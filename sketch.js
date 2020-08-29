@@ -833,3 +833,20 @@ this.acceleration.mult(0);
   }
   
 }
+
+
+class Rectangle {
+  constructor(x,y,lenght,width){
+   this.x1 = x ;
+   this.y1 = y ;
+   this.x2 = x+lenght;
+    this.y2= y+width;
+
+    }
+  
+  colladeWith(other) {
+  if (other.x1 > this.x2 || this.x1 > other.x2 || other.y1 > this.y2 || this.y1 > other.y2) return false;
+    return true;
+       
+  }
+  }
