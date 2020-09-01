@@ -109,7 +109,7 @@ function createDefaultStateMachine() {
 });
 }
 
-function createPreparePulling() {
+function createPreparePulling(target) {
   return createMachine({
   initialState: 'init',
   init: {
@@ -123,6 +123,13 @@ function createPreparePulling() {
       }
     },
     computeTransition(ctx){
+      if (ctx.first.position.x - ctx.cyclist.position.x > target) {
+        if (!ctx.cyclist.canGoForward()) {
+
+        } else {
+          
+        }
+      } 
       if (ctx.message == 'tira') {
         var targetName = 'preparePulling';
         

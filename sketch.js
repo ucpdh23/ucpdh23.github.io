@@ -7,7 +7,7 @@ let _debug = false;
 let _debug_item = 2;
 
 
-let items = 5;
+let items = 50;
 let demarrajeId = 11;
 
 let sepRange = 1.8;
@@ -652,36 +652,22 @@ result.limit(this.maxSteeringForce);
   
   
   computeForces_1(first) {
-  //  if (first.id == this.id) return;
-    
     this._separation = this.separation();
-    this._collision  = this.collision();
     this._alignment = this.alignment();
     this._cohesion = this.cohesion();
     this._borderAvoid = this.borderAvoid();
-    this._peloton = this.peloton(first);
-    this._pursuit = this.pursuit();
-    this._aerodynamic = this.aerodynamic();
-    //this._goodPosition = this.goodPosition(first);
-    //this._wander = this.wander(3, 10);
+
     this._alignment.mult(0.75);
     this._separation.mult(1.15);
     this._cohesion.mult(0.3);
-    if (this._pursuit != null)
-      this._pursuit.mult(0.8);
     
     this.acceleration.mult(0);
-    // this.acceleration.add(this._wander);
+
     this.acceleration.add(this._separation);
     this.acceleration.add(this._alignment);
     this.acceleration.add(this._cohesion);
-    //this.acceleration.add(this._collision);
-    //this.acceleration.add(this._peloton);
-    if (this._pursuit != null)
-      this.acceleration.add(this._pursuit);
-    //this.acceleration.add(this._aerodynamic);
+
     this.acceleration.add(this._borderAvoid);
-    //this.acceleration.add(this._goodPosition);
     
     this.acceleration.mult(0.5);
     
@@ -709,27 +695,18 @@ result.limit(this.maxSteeringForce);
     this._alignment = this.alignment();
     this._cohesion = this.cohesion();
     this._borderAvoid = this.borderAvoid();
-    this._peloton = this.peloton(first);
-    this._pursuit = this.pursuit();
-    this._aerodynamic = this.aerodynamic();
+    
     this._goodPosition = this.goodPosition(first);
     
     this._alignment.mult(0.75);
     this._separation.mult(0.7);
     this._cohesion.mult(0.1);
-    if (this._pursuit != null)
-      this._pursuit.mult(0.8);
     
     this.acceleration.mult(0);
     
     this.acceleration.add(this._separation);
     this.acceleration.add(this._alignment);
     this.acceleration.add(this._cohesion);
-    //this.acceleration.add(this._collision);
-    //this.acceleration.add(this._peloton);
-    if (this._pursuit != null)
-      this.acceleration.add(this._pursuit);
-    //this.acceleration.add(this._aerodynamic);
     this.acceleration.add(this._borderAvoid);
     this.acceleration.add(this._goodPosition);
     
