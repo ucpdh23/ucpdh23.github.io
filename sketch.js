@@ -16,6 +16,8 @@ let neighborDist = 15;
 let tirando =[];
 
 let globalFirst= null;
+let globalLast = null;
+let globalHull = null;
 
 const canvasWidth = 600;
 const canvasHeight = 300;
@@ -51,19 +53,23 @@ function draw() {
   var first = cyclists[0];
   var last = cyclists[0];
   
+  var localHull = [];
+  localHull.push([cyclists[0].position.x, cyclists[0].position.y]);
+  
   for (i=1; i < items; i++) {
     if (first.position.x < cyclists[i].position.x)
       first = cyclists[i];
     
     if (last.position.x > cyclists[i].position.x)
       last =cyclists[i];
-      
+    
+    localHull.push([cyclists[i].position.x, cyclists[i].position.y]);
   }
   
   globalFirst = first;
 
-    
-
+  var hullPoints = hull(localHull, 10);
+ 
   for (i = 0; i < items; i++) {
     cyclists[i].computeNeighbour(cyclists,i, first, last);
   }
@@ -80,6 +86,15 @@ function draw() {
   reference = road.show();
   for (i=0; i < items; i++)
     cyclists[i].show(reference);
+    
+  for (i = 0; i < hullPoints.length -1; i++){
+     var startX = reference - hullPoints[i][0];
+     var startY = 160 + hullPoints[i][1]*10;
+     var endX = reference - hullPoints[i+1][0];
+     var endY = 160 + hullPoints[i+1][1]*10;
+     line(startX*10, startY,
+     endX*10, endY)
+}
   
   time = time + delta
 }
@@ -111,116 +126,10 @@ class Cyclist {
     this.secuence = random(4);
     //print("myId:"+this.id);
     this._mSeparation = sepRange;
+    this._stateMachine = [];
     
     
-  this._state = createMachine({
-  initialState: 'init',
-  init: {
-    actions: {
-      onEnter(ctx) {
-       // console.log('off: onEnter')
-      },
-      onExit(ctx) {},
-      onExecute(ctx){
-         ctx.cyclist.computeForces_1(ctx.first);
-      }
-    },
-    computeTransition(ctx){
-      if (ctx.message == 'tira') {
-        var targetName = 'preparePulling';
-        
-        if (ctx.first.id == ctx.cyclist.id) targetName = 'pulling';
-        
-        return {
-      target: targetName,
-        action(){
-          ctx.message = '';
-        
-        },
-      };
-        }
-    if (ctx.cyclist.id == ctx.first.id) {
-      return {
-        target: 'first',
-        action(){},
-        };
-    }
-   },
-  },
-  first: {
-    actions: {
-      onEnter(ctx) {},
-      onExit(ctx) {},
-      onExecute(ctx) {
-      ctx.cyclist.computeForces_0(ctx.first);
-      },
-    },
-    computeTransition(ctx){
-    if (ctx.first.id != ctx.cyclist.id)
-      return {
-        target: 'init',
-        action(){}
-        };
-    
-    }
-  },
-    pulling: {
-      actions: {
-        onEnter(ctx){print('tirando');},
-        onExit(ctx){},
-        onExecute(ctx){
-          if (tirando.includes(ctx.cyclist)) {
-           ctx.cyclist.computeForces_0(ctx.first);
-          
-          }
-
-        
-        }
-        
-        },
-      computeTransition(ctx){
-        }
-      
-  },
-    
-    preparePulling: {
-      actions: {
-        onEnter(ctx){
-          print('prepare');
-        ctx.cyclist.preparePulling= null;
-        },
-        onExit(ctx){
-    print('prepared');   
-          ctx.cyclist.preparePulling = null;
-        },
-        onExecute(ctx) {
-          if (tirando.includes(ctx.cyclist)) return;
-          
-          
-          if (ctx.first.id == ctx.cyclist.id) {
-           print('firsr')
-            tirando.push(ctx.cyclist);
-            
-            } else {
-              
-              
-          ctx.cyclist._mGoodPosition = 0;
-          ctx.cyclist.computeForces_2(ctx.first);
-          
-          }
-        }
-        
-        },
-      computeTransition(ctx){
-        if (tirando.includes(ctx.cyclist))
-        return {
-          target: 'pulling',
-          action(){}
-        };
-      }
-      
-  },
-})
+  this.pushStateMachine(createDefaultStateMachine());
 
   }
   
@@ -228,13 +137,18 @@ class Cyclist {
     this.type = 'demarraje';
     this.step1 = step + 400 + random(200);
     this.step2 = step + 1200 + random(200);
-
     }
   
-  setTirando() {
-    this.type = 'tirando';
-    }
+  pushStateMachine(stateMachine){
+    this._stateMachine.push(stateMachine)
+  }
   
+  peekStateMachine() {
+    return this._stateMachine[this._stateMachine.length - 1];
+  }
+  popStateMachine() {
+    this._stateMachine.pop();
+  }
   
   computeNeighbour(cyclists,i, first, last) {
     this.neighbour = []
@@ -247,27 +161,14 @@ class Cyclist {
         }
       }
     }
-    this._state.transition({first: first, cyclist: this});
-    this._state.execute({first: first, cyclist: this});
-    //this.computeForces(first);
+    this.peekStateMachine().transition({first: first, cyclist: this});
+    this.peekStateMachine().execute({first: first, cyclist: this});
   }
   
-  checkTirando(first){
-    if (tirando.contains(this)) {
-      // already pulling the group
-      
-      } else {
-           if (this.id == first.id){
-      tirando.push(this);
-      } else {
-      
-      }
-    }
-    }
   
   sendMessage(msg){
     this.message = msg;
-    this._state.transition({first: globalFirst, cyclist: this, message: msg});
+    this.peekStateMachine().transition({first: globalFirst, cyclist: this, message: msg});
     }
   
   checkSalto(first){
@@ -283,15 +184,8 @@ class Cyclist {
     } else {
     this.state = 1;
       this.viewingAngle=210* (Math.PI/180);
-      
-      
-    
     }
-    
-    
-
-    
-    }
+ }
   
   show(reference) {
     this.secuence = (this.secuence + 1) % 8;
@@ -373,9 +267,6 @@ class Cyclist {
     var otherRect2 = other.getRectangle2();
     
     return myRect1.colladeWith(otherRect1)|| myRect1.colladeWith(otherRect2) || myRect2.colladeWith(otherRect1)|| myRect2.colladeWith(otherRect2);
-
-
-
     }
   
   getRectangle1(){
@@ -540,37 +431,75 @@ this.colliding = false;
 	if (count > 0) {
 	    steer.div(count)
 	    steer.limit(this.maxSteeringForce)
-  //  print(steer)
     }
 
 	return steer
   }
   
   goodPosition(first) {
-      if (this.position.x < first.position.x - this._mGoodPosition) {
+    if (this._mGoodPosition == 0){
+      return this.goodPositionToFirst(first);
+    } else {
+      return
+      this.goodPositionInsideGroup(first);
+    }
+  }
+  
+  
+  goodPositionToFirst(first) {
+    var targetPosition = this.computeTargetPosition(first);
+    if (this.position.x < first.position.x - this._mGoodPosition) {
+      if (!this.canGoForward()) {
+        var steer = createVector(0.2, 1);
+        if (this.position.y < first.position.y) {
+          steer.mult(-1);
+        } else {
+    
+        }
+        steer.limit(this.maxSteeringForce);
+        return steer;
+      } else {
+        var newX = 0;
+        var newY = first.position.y;
+        if (this._mGoodPosition == 0) {
+          newX = -3;
+          if (first.position.y < this.position.y) {
+            newY = newY + 1;
+          } else {
+            newY = newY - 1;
+          }
+    
+        } else {
+          newX = random(this._mGoodPosition - 2);
+        }
+    
+        var steer = this.seek(createVector(first.position.x - 2 - newX, newY));
+        steer.limit(this.maxSteeringForce)
+        return steer;
+      }
+    
+    }
+    
+    return createVector(0, 0);
+  }
+  
+  computeTargetPosition(first) {
+    
+  }
+  
+  goodPositionInsideGroup(first) {
+    if (this.position.x < first.position.x - this._mGoodPosition) {
         if (!this.canGoForward()) {
           var steer = createVector(0.2,1);
           if (this.position.y < first.position.y){
             steer.mult(-1);
-          } else{
-            
           }
           steer.limit(this.maxSteeringForce);
           return steer;
-          } else {
-            var newX = 0;
+        } else {
             var newY = first.position.y;
-            if (this._mGoodPosition == 0) {
-              newX = -2;
-              if (first.position.y < this.position.y) {
-                newY = newY +1;
-              } else {
-                newY = newY -1;
-              }
+            var newX =random(this._mGoodPosition -2);
               
-              } else {
-              newX =random(this._mGoodPosition -2);
-              }
         
         var steer = this.seek(createVector(first.position.x - 2 - newX, newY));
       steer.limit(this.maxSteeringForce)
@@ -602,10 +531,8 @@ this.colliding = false;
       
 
 	    if (dist < meters && this._inBoidViewRange(other,
-                             theta                                 ,
-                                                       angle* (Math.PI/180)
-                                                             )) {
-          
+               theta,
+               angle* (Math.PI/180))) {
           items.push(other);
           }
     }
@@ -663,7 +590,6 @@ this.colliding = false;
 	for (var i = this.neighbour.length - 1; i >= 0; i--) {
 	    var other = this.neighbour[i]
 
-
 	    var d = this.position.dist(other.position)
         var neighDist = neighborDist;
         if(this.id > 80) neighDist * 2;
@@ -694,19 +620,11 @@ this.colliding = false;
     var wanderX = radius * cos(theta);
     var wanderY = radius * sin(theta);
     
-//fill(255);
-
-// ellipse(10, 10, 10,10);
-    
     var steer = this.seek(createVector(
       this.position.x + distance + wanderX,
       this.position.y + wanderY));
     
     steer.limit(this.maxSteeringForce);
-    
-    
-    
-
     
     this.wanderTheta =theta + Math.PI / 16;
     
@@ -774,8 +692,7 @@ result.limit(this.maxSteeringForce);
     this._drive = this.drive();
     this._borderAvoid = this.borderAvoid();
 
-    
-this.acceleration.mult(0);
+    this.acceleration.mult(0);
 
     this.acceleration.add(this._wander);
     this.acceleration.add(this._drive);
