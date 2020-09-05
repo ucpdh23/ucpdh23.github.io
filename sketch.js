@@ -485,7 +485,7 @@ this.colliding = false;
       } else {
         var newX = 0;
         var newY = first.position.y;
-        if (this._mGoodPosition == 0) {
+        //if (this._mGoodPosition == 0) {
           newX = -3;
           if (first.position.y < this.position.y) {
             newY = newY + 1;
@@ -493,9 +493,9 @@ this.colliding = false;
             newY = newY - 1;
           }
     
-        } else {
-          newX = random(this._mGoodPosition - 2);
-        }
+      //  } else {
+       //   newX = random(this._mGoodPosition - 2);
+     //   }
     
         var steer = this.seek(createVector(first.position.x - 2 - newX, newY));
         steer.limit(this.maxSteeringForce)
