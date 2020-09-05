@@ -483,6 +483,17 @@ this.colliding = false;
         steer.limit(this.maxSteeringForce);
         return steer;
       } else {
+        
+        var deltaX = first.velocity.x;
+        var deltaY = (first.position.y < this.position.y)? 1 : -1;
+        var delta = createVector(deltaX, deltaY);
+        
+        //!!!!!!!!!!!!!
+        var target = p5.Vector.add(first.position, delta);
+        
+        
+        /*
+        
         var newX = 0;
         var newY = first.position.y;
         //if (this._mGoodPosition == 0) {
@@ -492,14 +503,18 @@ this.colliding = false;
           } else {
             newY = newY - 1;
           }
+          */
     
       //  } else {
        //   newX = random(this._mGoodPosition - 2);
      //   }
+     
+        var diff = p5.Vector.sub(target, this.position)
+        diff.sub(this.velocity)
     
-        var steer = this.seek(createVector(first.position.x - 2 - newX, newY));
-        steer.limit(this.maxSteeringForce)
-        return steer;
+        //var steer = this.seek(target);
+        diff.limit(this.maxSteeringForce)
+        return diff;
       }
     
     }
