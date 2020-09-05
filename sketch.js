@@ -127,6 +127,7 @@ class Cyclist {
     //print("myId:"+this.id);
     this._mSeparation = sepRange;
     this._stateMachine = [];
+    this.actualBodyColor = createVector(144 - this.id, 255 - this.id, this.id);
     
     
   this.pushStateMachine(createDefaultStateMachine());
@@ -167,6 +168,11 @@ class Cyclist {
   
   
   sendMessage(msg){
+    this.flashing = {
+      tics: 200,
+      color: createVector(0,0,255)
+    };
+    
     this.message = msg;
     this.peekStateMachine().transition({first: globalFirst, cyclist: this, message: msg});
     }
@@ -199,11 +205,15 @@ class Cyclist {
     else if (this.id % 10 == 1) stroke(0,255,0)
     
     ellipse(posX + 6, posY, 4, 4);
+    
+    this.computeStroke(this.actualBodyColor, this.flashing);
+    /*
     if (this.type == 'demarraje') {
       stroke(0,0,255);
       } else {
     stroke(144 - this.id, 255 - this.id, this.id)
         }
+        */
     triangle(
       posX + 9, posY-3,
       posX + 9, posY+3,
@@ -250,6 +260,20 @@ class Cyclist {
     ellipse(posX, posY, neighborDist*10, neighborDist*10);
     ellipse(posX,posY,sepRange*10, sepRange*10);
   }
+  
+  computeStroke(actual, flashing) {
+    var result = actual;
+    if (flashing != undefined && flashing != null) {
+      if (flashing.tics > 0) {
+        result = flashing.color;
+        flashing.tics = flashing.tics - 1;
+      }
+    }
+    
+    stroke(result.x, result.y, result.z);
+  }
+
+
 
   drawVector(v, posX, posY){
     this._drawVector(v, posX,posY, 1000);
