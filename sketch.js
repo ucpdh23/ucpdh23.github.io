@@ -471,8 +471,8 @@ this.colliding = false;
   
   
   goodPositionToFirst(first) {
-    var targetPosition = this.computeTargetPosition(first);
-    if (this.position.x < first.position.x - this._mGoodPosition) {
+    //var targetPosition = this.computeTargetPosition(first);
+    if (this.position.x < first.position.x) {
       if (!this.canGoForward()) {
         var steer = createVector(0.2, 1);
         if (this.position.y < first.position.y) {
