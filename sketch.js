@@ -3,7 +3,7 @@ let cyclists = [];
 let road;
 let meters;
 let time;
-let _debug = false;
+let _debug = true;
 let _debug_item = 2;
 
 
@@ -11,7 +11,7 @@ let items = 50;
 let demarrajeId = 11;
 
 let sepRange = 1.8;
-let neighborDist = 15;
+let neighborDist = 7;
 
 let tirando =[];
 
@@ -25,7 +25,7 @@ const canvasHeight = 300;
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   
-  frameRate(40);
+frameRate(50)
   
   for (i = 0; i < items; i++) {
     cyclists.push(new Cyclist(i))
@@ -34,10 +34,17 @@ function setup() {
   setTimeout(
     function(){
    print('tira!');
-      cyclists[1].sendMessage('tira');
+      cyclists[2].sendMessage('tira');
     },
-    12000
+    35000
 
+  );
+  
+  setTimeout(
+    function() {
+      cyclists[4].sendMessage('adelanta')
+    },
+    50000
   );
   
   road = new Road();
@@ -47,7 +54,7 @@ function setup() {
 }
 
 function draw() {
-  var delta = 1;
+  var delta = 1/20;
   meters = 0;
   
   var first = cyclists[0];
@@ -69,6 +76,13 @@ function draw() {
   globalFirst = first;
 
   var hullPoints = hull(localHull, 10);
+  globalHull = hullPoints;
+  
+/*lPointsllPoints = hull(cyclists,
+    10,
+    ['.position.x', '.position.y']);
+  print(hullPoints)
+  */
  
   for (i = 0; i < items; i++) {
     cyclists[i].computeNeighbour(cyclists,i, first, last);
@@ -113,15 +127,16 @@ this._cyclists= cyclists;
 class Cyclist {
   constructor(id)  {
     this.id = id;
+    this.maxSpeed = 20;
     this.state = 1;
     this._mGoodPosition = 7;
     this._mDemarrajeGoodPosition= 3;
     this.type = '';
-    this.position = createVector(0 - random(items / 2), 2 - random(4));
-    this.velocity = createVector(1,0);
+    this.position = createVector(0 - random(items / 1.5), 3 - random(6));
+    this.velocity = createVector(10,0);
     this.acceleration = createVector(0,0) //random(3),0);
     this.neighbour = []
-    this.maxSteeringForce = 0.0045
+    this.maxSteeringForce = 0.1 //0.0045
     this.viewingAngle = 210 * (Math.PI/180);
     this.secuence = random(4);
     //print("myId:"+this.id);
@@ -133,12 +148,6 @@ class Cyclist {
   this.pushStateMachine(createDefaultStateMachine());
 
   }
-  
-  setDemarraje(step){
-    this.type = 'demarraje';
-    this.step1 = step + 400 + random(200);
-    this.step2 = step + 1200 + random(200);
-    }
   
   pushStateMachine(stateMachine){
     this._stateMachine.push(stateMachine)
@@ -162,6 +171,7 @@ class Cyclist {
         }
       }
     }
+    //this.scaledPosition = p5.Vector.mult(this.position, createVector(0.555,1.666));
     this.peekStateMachine().transition({first: first, cyclist: this});
     this.peekStateMachine().execute({first: first, cyclist: this});
   }
@@ -169,7 +179,7 @@ class Cyclist {
   
   sendMessage(msg){
     this.flashing = {
-      tics: 200,
+      tics: 300,
       color: createVector(0,0,255)
     };
     
@@ -177,21 +187,6 @@ class Cyclist {
     this.peekStateMachine().transition({first: globalFirst, cyclist: this, message: msg});
     }
   
-  checkSalto(first){
-    if (this.position.x < this.step1) this.state = 1;
-    else  if (this.position.x < this.step2) {
-      this._mSeparation =1.6;
-      this._mGoodPosition = this._mDemarrajeGoodPosition;
-      this.viewingAngle=90* (Math.PI/180);
-      
-      
-    this.state=2;
-    
-    } else {
-    this.state = 1;
-      this.viewingAngle=210* (Math.PI/180);
-    }
- }
   
   show(reference) {
     this.secuence = (this.secuence + 1) % 8;
@@ -207,13 +202,7 @@ class Cyclist {
     ellipse(posX + 6, posY, 4, 4);
     
     this.computeStroke(this.actualBodyColor, this.flashing);
-    /*
-    if (this.type == 'demarraje') {
-      stroke(0,0,255);
-      } else {
-    stroke(144 - this.id, 255 - this.id, this.id)
-        }
-        */
+    
     triangle(
       posX + 9, posY-3,
       posX + 9, posY+3,
@@ -226,7 +215,7 @@ class Cyclist {
     
     if (_debug && this._wander != undefined) {
       this.drawVector(this._wander, posX, posY);
-      this.drawVector(this.velocity, posX, posY);
+     // this.drawVector(this.velocity, posX, posY);
       }
     
     if (!_debug) return;
@@ -236,29 +225,49 @@ class Cyclist {
     stroke(0,250,0)  
     if (this._separation != undefined)
       this.drawVector(this._separation, posX, posY);
-
+      
+      
+    // red
     stroke(255,0,0)
     this._drawVector(this.acceleration, posX, posY+5, 10000);
-  stroke(255,0,255);  
-    this._drawVector(this.velocity, posX, posY+5, 50);
+    
+    // purple
+    stroke(255,255,255);
+    if (this.id == globalFirst.id){
+       this._drawVector(this.velocity, posX, posY+5, 50);
+    } else {
+      //this._drawVector(p5.Vector.sub(globalFirst.velocity, this.velocity), posY+5, 50);
+      var diffX = (globalFirst.velocity.x-this.velocity.x);
+      var diffY = globalFirst.velocity.
+      y - this.velocity.y;
+      text(((diffX > 0)? ">>":"<<") + " deltaX:" + diffX , 140, 30);
+      text(((diffY<0)? "v":"∆") + " deltaY:"+ diffY, 140, 45);
+    }
 
     // blue - cohesion
-    
-    
     stroke(0,0,255)
     if (this._cohesion != undefined)
       this.drawVector(this._cohesion,posX,posY);
+      
     // yellow - alligment
     stroke(255,255,0);
     if (this._alignment != undefined)
       this.drawVector(this._alignment, posX, posY)
  
     stroke(90);
-    
-    //line(posX,posY,posX- this.velocity.x*10, posY+this.velocity.y*10)
+   
     noFill()
-    ellipse(posX, posY, neighborDist*10, neighborDist*10);
-    ellipse(posX,posY,sepRange*10, sepRange*10);
+    //ellipse(posX, posY, neighborDist*10, neighborDist*10);
+    circle(posX,posY, neighborDist*20);
+    //ellipse(posX,posY,sepRange*10, sepRange*10);
+    circle(posX, posY, sepRange*20);
+    
+    line(posX, posY,
+    posX + Math.sin(3/2*Math.PI + this.viewingAngle/2)*neighborDist*10,
+    posY + Math.cos(3/2*Math.PI + this.viewingAngle/2)*neighborDist*10);
+    line(posX, posY,
+      posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10,
+      posY - Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10);
   }
   
   computeStroke(actual, flashing) {
@@ -298,7 +307,6 @@ class Cyclist {
     return new Rectangle(
       this.position.x, this.position.y - width_rectangle_1, 1.7, width_rectangle_1*2
     );
-  
   }
   
   getRectangle2
@@ -307,12 +315,9 @@ class Cyclist {
     return new Rectangle(
       this.position.x - 0.5, this.position.y - 0.3, 0.5, 0.6
     );
-  
   }
   
   inBoidViewRange(other) {
-//    return this.position.x < other.position.x ;
-
     var theta = Math.atan2(-this.velocity.y, this.velocity.x);
     
     return this._inBoidViewRange(other,theta,this.viewingAngle);
@@ -336,7 +341,6 @@ class Cyclist {
   }
   
   collision() {
-    
     var steer = createVector(0, 0)
 	var diff = createVector(0, 0)
 	var count = 0
@@ -349,7 +353,6 @@ this.colliding = false;
           var dist =this.position.dist(other.position)
           
           diff = p5.Vector.sub(this.position, other.position)
-          //diff.div(dist/50)
 		steer.add(diff)
 		count++;
           
@@ -360,7 +363,6 @@ this.colliding = false;
 	if (count > 0) {
 	    steer.div(count)
 	    steer.limit(this.maxSteeringForce)
-  //  print(steer)
     }
 
 	return steer
@@ -469,8 +471,69 @@ this.colliding = false;
     }
   }
   
-  
   goodPositionToFirst(first) {
+    if (this.position.x < first.position.x) {
+      var border = this.inBorder();
+      
+      if (border == null) {
+        var steer = createVector(0.2, 1);
+        if (this.position.y < first.position.y) {
+          steer.mult(-1);
+        } else {
+        
+        }
+        steer.limit(this.maxSteeringForce);
+        return steer;
+      } else if (border.x == 0){
+        return createVector(0,0);
+      } else {
+        var steer = this.seek(border);
+        steer.limit(this.maxSteeringForce);
+        
+        return steer;
+      }
+    }
+  }
+  
+  
+  
+  inBorder() {
+    var item = -1;
+    
+    for (var i = 0; i < globalHull.length - 1; i++) {
+      var x = globalHull[i][0];
+      var y = globalHull[i][1];
+      
+      if (x == this.position.x &&
+         y == this.position.y) {
+           item = i;
+           break;
+      }
+    }
+    
+    if (item != -1) {
+      if (item == 0) return createVector(0,0)
+      
+      if (item == globalHull.length-1) {
+        return createVector(
+          globalHull[0][0],
+          globalHull[0][1]
+        );
+      } else {
+        if (globalHull[item -1][0] > this.position.x) return createVector(
+          globalHull[item-1][0],
+          globalHull[item-1][1]+1);
+        else return createVector(
+          globalHull[item+1][0],
+          globalHull[item+1][1]-1);
+      }
+    } else {
+      return null;
+    }
+  }
+  
+  
+  __goodPositionToFirst(first) {
     //var targetPosition = this.computeTargetPosition(first);
     if (this.position.x < first.position.x) {
       if (!this.canGoForward()) {
@@ -484,36 +547,43 @@ this.colliding = false;
         return steer;
       } else {
         
-        var deltaX = first.velocity.x;
+        var deltaX = 0; //first.velocity.x;
         var deltaY = (first.position.y < this.position.y)? 1 : -1;
         var delta = createVector(deltaX, deltaY);
         
         //!!!!!!!!!!!!!
         var target = p5.Vector.add(first.position, delta);
-        
-        
-        /*
-        
-        var newX = 0;
-        var newY = first.position.y;
-        //if (this._mGoodPosition == 0) {
-          newX = -3;
-          if (first.position.y < this.position.y) {
-            newY = newY + 1;
-          } else {
-            newY = newY - 1;
-          }
-          */
-    
-      //  } else {
-       //   newX = random(this._mGoodPosition - 2);
-     //   }
      
         var diff = p5.Vector.sub(target, this.position)
+        
+        var mag = diff.mag();
+        
+        diff.normalize();
+        
+        if (mag < 1) {
+          diff.mult(this.maxSpeed);
+        } else 
+        
+        if (mag < 6){
+          var firstRef = p5.Vector.mult(first.velocity, (6-mag)/6);
+          diff.mult(mag / 6 * this.maxSpeed);
+          diff.add(firstRef)
+          //diff.mult(0.2);
+        } else {
+          diff.mult(this.maxSpeed);
+        }
+        
+        //var diffVel = p5.Vector.sub(first.velocity, this.velocity); 
+        //diff.sub(diffVel)
         diff.sub(this.velocity)
     
-        //var steer = this.seek(target);
         diff.limit(this.maxSteeringForce)
+        
+        var finalMag = diff.mag();
+        if (finalMag < 0.004)
+          print('finito');
+       // print(diff.mag())
+        
         return diff;
       }
     
@@ -551,12 +621,19 @@ this.colliding = false;
   }
   
   canGoForward(){
-    var inRange = this.computeItems(30, 4);
+    var inRange = this.computeItems(20, 4);
     //print(inRange);
     if (inRange.length > 0) 
-    return false;
-    else
-      return true;
+       return false;
+    //return true;
+    
+    inRange = this.computeItems(180, 1);
+    
+    if (inRange.length > 0)
+       return false
+    
+    return true;
+    
     }
   
   computeItems(angle, meters) {
@@ -599,13 +676,17 @@ this.colliding = false;
 	    steer.div(count)
       steer.sub(this.velocity)
 	
-      steer.limit(this.maxSteeringForce);
+     steer.limit(this.maxSteeringForce);
 	}
 	return steer
   }
   
   seek(mass){
     var diff = p5.Vector.sub(mass, this.position)
+    
+    diff.normalize();
+    diff.mult(this.maxSpeed);
+    
     diff.sub(this.velocity)
     
      return diff;
@@ -633,7 +714,7 @@ this.colliding = false;
         var neighDist = neighborDist;
         if(this.id > 80) neighDist * 2;
         
-	    if (d < neighDist && this.inBoidViewRange(other)){ //&& !this.isColliding(other)) {
+	    if (d < neighDist && d > 1.6 && this.inBoidViewRange(other)){ //&& !this.isColliding(other)) {
 		mass.add(other.position)
 		count++
 	    }
@@ -647,11 +728,12 @@ this.colliding = false;
       steer.limit(this.maxSteeringForce)
       
       return steer;
-	}
-	return mass
-  }
+	  }
+	  return mass
+  } 
   
   wander(radius, distance) {
+    return createVector(0,0)
    var theta = this.wanderTheta;
     
     if (theta == undefined) theta = Math.PI/2;
@@ -708,7 +790,7 @@ result.limit(this.maxSteeringForce);
 
     this.acceleration.add(this._borderAvoid);
     
-    this.acceleration.mult(0.5);
+    this.acceleration.limit(this.maxSteeringForce);
     
   }
   
@@ -730,7 +812,7 @@ result.limit(this.maxSteeringForce);
   computeForces_2(first) {
     
     this._separation = this.separation();
-    this._collision  = this.collision();
+   // this._collision  = this.collision();
     this._alignment = this.alignment();
     this._cohesion = this.cohesion();
     this._borderAvoid = this.borderAvoid();
@@ -753,14 +835,12 @@ result.limit(this.maxSteeringForce);
     
   }
   update(time) {
-
-    
-    this.position.add(this.velocity);
-    this.velocity.add(this.acceleration);
+    this.position.add(p5.Vector.mult(this.velocity, time));
+    this.velocity.add(p5.Vector.mult(this.acceleration, time));
     this.velocity.limit(this.maxSpeed);
     //this.acceleration.mult(0);
     
-    this.neighbout = []
+    this.neighbour = []
     
     return this.position.x
   }

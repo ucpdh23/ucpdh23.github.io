@@ -142,6 +142,11 @@ function createPreparePulling(target) {
         
         },
       };
+        } else if (ctx.message == 'adelanta'){
+          return {
+            target: 'adelanta',
+            action(){}
+          };
         }
     if (ctx.cyclist.id == ctx.first.id) {
       return {
@@ -149,6 +154,7 @@ function createPreparePulling(target) {
         action(){},
         };
     }
+    
    },
   },
   first: {
@@ -192,17 +198,23 @@ function createPreparePulling(target) {
         onEnter(ctx){
           print('prepare');
         ctx.cyclist.preparePulling= null;
+        ctx.cyclist.tmpMaxSpeed = ctx.cyclist.maxSpeed;
+        ctx.cyclist.maxSpeed = ctx.first.velocity.mag() * 1.05;
+        ctx.cyclist.tmpSeparation= ctx.cyclist._mSeparation;
+        ctx.cyclist._mSeparation=1.3;
+        
         },
         onExit(ctx){
     print('prepared');   
           ctx.cyclist.preparePulling = null;
+          ctx.cyclist.maxSpeed = ctx.cyclist.tmpMaxSpeed;
+          ctx.cyclist._mSeparation = ctx.cyclist.tmpSeparation;
         },
         onExecute(ctx) {
           if (tirando.includes(ctx.cyclist)) return;
           
           
           if (ctx.first.id == ctx.cyclist.id) {
-           print('first')
             tirando.push(ctx.cyclist);
             
             } else {
@@ -219,6 +231,47 @@ function createPreparePulling(target) {
         if (tirando.includes(ctx.cyclist))
         return {
           target: 'pulling',
+          action(){}
+        };
+      }
+      
+  },
+  
+  
+  adelanta: {
+      actions: {
+        onEnter(ctx){
+          print('adelanting');
+        ctx.cyclist.preparePulling= null;
+        ctx.cyclist.tmpMaxSpeed = ctx.cyclist.maxSpeed;
+        ctx.cyclist.maxSpeed = ctx.first.velocity.mag() * 1.05;
+        ctx.cyclist.tmpSeparation= ctx.cyclist._mSeparation;
+        ctx.cyclist._mSeparation=1.3;
+        
+        },
+        onExit(ctx){
+    print('adelanted');   
+          ctx.cyclist.preparePulling = null;
+          ctx.cyclist.maxSpeed = ctx.cyclist.tmpMaxSpeed;
+          ctx.cyclist._mSeparation = ctx.cyclist.tmpSeparation;
+        },
+        onExecute(ctx) {
+          if (tirando.includes(ctx.cyclist)) return;
+          
+          
+              
+              
+          ctx.cyclist._mGoodPosition = 6;
+          ctx.cyclist.computeForces_2(ctx.first);
+          
+
+        }
+        
+        },
+      computeTransition(ctx){
+        if (ctx.first.position.x - ctx.cyclist.position.x < 6)
+        return {
+          target: 'init',
           action(){}
         };
       }
