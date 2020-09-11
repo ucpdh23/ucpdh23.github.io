@@ -3,7 +3,7 @@ let cyclists = [];
 let road;
 let meters;
 let time;
-let _debug = true;
+let _debug = false;
 let _debug_item = 2;
 
 
@@ -25,7 +25,7 @@ const canvasHeight = 300;
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   
-frameRate(50)
+frameRate(20)
   
   for (i = 0; i < items; i++) {
     cyclists.push(new Cyclist(i))
@@ -101,6 +101,11 @@ function draw() {
   for (i=0; i < items; i++)
     cyclists[i].show(reference);
     
+    
+    time = time + delta;
+    
+    return
+    
   for (i = 0; i < hullPoints.length -1; i++){
      var startX = reference - hullPoints[i][0];
      var startY = 160 + hullPoints[i][1]*10;
@@ -109,8 +114,6 @@ function draw() {
      line(startX*10, startY,
      endX*10, endY)
 }
-  
-  time = time + delta
 }
 
 class Group {
@@ -522,10 +525,10 @@ this.colliding = false;
       } else {
         if (globalHull[item -1][0] > this.position.x) return createVector(
           globalHull[item-1][0],
-          globalHull[item-1][1]+0.5);
+          globalHull[item-1][1]+0.75);
         else return createVector(
           globalHull[item+1][0],
-          globalHull[item+1][1]-0.5);
+          globalHull[item+1][1]-0.75);
       }
     } else {
       return null;
