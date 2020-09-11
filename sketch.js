@@ -522,10 +522,10 @@ this.colliding = false;
       } else {
         if (globalHull[item -1][0] > this.position.x) return createVector(
           globalHull[item-1][0],
-          globalHull[item-1][1]+1);
+          globalHull[item-1][1]+0.5);
         else return createVector(
           globalHull[item+1][0],
-          globalHull[item+1][1]-1);
+          globalHull[item+1][1]-0.5);
       }
     } else {
       return null;
