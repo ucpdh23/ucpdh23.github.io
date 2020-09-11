@@ -139,7 +139,7 @@ class Cyclist {
     this.velocity = createVector(10,0);
     this.acceleration = createVector(0,0) //random(3),0);
     this.neighbour = []
-    this.maxSteeringForce = 0.1 //0.0045
+    this.maxSteeringForce = 0.2 //0.0045
     this.viewingAngle = 210 * (Math.PI/180);
     this.secuence = random(4);
     //print("myId:"+this.id);
@@ -244,7 +244,7 @@ class Cyclist {
       var diffY = globalFirst.velocity.
       y - this.velocity.y;
       text(((diffX > 0)? ">>":"<<") + " deltaX:" + diffX , 140, 30);
-      text(((diffY<0)? "v":"∆") + " deltaY:"+ diffY, 140, 45);
+      text(((diffY<0)? "V":"∆") + " deltaY:"+ diffY, 140, 45);
     }
 
     // blue - cohesion
