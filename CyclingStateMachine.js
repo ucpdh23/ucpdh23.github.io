@@ -123,26 +123,20 @@ function createPreparePulling(target) {
       }
     },
     computeTransition(ctx){
-      if (ctx.first.position.x - ctx.cyclist.position.x > target) {
-        if (!ctx.cyclist.canGoForward()) {
-
-        } else {
-          
-        }
-      } 
-      if (ctx.message == 'tira') {
+      if (ctx.message === 'tira') {
         var targetName = 'preparePulling';
         
-        if (ctx.first.id == ctx.cyclist.id) targetName = 'pulling';
+        if (ctx.first.id === ctx.cyclist.id) targetName = 'pulling';
         
         return {
-      target: targetName,
-        action(){
-          ctx.message = '';
-        
-        },
-      };
-        } else if (ctx.message == 'adelanta'){
+            target: targetName,
+            action() {
+                ctx.message = '';
+            },
+          };
+      } else if (ctx.message === 'adelanta') {
+          print("adelantando...");
+
           return {
             target: 'adelanta',
             action(){}
