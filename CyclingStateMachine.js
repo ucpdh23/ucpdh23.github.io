@@ -24,6 +24,13 @@ function createDefaultStateMachine() {
         
         },
       };
+        }else if (ctx.message === 'adelanta') {
+          print("adelantando...");
+        
+          return {
+            target: 'adelanta',
+            action() {}
+          };
         }
     if (ctx.cyclist.id == ctx.first.id) {
       return {
@@ -101,6 +108,48 @@ function createDefaultStateMachine() {
         if (tirando.includes(ctx.cyclist))
         return {
           target: 'pulling',
+          action(){}
+        };
+      }
+      
+  },
+  
+   
+  
+  adelanta: {
+      actions: {
+        onEnter(ctx){
+          print('adelanting');
+        ctx.cyclist.preparePulling= null;
+        ctx.cyclist.tmpMaxSpeed = ctx.cyclist.maxSpeed;
+        ctx.cyclist.maxSpeed = ctx.first.velocity.mag() * 1.05;
+        ctx.cyclist.tmpSeparation= ctx.cyclist._mSeparation;
+        ctx.cyclist._mSeparation=1.3;
+        
+        },
+        onExit(ctx){
+    print('adelanted');   
+          ctx.cyclist.preparePulling = null;
+          ctx.cyclist.maxSpeed = ctx.cyclist.tmpMaxSpeed;
+          ctx.cyclist._mSeparation = ctx.cyclist.tmpSeparation;
+        },
+        onExecute(ctx) {
+          if (tirando.includes(ctx.cyclist)) return;
+          
+          
+              
+              
+          ctx.cyclist._mGoodPosition = 6;
+          ctx.cyclist.computeForces_2(ctx.first);
+          
+
+        }
+        
+        },
+      computeTransition(ctx){
+        if (ctx.first.position.x - ctx.cyclist.position.x < 6)
+        return {
+          target: 'init',
           action(){}
         };
       }

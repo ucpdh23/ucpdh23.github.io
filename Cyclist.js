@@ -293,7 +293,9 @@
     }
 
     goodPositionToFirst(first) {
-        if (this.position.x < first.position.x) {
+      var diff = first.position.x /* + first.velocity.x -
+      */ - this.position.x;
+      if (diff > 0.5) {
             var border = this.inBorder();
 
             if (border == null) {
@@ -310,9 +312,17 @@
             } else {
                 var steer = this.seek(border);
                 steer.limit(this.maxSteeringForce);
+                
+                if (diff < 3) {
+                  var diffVel = first.velocity.x - this.velocity.x;
+                  diffVel = diffVel * (3 - diff) / 3;
+                  steer.x =+ diffVel;
+                }
 
                 return steer;
             }
+        } else {
+          return createVector(0,0);00
         }
     }
 
