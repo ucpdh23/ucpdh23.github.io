@@ -322,7 +322,7 @@
                 return steer;
             }
         } else {
-          return createVector(0,0);00
+          return createVector(0,0);
         }
     }
 
