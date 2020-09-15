@@ -77,6 +77,8 @@
                 y - this.velocity.y;
             text(((diffX > 0) ? ">>" : "<<") + " deltaX:" + diffX, 140, 30);
             text(((diffY < 0) ? "V" : "∆") + " deltaY:" + diffY, 140, 45);
+            text("vel:"+this.velocity.x*3600/1000, 140, 15);
+            text("diff:"+(globalFirst.position.x - this.position.x), 140, 60);
         }
 
         // blue - cohesion
@@ -295,6 +297,16 @@
     goodPositionToFirst(first) {
       var diff = first.position.x /* + first.velocity.x -
       */ - this.position.x;
+      
+      if (diff < 2) {
+        var diffVel = first.velocity.x - this.velocity.x;
+        if (diffVel < 0.5 && diffVel > -0.5) {
+         // print("closet");
+          // aqui puedo cambiar de estado
+        }
+      }
+
+      
       if (diff > 0.5) {
             var border = this.inBorder();
 
@@ -313,15 +325,19 @@
                 var steer = this.seek(border);
                 steer.limit(this.maxSteeringForce);
                 
-                if (diff < 3) {
-                  var diffVel = first.velocity.x - this.velocity.x;
-                  diffVel = diffVel * (3 - diff) / 3;
+                var diffVel = first.velocity.x - this.velocity.x;
+                
+                var ref = (diffVel<-1)? 3:2;
+                
+                if (diff < ref) {
+                  diffVel = diffVel * (ref - diff) / ref;
                   steer.x =+ diffVel;
                 }
 
                 return steer;
             }
         } else {
+          print("cerca");
           return createVector(0,0);
         }
     }

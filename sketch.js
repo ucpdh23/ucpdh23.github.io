@@ -3,12 +3,12 @@ let cyclists = [];
 let road;
 let meters;
 let time = 0;
-let _debug = false;
+let _debug = true;
 let _debug_item = 2;
 let _drawHull = false;
 
 
-let items = 50;
+let items = 30;
 let demarrajeId = 11;
 
 let sepRange = 1.8;
@@ -32,10 +32,11 @@ frameRate(20)
     cyclists.push(new Cyclist(i))
   }
   
+  /*
   setTimeout(
     function(){
    print('tira!');
-      cyclists[2].sendMessage('tira');
+      cyclists[2].sendMessage('tira!');
     },
     35000
 
@@ -47,6 +48,7 @@ frameRate(20)
     },
     50000
   );
+  */
   
   road = new Road();
   

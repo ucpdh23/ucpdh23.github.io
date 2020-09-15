@@ -80,11 +80,14 @@ function createDefaultStateMachine() {
       actions: {
         onEnter(ctx){
           print('prepare');
-        ctx.cyclist.preparePulling= null;
+        //ctx.cyclist.preparePulling= null;
+        ctx.cyclist._maxSteeringForce = ctx.cyclist.maxSteeringForce;
+        ctx.cyclist.maxSteeringForce = ctx.cyclist.maxSteeringForce * 1.3;
         },
         onExit(ctx){
     print('prepared');   
-          ctx.cyclist.preparePulling = null;
+         // ctx.cyclist.preparePulling = null;
+          ctx.cyclist.maxSteeringForce = ctx.cyclist._maxSteeringForce;
         },
         onExecute(ctx) {
           if (tirando.includes(ctx.cyclist)) return;
