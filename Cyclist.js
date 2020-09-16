@@ -616,27 +616,32 @@
         return result;
 
     }
+    
+    computeForces(mAlig, mSep, mCoh){
+      this._separation = this.separation();
+      this._alignment = this.alignment();
+      this._cohesion = this.cohesion();
+      this._borderAvoid = this.borderAvoid();
+      
+      this._alignment.mult(mAlig);
+      this._separation.mult(mSep);
+      this._cohesion.mult(mCoh);
+      
+      this.acceleration.mult(0);
+      
+      this.acceleration.add(this._separation);
+      this.acceleration.add(this._alignment);
+      this.acceleration.add(this._cohesion);
+      
+      this.acceleration.add(this._borderAvoid);
+      
+    }
 
 
     computeForces_1(first) {
-        this._separation = this.separation();
-        this._alignment = this.alignment();
-        this._cohesion = this.cohesion();
-        this._borderAvoid = this.borderAvoid();
+      this.computeForces(0.75, 1.15, 0.3)
 
-        this._alignment.mult(0.75);
-        this._separation.mult(1.15);
-        this._cohesion.mult(0.3);
-
-        this.acceleration.mult(0);
-
-        this.acceleration.add(this._separation);
-        this.acceleration.add(this._alignment);
-        this.acceleration.add(this._cohesion);
-
-        this.acceleration.add(this._borderAvoid);
-
-        this.acceleration.limit(this.maxSteeringForce);
+      this.acceleration.limit(this.maxSteeringForce);
 
     }
 
@@ -651,35 +656,21 @@
         this.acceleration.add(this._drive);
         this.acceleration.add(this._borderAvoid);
         this.acceleration.limit(this.maxSteeringForce);
+        
         this.acceleration.x = 0;
 
     }
 
     computeForces_2(first) {
+      this.computeForces(0.75, 0.7, 0.1)
 
         this._separation = this.separation();
-        // this._collision  = this.collision();
-        this._alignment = this.alignment();
-        this._cohesion = this.cohesion();
-        this._borderAvoid = this.borderAvoid();
 
         this._goodPosition = this.goodPosition(first);
 
-        this._alignment.mult(0.75);
-        this._separation.mult(0.7);
-        this._cohesion.mult(0.1);
-
-        this.acceleration.mult(0);
-
-        this.acceleration.add(this._separation);
-        this.acceleration.add(this._alignment);
-        this.acceleration.add(this._cohesion);
-        this.acceleration.add(this._borderAvoid);
         this.acceleration.add(this._goodPosition);
-
-        // this.acceleration.mult(0.5);
-
     }
+    
     update(time) {
         this.position.add(p5.Vector.mult(this.velocity, time));
         this.velocity.add(p5.Vector.mult(this.acceleration, time));
