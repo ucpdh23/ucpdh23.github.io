@@ -617,11 +617,17 @@
 
     }
     
+    selfAcc() {
+      return createVector(0,0);
+    }
+    
     computeForces(mAlig, mSep, mCoh){
       this._separation = this.separation();
       this._alignment = this.alignment();
       this._cohesion = this.cohesion();
       this._borderAvoid = this.borderAvoid();
+      
+      this._selfAcc = this.selfAcc();
       
       this._alignment.mult(mAlig);
       this._separation.mult(mSep);
@@ -634,7 +640,7 @@
       this.acceleration.add(this._cohesion);
       
       this.acceleration.add(this._borderAvoid);
-      
+      this.acceleration.add(this._selfAcc);
     }
 
 
