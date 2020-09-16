@@ -664,8 +664,6 @@
     computeForces_2(first) {
       this.computeForces(0.75, 0.7, 0.1)
 
-        this._separation = this.separation();
-
         this._goodPosition = this.goodPosition(first);
 
         this.acceleration.add(this._goodPosition);
