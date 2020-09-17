@@ -31,6 +31,12 @@ function createDefaultStateMachine() {
             target: 'adelanta',
             action() {}
           };
+        } else if (ctx.message === 'acelera') {
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = 3;
+        } else if (ctx.message === 'desacelera') {
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = -3;
         }
     if (ctx.cyclist.id == ctx.first.id) {
       return {

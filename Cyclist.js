@@ -618,6 +618,22 @@
     }
     
     selfAcc() {
+      if (this.startSelfAcc) {
+        this._selfAccInit = time;
+        this.selfStartedSelfAcc = true;
+        this.startSelfAcc = undefined;
+      } else if(this.selfStartedSelfAcc) {
+        var diffTime =(time - this._selfAccInit)/3;
+    
+        
+        if (diffTime > Math.PI) {
+          this.selfStartedSelfAcc = false;
+        }
+        
+        return createVector(this.selfAccLevel
+          * Math.sin(diffTime), 0);
+      }
+      
       return createVector(0,0);
     }
     
@@ -634,6 +650,12 @@
       this._cohesion.mult(mCoh);
       
       this.acceleration.mult(0);
+      
+      if (this._selfAcc.x !== 0) {
+        this._alignment.x = 0;
+        this._separation.x = 0;
+        this._cohesion.x = 0;
+      }
       
       this.acceleration.add(this._separation);
       this.acceleration.add(this._alignment);
@@ -655,12 +677,14 @@
         this._wander = this.wander(4, 15);
         this._drive = this.drive();
         this._borderAvoid = this.borderAvoid();
+        this._selfAcc = this.selfAcc();
 
         this.acceleration.mult(0);
 
         this.acceleration.add(this._wander);
         this.acceleration.add(this._drive);
         this.acceleration.add(this._borderAvoid);
+        this.acceleration.add(this._selfAcc);
         this.acceleration.limit(this.maxSteeringForce);
         
         this.acceleration.x = 0;
