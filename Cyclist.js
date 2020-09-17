@@ -652,9 +652,9 @@
       this.acceleration.mult(0);
       
       if (this._selfAcc.x !== 0) {
-        this._alignment.x = 0;
-        this._separation.x = 0;
-        this._cohesion.x = 0;
+        this._alignment.x /= 2;
+        this._separation.x /= 2;
+        this._cohesion.x /= 2;
       }
       
       this.acceleration.add(this._separation);
