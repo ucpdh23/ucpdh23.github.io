@@ -19,6 +19,7 @@
 
         this.pushStateMachine(createDefaultStateMachine());
 
+        this.energy = new Energy(this);
     }
 
 
@@ -706,6 +707,8 @@
         this.velocity.add(p5.Vector.mult(this.acceleration, time));
         this.velocity.limit(this.maxSpeed);
         //this.acceleration.mult(0);
+        this.energy.update(time)
+        
 
         this.neighbour = []
 

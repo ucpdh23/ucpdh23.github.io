@@ -14,6 +14,7 @@
       <script src="stateMachine.js"></script>
       <script src="CyclingStateMachine.js"></script>
       <script src="hull.js"></script>
+      <script src="Energy.js"></script>
       <script src="sketch.js"></script>
 
       amarillo alignment<br />
@@ -21,7 +22,7 @@
       blue cohesion<br />
       red aceleración<br />
       
-      <input type="button" value="-" onclick="JavaScript:_debug_item= _debug_item+1"/><input type="button" value="+" onclick="JavaScript:_debug_item= _debug_item-1"/>
+      <input type="button" value="-" onclick="JavaScript:_debug_item= _debug_item-1"/><input type="button" value="+" onclick="JavaScript:_debug_item= _debug_item+1"/>
       <input type="button" value="tira" onclick="JavaScript:cyclists[_debug_item].sendMessage('tira')" />
       <input type="button" value="acelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('acelera')" />
       <input type="button" value="desacelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('desacelera')" />
