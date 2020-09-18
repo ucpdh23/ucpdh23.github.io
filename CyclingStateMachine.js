@@ -55,6 +55,15 @@ function createDefaultStateMachine() {
       },
     },
     computeTransition(ctx){
+      
+      if (ctx.message === 'acelera') {
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = 3;
+        } else if (ctx.message === 'desacelera') {
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = -3;
+        }
+      
     if (ctx.first.id != ctx.cyclist.id)
       return {
         target: 'init',

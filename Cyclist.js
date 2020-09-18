@@ -619,6 +619,7 @@
     
     selfAcc() {
       if (this.startSelfAcc) {
+        //print('selfAcc')
         this._selfAccInit = time;
         this.selfStartedSelfAcc = true;
         this.startSelfAcc = undefined;
@@ -642,7 +643,7 @@
       this._alignment = this.alignment();
       this._cohesion = this.cohesion();
       this._borderAvoid = this.borderAvoid();
-      
+     
       this._selfAcc = this.selfAcc();
       
       this._alignment.mult(mAlig);
@@ -685,9 +686,10 @@
         this.acceleration.add(this._drive);
         this.acceleration.add(this._borderAvoid);
         this.acceleration.add(this._selfAcc);
+        
         this.acceleration.limit(this.maxSteeringForce);
         
-        this.acceleration.x = 0;
+      // this.acceleration.x = 0;
 
     }
 
