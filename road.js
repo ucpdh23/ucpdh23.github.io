@@ -19,7 +19,7 @@ class Road {
     fill(255)
     textSize(13)
     text("meters:" + (int)(meters), 30, 30)
-    text("speed:" + globalFirst.velocity.x*3600/1000, 30, 45)
+    text("speed:" + ((int)(globalFirst.velocity.x*3600))/1000, 30, 45)
     line(0, this.y1, canvasWidth, this.y1);
     line(0, this.y2, canvasWidth, this.y2);
     /*
