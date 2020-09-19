@@ -80,7 +80,7 @@
             text(((diffY < 0) ? "V" : "∆") + " deltaY:" + diffY, 140, 45);
             text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
             text("diff:"+(globalFirst.position.x - this.position.x), 140, 60);
-            text("pulse:" + (int)(this.energy.pulse),240, 15)
+            text("pulse:" + (int)(this.energy.pulse2),240, 15)
         }
 
         // blue - cohesion
