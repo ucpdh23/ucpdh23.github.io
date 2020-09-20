@@ -3,7 +3,7 @@ class Energy {
   constructor(cyclist) {
     this.cyclist = cyclist;
     this.pulse = 80;
-    this.llano = 90;
+    this.llano = 75 + random(15);
     this.refProp = 15 + this.llano / 10;
     this.lastAcc = [0,0,0,0,0,0,0,0,0,0]
     this.lastAccIndex = 0;
