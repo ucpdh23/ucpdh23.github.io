@@ -56,8 +56,8 @@
         this.computeStroke(this.actualBodyColor, this.flashing);
 
         triangle(
-            posX + 9, posY - 3,
-            posX + 9, posY + 3,
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
             posX + 15, posY);
 
         ellipse(posX + 14, posY - 2, this.secuence % 4, 1);
