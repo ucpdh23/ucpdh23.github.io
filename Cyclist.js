@@ -10,7 +10,8 @@
         this.acceleration = createVector(0, 0) //random(3),0);
         this.neighbour = []
         this.maxSteeringForce = 0.2 //0.0045
-        this.viewingAngle = 210 * (Math.PI / 180);
+        var angle = 210;
+        this.viewingAngle = angle * (Math.PI / 180);
         this.secuence = random(4);
         //print("myId:"+this.id);
         this._mSeparation = sepRange;
@@ -25,7 +26,9 @@
 
 
     show(reference) {
+      if (this.acceleration.x > 0 || globalFirst.id === this.id)
         this.secuence = (this.secuence + 1) % 8;
+        
         stroke(255)
         let posX = (reference - this.position.x) * 10
         let posY = 160 + this.position.y * 10
@@ -33,9 +36,22 @@
         line(posX, posY, posX + 18, posY);
 
         if (this.colliding) stroke(255, 0, 0)
-        else if (this.id % 10 == 1) stroke(0, 255, 0)
+        else if (this.id % 10 == 1) stroke(0, 255, 0);
+        
+        
+        var heading = 0;
+        if (this.acceleration.x > 0.1) {
+          if (this.secuence < 2)
+            heading = -1;
+          else if (this.secuence < 4)
+            heading = 0;
+          else if (this.secuence < 6)
+            heading = 1;
+          else
+            heading = 0;
+        }
 
-        ellipse(posX + 6, posY, 4, 4);
+        ellipse(posX + 6, posY+heading, 4, 4);
 
         this.computeStroke(this.actualBodyColor, this.flashing);
 
@@ -69,7 +85,7 @@
 
         // purple
         stroke(255, 255, 255);
-        if (this.id == globalFirst.id) {
+        if (false) { //this.id == globalFirst.id) {
             this._drawVector(this.velocity, posX, posY + 5, 50);
         } else {
             //this._drawVector(p5.Vector.sub(globalFirst.velocity, this.velocity), posY+5, 50);
