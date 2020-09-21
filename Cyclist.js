@@ -21,6 +21,11 @@
         this.pushStateMachine(createDefaultStateMachine());
 
         this.energy = new Energy(this);
+        if (this.energy.llano < 80) {
+          this._mSeparation = this._mSeparation + 0.2;
+        } else if (this.energy.llano > 85) {
+          this._mSeparation = this._mSeparation - 0.2;
+        }
     }
 
 
@@ -92,11 +97,12 @@
             var diffX = (globalFirst.velocity.x - this.velocity.x);
             var diffY = globalFirst.velocity.
                 y - this.velocity.y;
-            text(((diffX > 0) ? ">>" : "<<") + " deltaX:" + diffX, 140, 30);
-            text(((diffY < 0) ? "V" : "∆") + " deltaY:" + diffY, 140, 45);
+            text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, 140, 30);
+            text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, 140, 45);
             text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
-            text("diff:"+(globalFirst.position.x - this.position.x), 140, 60);
+            text("dist:"+((int)((globalFirst.position.x - this.position.x)*1000))/1000, 140, 60);
             text("pulse:" + (int)(this.energy.pulse2),240, 15)
+            text("llano:" + this.energy.llano, 300, 15)
         }
 
         // blue - cohesion
@@ -115,7 +121,7 @@
         //ellipse(posX, posY, neighborDist*10, neighborDist*10);
         circle(posX, posY, neighborDist * 20);
         //ellipse(posX,posY,sepRange*10, sepRange*10);
-        circle(posX, posY, sepRange * 20);
+        circle(posX, posY, this._mSeparation * 20);
 
         line(posX, posY,
             posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10,
