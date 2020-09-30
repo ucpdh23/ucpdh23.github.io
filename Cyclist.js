@@ -58,12 +58,16 @@
 
         ellipse(posX + 6, posY+heading, 4, 4);
 
-        this.computeStroke(this.actualBodyColor, this.flashing);
+        var isFlashing = this.computeStroke(this.actualBodyColor, this.flashing);
 
         triangle(
             posX + 9, posY - 3+ heading,
             posX + 9, posY + 3+ heading,
             posX + 15, posY);
+            
+        if (!isFlashing) {
+          this.drawMallot(posX, posY, heading);
+        }
 
         ellipse(posX + 14, posY - 2, this.secuence % 4, 1);
         ellipse(posX + 14, posY + 2, (this.secuence + 2) % 4, 1);
@@ -778,15 +782,117 @@
     }
 
     computeStroke(actual, flashing) {
+      var isFlashing = false;
         var result = actual;
         if (flashing != undefined && flashing != null) {
             if (flashing.tics > 0) {
                 result = flashing.color;
                 flashing.tics = flashing.tics - 1;
+                isFlashing= true;
             }
         }
 
         stroke(result.x, result.y, result.z);
+        
+        return flashing;
     }
 
+    drawMallot(posX, posY, heading) {
+      if (this.id < 10) {
+        stroke(218, 165, 32)
+        fill(218, 165, 32);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+            //stroke(0);
+            //line(posX + 9, posY - 3+ heading,
+             //posX + 9, posY - 1+ heading
+            //);
+             
+      } else if (this.id < 20) {
+      
+        stroke(  0, 191, 225)
+        fill(  0, 191, 225);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+      } else if  (this.id < 30) {
+      
+        stroke(  255, 255, 255)
+        fill(  255, 255, 255);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke (0,255,0)
+           fill(0, 255, 0)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);
+            noFill()
+           
+      } else if  (this.id < 40) {
+      
+        stroke(  255, 0,0)
+        fill(  255, 0,0);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke (0,0,0)
+           fill(0, 0, 0)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 12, posY);
+            noFill()
+           
+      } else if  (this.id < 50) {
+      
+        stroke( 0 , 0,228)
+        fill(  0,0,228);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke (255)
+           fill(255)
+           triangle(
+            posX + 11, posY - 1+ heading,
+            posX + 11, posY + 1+ heading,
+            posX + 11, posY);
+            noFill()
+           
+      } else if  (this.id < 60) {
+      
+        stroke(  255, 0, 0)
+        fill(  255, 0, 0);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke (250)
+           fill(250)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);
+            noFill()
+           
+      } 
+    }
 }

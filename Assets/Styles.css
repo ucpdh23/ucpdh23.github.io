@@ -1,0 +1,102 @@
+* {
+  /*margin: 10px;
+  padding: 10px;
+  box-sizing: border-box;*/
+}
+
+html {
+  font-family: 'Arimo', sans-serif;
+}
+
+body {
+  /*background-color: #E6B065;*/
+  margin: 0px;
+}
+h1 {
+  color: azure;
+  text-shadow: 3px 5px 6px #3f3e3e;
+  vertical-align: center;
+ /*margin: 25px 25px 25px 25px;*/
+}
+p {
+  color: red;
+}
+
+.parent {
+  display: flex;
+  flex-direction: column;
+}
+
+ .header {
+   display: flex;
+   flex-flow: row nowrap;
+ }
+ 
+  .logo {
+    background-color: #000000;
+    flex: 1 1 auto;
+    height: 60px;
+  }
+  .nav {
+    background-color: #000000;
+    flex: 5 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    color: white;
+  }
+  
+  .social {
+    background-color: #000000;
+    flex: 1 1 auto;
+  }
+  
+ .main {
+   background-image: url("../Assets/items.png");
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 400px;
+ }
+ 
+  .box {
+    color: #B0FA48;
+    border-radius: 5px;
+    border: 1px solid #73AD21;
+    padding: 20px;
+    height: 28px;
+    display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 250px;
+  }
+
+ .menu {
+   display: flex;
+   flex-direction: column;
+ }
+
+  .item {
+  /* Background pattern from Toptal Subtle Patterns */
+   display: flex;
+   flex-direction: row-reverse;
+   vertical-align: center;
+   align-items: center;
+   background-color: red;
+   /*height: 60px;
+   width: 98%;*/
+   text-align: right;
+   /*position: absolute;*/
+   margin: 5px;
+  }
+  
+   .title {
+     margin: 15px;
+   }
+
+  .cyclist {
+    background-image: url("../Assets/Ruedas.jpeg");
+    background-position: right center;
+  }

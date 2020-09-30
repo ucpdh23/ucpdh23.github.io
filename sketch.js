@@ -8,7 +8,7 @@ let _debug_item = 2;
 let _drawHull = false;
 
 
-let items = 5;
+let items = 60;
 let demarrajeId = 11;
 
 let sepRange = 1.8;
@@ -92,7 +92,7 @@ function draw() {
       meters = currMeters
   }
   
-  background(20);
+  background(40);
   
   reference = road.show();
   for (i=0; i < items; i++)
