@@ -44,10 +44,10 @@
           var diffClickedY = posY - clicked.y;
           
           
-          if (diffClickedX < 10 &&
-              diffClickedX > -10 &&
-              diffClickedY < 1 &&
-              diffClickedY > -20) {
+          if (diffClickedX < 1 &&
+              diffClickedX > -20 &&
+              diffClickedY < 7 &&
+              diffClickedY > -7) {
                 console.log("sel:"+ this.id)
                 _debug_item = this.id;
               }
