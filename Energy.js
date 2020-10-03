@@ -7,6 +7,7 @@ class Energy {
     this.refProp = 15 + this.llano / 10;
     this.lastAcc = [0,0,0,0,0,0,0,0,0,0]
     this.lastAccIndex = 0;
+    this.points = 100;
   }
   
   update(delta) {
@@ -35,6 +36,7 @@ class Energy {
     var itemsPulse = items + items2/2;
     this.pulse2 = this.pulse - itemsPulse;
     
+    this.points -= this.pulse2/ 2500 * delta;
   }
   
   computeAccVar(acc) {

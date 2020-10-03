@@ -123,6 +123,7 @@
             text("dist:"+((int)((globalFirst.position.x - this.position.x)*1000))/1000, 140, 60);
             text("pulse:" + (int)(this.energy.pulse2),240, 15)
             text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
+            text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
         }
 
         // blue - cohesion
