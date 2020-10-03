@@ -106,15 +106,14 @@ function createDefaultStateMachine() {
         },
         onExecute(ctx) {
           if (tirando.includes(ctx.cyclist)) return;
-          
+
+
           
           if (ctx.first.id == ctx.cyclist.id) {
            print('first')
             tirando.push(ctx.cyclist);
             
             } else {
-              
-              
           ctx.cyclist._mGoodPosition = 0;
           ctx.cyclist.computeForces_2(ctx.first);
           
@@ -122,16 +121,64 @@ function createDefaultStateMachine() {
         }
         
         },
-      computeTransition(ctx){
-        if (tirando.includes(ctx.cyclist))
-        return {
-          target: 'pulling',
-          action(){}
-        };
-      }
-      
-  },
-  
+        computeTransition(ctx) {
+            if (ctx.cyclist._gotoFirst !== undefined && ctx.cyclist._gotoFirst === true) {
+                ctx.cyclist._gotoFirst = false;
+
+                return {
+                    target: 'gotoFirst',
+                    action() { }
+                };
+            } else if (tirando.includes(ctx.cyclist)) {
+                return {
+                    target: 'pulling',
+                    action() { }
+                };
+            }
+        }
+    },
+      gotoFirst: {
+          actions: {
+              onEnter(ctx) {
+                  var diff = ctx.cyclist.velocity.x - ctx.first.velocity.x;
+
+                  var acceleration = 1;
+                  if (diff > 0.5) {
+                      acceleration = 0.2
+                  } else if (diff > 0.3) {
+                      acceleration = 0.4
+                  } else if (diff > 0.2) {
+                      acceleration = 0.6
+                  } else if (diff > 0.1) {
+                      acceleraton = 0.8
+                  }
+
+                  ctx.cyclist._gotoFirstDefaultTime = ctx.cyclist.selfAccTimer;
+
+                  ctx.cyclist.startSelfAcc = true;
+                  ctx.cyclist.selfAccLevel = acceleration;
+                  ctx.cyclist.selfAccTimer = 0.3;
+              },
+              onExit(ctx) {
+                  ctx.cyclist.selfAccTimer = ctx.cyclist._gotoFirstDefaultTime;
+              },
+              onExecute(ctx) {
+                  ctx.cyclist.computeForces_3(ctx.first);
+              }
+          },
+          computeTransition(ctx) {
+              if (ctx.cyclist.selfStartedSelfAcc === false) {
+                  if (ctx.first.id === ctx.cyclist.id) {
+                      tirando.push(ctx.cyclist);
+                      return {
+                          target: 'pulling',
+                          action() { }
+                      };
+                  }
+              }
+          }
+      },
+
    
   
   adelanta: {

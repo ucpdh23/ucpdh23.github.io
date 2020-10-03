@@ -5,6 +5,7 @@
         this.state = 1;
         this._mGoodPosition = 7;
         this._mDemarrajeGoodPosition = 3;
+        this.selfAccTimer = 3;
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
         this.velocity = createVector(10, 0);
         this.acceleration = createVector(0, 0) //random(3),0);
@@ -106,7 +107,7 @@
             text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
             text("dist:"+((int)((globalFirst.position.x - this.position.x)*1000))/1000, 140, 60);
             text("pulse:" + (int)(this.energy.pulse2),240, 15)
-            text("llano:" + this.energy.llano, 300, 15)
+            text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
         }
 
         // blue - cohesion
@@ -315,7 +316,11 @@
     }
 
     goodPosition(first) {
-        if (this._mGoodPosition == 0) {
+        if (this._mGoodPosition === -2) {
+            var cyclistToBet = findCyclist(this._gotoFirstId);
+
+            return this.goodPositionBeforeFirst(cyclistToBet);
+        } else if (this._mGoodPosition === 0) {
             return this.goodPositionToFirst(first);
         } else {
             this.goodPositionInsideGroup(first);
@@ -325,17 +330,17 @@
     goodPositionToFirst(first) {
       var diff = first.position.x /* + first.velocity.x -
       */ - this.position.x;
-      
-      if (diff < 2) {
-        var diffVel = first.velocity.x - this.velocity.x;
-        if (diffVel < 0.5 && diffVel > -0.5) {
-         // print("closet");
-          // aqui puedo cambiar de estado
-        }
-      }
 
-      
-      if (diff > 0.5) {
+        var almostFirst = false;
+        if (diff < 2) {
+            var diffVel = first.velocity.x - this.velocity.x;
+            if (diffVel < 0.5 && diffVel > -0.5) {
+                this._gotoFirst = true;
+                this._gotoFirstId = first.id;
+            }
+        }
+
+        if (diff > 0.5) {
             var border = this.inBorder();
 
             if (border == null) {
@@ -652,7 +657,7 @@
         this.selfStartedSelfAcc = true;
         this.startSelfAcc = undefined;
       } else if(this.selfStartedSelfAcc) {
-        var diffTime =(time - this._selfAccInit)/3;
+          var diffTime = (time - this._selfAccInit) / this.selfAccTimer;
     
         
         if (diffTime > Math.PI) {
@@ -727,6 +732,10 @@
         this._goodPosition = this.goodPosition(first);
 
         this.acceleration.add(this._goodPosition);
+    }
+
+    computeForces_3(first) {
+        this.computeForces(1, 0.2, 0.2);
     }
     
     update(time) {
