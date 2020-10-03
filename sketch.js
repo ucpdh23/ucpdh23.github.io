@@ -20,6 +20,8 @@ let globalFirst= null;
 let globalLast = null;
 let globalHull = null;
 
+let clicked = null;
+
 const canvasWidth = 600;
 const canvasHeight = 300;
 
@@ -115,6 +117,17 @@ function draw() {
     text(pad(mins, 2) + ":" + pad(secs, 2), 30, 13);
 
     time = time + delta;
+    clicked = null;
+}
+
+
+function mouseClicked() {
+  ellipse(mouseX, mouseY, 5, 5);
+  
+  clicked = createVector(mouseX, mouseY)
+  
+  // prevent default
+  return false;
 }
 
 class Group {

@@ -39,6 +39,21 @@
         let posX = (reference - this.position.x) * 10
         let posY = 160 + this.position.y * 10
 
+        if (clicked != null) {
+          var diffClickedX = posX - clicked.x;
+          var diffClickedY = posY - clicked.y;
+          
+          
+          if (diffClickedX < 10 &&
+              diffClickedX > -10 &&
+              diffClickedY < 1 &&
+              diffClickedY > -20) {
+                console.log("sel:"+ this.id)
+                _debug_item = this.id;
+              }
+        }
+
+
         line(posX, posY, posX + 18, posY);
 
         if (this.colliding) stroke(255, 0, 0)
