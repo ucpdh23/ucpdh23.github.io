@@ -67,6 +67,7 @@ frameRate(20)
 function draw() {
   var delta = 1/20;
   meters = 0;
+  var selected = _debug_item;
   
   var first = cyclists[0];
   var last = cyclists[0];
@@ -123,6 +124,11 @@ function draw() {
     text(pad(mins, 2) + ":" + pad(secs, 2), 30, 13);
 
     time = time + delta;
+    
+    if (selected !== _debug_item) {
+      _showSlider();
+    }
+    
     clicked = null;
 
     showSliderValue = 0;
@@ -131,9 +137,17 @@ function draw() {
         slider.hide();
         slider.remove();
         showSlider = false;
-    } else if (showSlider && showSliderLastClickTime + 1 < time) {
-        showSliderValue
     }
+}
+
+function _showSlider() {
+  slider = createSlider(0, 100, 50);
+  slider.position(mouseX, mouseY + 30);
+  slider.style('width', '80px');
+  slider.touchEnded(sliderMouseClicked);
+  
+  showSlider = true;
+  showSliderStartTime = time;
 }
 
 function mouseClicked() {
@@ -141,30 +155,22 @@ function mouseClicked() {
   
     clicked = createVector(mouseX, mouseY)
 
-    if (!showSlider) {
-        slider = createSlider(0, 100, 50);
-        slider.position(mouseX, mouseY + 30);
-        slider.style('width', '80px');
-        slider.mouseClicked(sliderMouseClicked);
-
-
-        showSlider = true;
-        showSliderStartTime = time;
-    }
   
     // prevent default
     return false;
 }
 
 function sliderMouseClicked() {
-    showSliderStartTime = time;
-    showSliderLastClickTime = time;
+    
+    showSliderValue= -(slider.value() - 50)/50;
 
-    showSliderValue = (slider.value() - 50)/50;
-
-    slider.value(50);
-
-    showSliderStartTime = 0
+    //slider.value(50);
+    
+    console.log("slider:"+showSliderValue)
+    
+    showSliderStartTime = time - 2
+    
+    
 
     return false;
 }
