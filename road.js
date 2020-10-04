@@ -42,7 +42,7 @@ class Road {
    */
     var start = (int)(meters) + 10;
     
-    for (var i = start; i >= start - 60; i--) {
+    for (var i = start; i >= start - 100; i--) {
       if (i %8 == 0) line((start - i)*10, this.middle, (start - i + 4)*10, this.middle);
     }
     

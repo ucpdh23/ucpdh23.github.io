@@ -819,7 +819,7 @@
 
         stroke(result.x, result.y, result.z);
         
-        return flashing;
+        return isFlashing;
     }
 
     drawMallot(posX, posY, heading) {

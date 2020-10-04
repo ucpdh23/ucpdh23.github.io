@@ -22,7 +22,7 @@ let globalHull = null;
 
 let clicked = null;
 
-const canvasWidth = 600;
+const canvasWidth = 1000;
 const canvasHeight = 300;
 
 let slider = null;
@@ -126,6 +126,11 @@ function draw() {
     time = time + delta;
     
     if (selected !== _debug_item) {
+      if (showSlider) {
+        slider.hide();
+        slider.remove();
+        showSlider = false;
+      }
       _showSlider();
     }
     
@@ -133,7 +138,7 @@ function draw() {
 
     showSliderValue = 0;
 
-    if (showSlider && showSliderStartTime + 5 < time) {
+    if (showSlider && showSliderStartTime + 3 < time) {
         slider.hide();
         slider.remove();
         showSlider = false;
@@ -168,9 +173,9 @@ function sliderMouseClicked() {
     
     console.log("slider:"+showSliderValue)
     
-    showSliderStartTime = time - 2
+    showSliderStartTime = time - 1
     
-    
+    cyclists[_debug_item].sendMessage('acelera#'+showSliderValue);
 
     return false;
 }

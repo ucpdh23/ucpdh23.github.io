@@ -37,6 +37,11 @@ function createDefaultStateMachine() {
         } else if (ctx.message === 'desacelera') {
           ctx.cyclist.startSelfAcc = true;
           ctx.cyclist.selfAccLevel = -3;
+        } else if (typeof ctx.message == 'string' && ctx.message.startsWith('acelera#')) {
+          var val = parseFloat(ctx.message.split('#')[1]);
+          
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = val;
         }
     if (ctx.cyclist.id == ctx.first.id) {
       return {
@@ -62,6 +67,11 @@ function createDefaultStateMachine() {
         } else if (ctx.message === 'desacelera') {
           ctx.cyclist.startSelfAcc = true;
           ctx.cyclist.selfAccLevel = -3;
+        } else if (typeof ctx.message == 'string' && ctx.message.startsWith('acelera#')) {
+          var val = parseFloat(ctx.message.split('#')[1]);
+          
+          ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = val;
         }
       
     if (ctx.first.id != ctx.cyclist.id)
