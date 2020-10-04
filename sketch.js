@@ -31,6 +31,8 @@ let showSliderStartTime = null;
 let showSliderLastClickTime = null;
 let showSliderValue = 0;
 
+let button;
+
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   
@@ -127,11 +129,9 @@ function draw() {
     
     if (selected !== _debug_item) {
       if (showSlider) {
-        slider.hide();
-        slider.remove();
-        showSlider = false;
+        hideOptions()
       }
-      _showSlider();
+      showOptions();
     }
     
     clicked = null;
@@ -139,10 +139,37 @@ function draw() {
     showSliderValue = 0;
 
     if (showSlider && showSliderStartTime + 3 < time) {
-        slider.hide();
+      hideOptions();
+    }
+}
+function hideOptions() {
+  _hideSlider();
+  _hideButton();
+}
+
+function _hideButton() {
+  button.hide();
+  button.remove();
+}
+
+function _hideSlider() {
+  slider.hide();
         slider.remove();
         showSlider = false;
-    }
+}
+
+function showOptions() {
+  _showSlider();
+  _showButton();
+}
+
+function _showButton() {
+  button = createButton('pull');
+  button.position(mouseX, mouseY+5);
+  button.mousePressed(() => {
+    cyclists[_debug_item].sendMessage('tira');
+    
+  });
 }
 
 function _showSlider() {
