@@ -34,7 +34,7 @@ class Energy {
     var items = this.cyclist.computeItems(30,4).length;
     var items2 = this.cyclist.computeItems(180, 6).length;
     var itemsPulse = items + items2/2;
-    this.pulse2 = this.pulse - itemsPulse;
+    this.pulse2 = this.pulse - itemsPulse *2;
     
     this.points -= this.pulse2/ 2500 * delta;
   }

@@ -174,6 +174,8 @@ function createDefaultStateMachine() {
                           target: 'pulling',
                           action() { }
                       };
+                  } else {
+                    ctx.cyclist.startSelfAcc = true;
                   }
               }
           }

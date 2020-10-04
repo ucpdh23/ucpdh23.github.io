@@ -243,7 +243,7 @@
         if (theta == undefined) theta = Math.PI / 2;
 
         var radius = 4;
-        var distance = 1000;
+        var distance = 10;
 
         var driveX = radius * cos(theta);
         var driveY = radius * sin(theta);
