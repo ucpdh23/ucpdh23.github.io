@@ -174,6 +174,8 @@ function createDefaultStateMachine() {
                           target: 'pulling',
                           action() { }
                       };
+                  } else if (ctx.first.velocity.x < ctx.cyclist.velocity.x - 0.3) {
+                      console.log("wait a while");
                   } else {
                     ctx.cyclist.startSelfAcc = true;
                   }

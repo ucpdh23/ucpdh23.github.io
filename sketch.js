@@ -25,6 +25,12 @@ let clicked = null;
 const canvasWidth = 600;
 const canvasHeight = 300;
 
+let slider = null;
+let showSlider = false;
+let showSliderStartTime = null;
+let showSliderLastClickTime = null;
+let showSliderValue = 0;
+
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
   
@@ -118,16 +124,49 @@ function draw() {
 
     time = time + delta;
     clicked = null;
+
+    showSliderValue = 0;
+
+    if (showSlider && showSliderStartTime + 5 < time) {
+        slider.hide();
+        slider.remove();
+        showSlider = false;
+    } else if (showSlider && showSliderLastClickTime + 1 < time) {
+        showSliderValue
+    }
 }
 
-
 function mouseClicked() {
-  ellipse(mouseX, mouseY, 5, 5);
+    ellipse(mouseX, mouseY, 5, 5);
   
-  clicked = createVector(mouseX, mouseY)
+    clicked = createVector(mouseX, mouseY)
+
+    if (!showSlider) {
+        slider = createSlider(0, 100, 50);
+        slider.position(mouseX, mouseY + 30);
+        slider.style('width', '80px');
+        slider.mouseClicked(sliderMouseClicked);
+
+
+        showSlider = true;
+        showSliderStartTime = time;
+    }
   
-  // prevent default
-  return false;
+    // prevent default
+    return false;
+}
+
+function sliderMouseClicked() {
+    showSliderStartTime = time;
+    showSliderLastClickTime = time;
+
+    showSliderValue = (slider.value() - 50)/50;
+
+    slider.value(50);
+
+    showSliderStartTime = 0
+
+    return false;
 }
 
 class Group {
