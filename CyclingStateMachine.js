@@ -97,6 +97,20 @@ function createDefaultStateMachine() {
         
         },
       computeTransition(ctx){
+        if (ctx.message == 'tira') {
+        ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.selfAccLevel = -3;
+          return {
+        target: 'init',
+        action(){},
+        };
+          
+        } else if (typeof ctx.message == 'string' && ctx.message.startsWith('acelera#')) {
+            var val = parseFloat(ctx.message.split('#')[1]);
+          
+            ctx.cyclist.startSelfAcc = true;
+            ctx.cyclist.selfAccLevel = val;
+          }
         }
       
   },

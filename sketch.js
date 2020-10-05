@@ -8,7 +8,7 @@ let _debug_item = 2;
 let _drawHull = false;
 
 
-let items = 160;
+let items = 5;
 let demarrajeId = 11;
 
 let sepRange = 1.8;

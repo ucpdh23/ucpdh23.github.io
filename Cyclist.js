@@ -32,7 +32,7 @@
 
 
     show(reference) {
-      if (this.acceleration.x > 0 || globalFirst.id === this.id)
+      if (this.acceleration.x >= 0 || globalFirst.id === this.id)
         this.secuence = (this.secuence + 1) % 8;
         
         stroke(255)
@@ -672,6 +672,10 @@
         this._selfAccInit = time;
         this.selfStartedSelfAcc = true;
         this.startSelfAcc = undefined;
+        if (this.energy.pulse2 > 160) {
+          if (this.selfAccLevel > 0)
+            this.selfAccLevel /= 2;
+        }
       } else if(this.selfStartedSelfAcc) {
           var diffTime = (time - this._selfAccInit) / this.selfAccTimer;
     
