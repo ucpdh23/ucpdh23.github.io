@@ -690,14 +690,50 @@
       
       return createVector(0,0);
     }
+
+    reduceDraft() {
+        if (this.energy.pulse2 > 120 &&
+            (this.energy.pulse - this.energy.pulse2) < 2) {
+            var candidate = this.findCandidateToReduceDraft(45, 4)
+
+            if (candidate === null) {
+                candidate = this.findCandidateToReduceDraft(90, 6)
+            }
+
+            if (candidate === null) {
+                candidate = this.findCandidateToReduceDraft(45, 12)
+            }
+
+            if (candidate !== null) {
+                console.log("try to reduce energy of " + this.id + " with " + candidate.id);
+
+            }
+        }
+
+        return createVector(0, 0);
+    }
+
+    findCandidateToReduceDraft(angle, meters) {
+        var items = this.computeItems(angle, meters);
+
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (item.position.x > this.position.x + 2 && this.velocity.x - item.velocity.x < 2 && this.velocity.x - item.velocity.x > -2) {
+                return item;
+            }
+        }
+
+    }
     
+
     computeForces(mAlig, mSep, mCoh){
       this._separation = this.separation();
       this._alignment = this.alignment();
       this._cohesion = this.cohesion();
       this._borderAvoid = this.borderAvoid();
      
-      this._selfAcc = this.selfAcc();
+        this._selfAcc = this.selfAcc();
+        this._reduceDraft = this.reduceDraft();
       
       this._alignment.mult(mAlig);
       this._separation.mult(mSep);
@@ -717,6 +753,7 @@
       
       this.acceleration.add(this._borderAvoid);
       this.acceleration.add(this._selfAcc);
+      this.acceleration.add(this._reduceDraft);
     }
 
 
