@@ -120,8 +120,9 @@
             text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, 140, 30);
             text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, 140, 45);
             text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
-            text("dist:"+((int)((globalFirst.position.x - this.position.x)*1000))/1000, 140, 60);
-            text("pulse:" + (int)(this.energy.pulse2),240, 15)
+            text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
+            text("id:" + (int)(this.id), 240, 15)
+            text("pulse:" + (int)(this.energy.pulse2),240, 30)
             text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
             text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
         }
@@ -391,7 +392,43 @@
         }
     }
 
+    goAfter(target) {
+        var offset = createVector(-1.8, 0);
+        var pointToGo = p5.Vector.add(target.position, offset);
 
+        var toOffset = p5.Vector.sub(this.position, pointToGo);
+
+        var toOffsetMag = toOffset.mag();
+
+        var lookAheadTime = toOffsetMag / (this.maxSpeed + target.velocity.x);
+
+        var futurePosition = p5.Vector.mult(target.velocity, lookAheadTime);
+
+        var pointToFoInFuture = p5.Vector.add(futurePosition, pointToGo);
+
+
+        return this.arrive(pointToFoInFuture, 1);
+    }
+
+    arrive(target, level) {
+        if (target.x > this.position.x) {
+            var deceleration = 0.3;
+
+            var toTarget = p5.Vector.sub(target, this.position);
+            var dist = toTarget.mag();
+
+            var speed = dist / (deceleration * level);
+            speed = Math.min(speed, this.maxSpeed);
+
+            var desiredVel = toTarget.mult(speed / dist);
+            desiredVel.sub(this.velocity);
+            return desiredVel;
+        } else {
+            console.log("cannot go back");
+        }
+
+
+    }
 
     inBorder() {
         var item = -1;
@@ -692,21 +729,37 @@
     }
 
     reduceDraft() {
-        if (this.energy.pulse2 > 120 &&
-            (this.energy.pulse - this.energy.pulse2) < 2) {
-            var candidate = this.findCandidateToReduceDraft(45, 4)
-
-            if (candidate === null) {
-                candidate = this.findCandidateToReduceDraft(90, 6)
+        if (this._reduceDraftEnabled) {
+            if (time - this._reduceDraftTime < 300) {
+                if (Math.abs(this.velocity.x - this._reduceDraftCandidate.velocity.x) < 2) {
+                    return this.goAfter(this._reduceDraftCandidate);
+                } else {
+                    this._reduceDraftEnabled = false;
+                }
+            } else {
+                this._reduceDraftEnabled = false;
             }
+        } else if (this.energy.pulse2 > 120) {
+            if (this.energy.draftReduction <= 2) {
+                var candidate = this.findCandidateToReduceDraft(45, 4)
 
-            if (candidate === null) {
-                candidate = this.findCandidateToReduceDraft(45, 12)
-            }
+                if (candidate === null) {
+                    candidate = this.findCandidateToReduceDraft(90, 6)
+                }
 
-            if (candidate !== null) {
-                console.log("try to reduce energy of " + this.id + " with " + candidate.id);
+                if (candidate === null) {
+                    candidate = this.findCandidateToReduceDraft(45, 12)
+                }
 
+                if (candidate !== null && candidate !== undefined) {
+                    this._reduceDraftCandidate = candidate;
+                    this._reduceDraftTime = time;
+
+                    console.log("try to reduce energy of " + this.id + " with " + candidate.id);
+
+                }
+            } else {
+                console.log("id:" + this.id + " draftReduction: " + this.energy.draftReduction);
             }
         }
 
@@ -718,7 +771,7 @@
 
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
-            if (item.position.x > this.position.x + 2 && this.velocity.x - item.velocity.x < 2 && this.velocity.x - item.velocity.x > -2) {
+            if (item.position.x > this.position.x + 2 && Math.abs(this.velocity.x - item.velocity.x) < 2 ) {
                 return item;
             }
         }

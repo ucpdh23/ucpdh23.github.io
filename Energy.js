@@ -17,11 +17,11 @@ class Energy {
     var newPulse = g * 21.0084034 +58.9915966;
     
     if (newPulse +2 < this.pulse) {
-      this.pulse -= 0.3;
+        this.pulse -= 0.3;
     } else if (this.pulse +2<newPulse) {
-      this.pulse += 0.5;
+        this.pulse += 0.5;
     } else {
-      this.pulse = newPulse;
+        this.pulse = newPulse;
     }
     
     var accX = this.cyclist.acceleration.x;
@@ -33,8 +33,10 @@ class Energy {
     
     var items = this.cyclist.computeItems(30,4).length;
     var items2 = this.cyclist.computeItems(180, 6).length;
-    var itemsPulse = items + items2/2;
-    this.pulse2 = this.pulse - itemsPulse *2;
+    var itemsPulse = items + items2 / 2;
+    this.draftReduction = itemsPulse * 2;
+
+    this.pulse2 = this.pulse - this.draftReduction;
     
     this.points -= this.pulse2/ 2500 * delta;
   }

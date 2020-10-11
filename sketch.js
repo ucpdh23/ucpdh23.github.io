@@ -173,13 +173,15 @@ function _showButton() {
 }
 
 function _showSlider() {
-  slider = createSlider(0, 100, 50);
-  slider.position(mouseX, mouseY + 30);
-  slider.style('width', '80px');
-  slider.touchEnded(sliderMouseClicked);
-  
-  showSlider = true;
-  showSliderStartTime = time;
+    slider = createSlider(0, 100, 50);
+    slider.position(mouseX, mouseY + 30);
+    slider.style('width', '80px');
+    slider.touchEnded(sliderMouseClicked);
+    slider.mouseReleased(sliderMouseClicked);
+
+
+    showSlider = true;
+    showSliderStartTime = time;
 }
 
 function mouseClicked() {
@@ -207,16 +209,6 @@ function sliderMouseClicked() {
     return false;
 }
 
-class Group {
-constructor(cyclists){
-this._cyclists= cyclists;
-
-}
-  
-  sendMessage(sender, message) {
-
-  }
-}
 
 
 
