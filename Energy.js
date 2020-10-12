@@ -31,8 +31,8 @@ class Energy {
     var accVar = this.computeAccVar(accX);
     this.pulse = this.pulse + accVar;
     
-    var items = this.cyclist.computeItems(30,4).length;
-    var items2 = this.cyclist.computeItems(180, 6).length;
+    var items = this.cyclist.computeItems(20,4).length;
+    var items2 = this.cyclist.computeItems(90, 6).length;
     var itemsPulse = items + items2 / 2;
     this.draftReduction = itemsPulse * 2;
 

@@ -7,7 +7,7 @@
         this._mDemarrajeGoodPosition = 3;
         this.selfAccTimer = 3;
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
-        this.velocity = createVector(10, 0);
+        this.velocity = createVector(13, 0);
         this.acceleration = createVector(0, 0) //random(3),0);
         this.neighbour = []
         this.maxSteeringForce = 0.2 //0.0045
@@ -123,8 +123,10 @@
             text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
             text("id:" + (int)(this.id), 240, 15)
             text("pulse:" + (int)(this.energy.pulse2),240, 30)
+            text(" red.:" + this.energy.draftReduction, 240, 45);
             text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
             text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
+            text("log:" + this.log, 240, 60);
         }
 
         // blue - cohesion
@@ -393,6 +395,34 @@
     }
 
     goAfter(target) {
+      
+      var endPos = p5.Vector.add(target.position, createVector(-1.5, 0));
+      var diff = p5.Vector.sub(endPos, this.position);
+      var dist = diff.mag();
+      diff.normalize();
+      
+     // this.log = "follow:" + target.id + " x:"+diff.x+" y:"+diff.y;
+      this.log = "follow:" + target.id + " dist:"+dist;
+      
+      var speed = dist / 0.0003;
+      speed = Math.min(speed, 15);
+      
+      
+      diff.mult(speed);
+      
+      diff.sub(this.velocity);
+      
+      return diff;
+      //return diff;
+      //diff.norm();
+      
+      //var steer = this.seek(target);
+      //steer.limit(this.maxSteeringForce);
+     // return steer;
+      
+      
+     return createVector(0,0);
+      
         var offset = createVector(-1.8, 0);
         var pointToGo = p5.Vector.add(target.position, offset);
 
@@ -730,9 +760,12 @@
 
     reduceDraft() {
         if (this._reduceDraftEnabled) {
-            if (time - this._reduceDraftTime < 300) {
+          if (this.energy.draftReduction > 2) {
+            this._reduceDraftEnabled = false;
+          } else if (time - this._reduceDraftTime < 30) {
                 if (Math.abs(this.velocity.x - this._reduceDraftCandidate.velocity.x) < 2) {
                     return this.goAfter(this._reduceDraftCandidate);
+                   // console.log("goafter")
                 } else {
                     this._reduceDraftEnabled = false;
                 }
@@ -754,12 +787,15 @@
                 if (candidate !== null && candidate !== undefined) {
                     this._reduceDraftCandidate = candidate;
                     this._reduceDraftTime = time;
+                    this._reduceDraftEnabled= true;
 
-                    console.log("try to reduce energy of " + this.id + " with " + candidate.id);
+                    //console.log("try to reduce energy of " + this.id + " following " + candidate.id);
 
+                } else {
+                  this.log = "without candidate"
                 }
             } else {
-                console.log("id:" + this.id + " draftReduction: " + this.energy.draftReduction);
+                // console.log("id:" + this.id + " draftReduction: " + this.energy.draftReduction);
             }
         }
 
@@ -769,13 +805,21 @@
     findCandidateToReduceDraft(angle, meters) {
         var items = this.computeItems(angle, meters);
 
+        var bestCandidate = null;
+        var bestCandidateDistance = 100;
         for (var i = 0; i < items.length; i++) {
             var item = items[i];
-            if (item.position.x > this.position.x + 2 && Math.abs(this.velocity.x - item.velocity.x) < 2 ) {
-                return item;
+            if (item.position.x > this.position.x + 1.4 && Math.abs(this.velocity.x - item.velocity.x) < 2 ) {
+                var distance = item.position.x - this.position.x;
+                
+                if (distance < bestCandidateDistance) {
+                  bestCandidateDistance= distance;
+                  bestCandidate= item;
+                }
             }
         }
-
+        
+        return bestCandidate;
     }
     
 
@@ -874,6 +918,7 @@
     }
 
     computeNeighbour(cyclists, i, first, last) {
+      this.log = "";
         this.neighbour = []
         for (i = 0; i < items; i++) {
             if (this !== cyclists[i]) {
