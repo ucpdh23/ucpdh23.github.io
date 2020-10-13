@@ -48,9 +48,43 @@ function createDefaultStateMachine() {
         target: 'first',
         action(){},
         };
+    } else {
+      if (ctx.cyclist.shouldReduceDraft()) {
+        var candidate = ctx.cyclist.findCandidate();
+        
+        if (candidate !== null) {
+          ctx.cyclist._reduceDraftCandidate = candidate;
+          ctx.cyclist._reduceDraftTime = time;
+        
+          return {
+            target: 'reduceDraft',
+            action(){},
+          };
+        }
+      }
     }
    },
   },
+  reduceDraft: {
+    actions: {
+      onEnter(ctx) {
+        console.log('reduceDraft '+ ctx.cyclist.id)
+      },
+      onExit(ctx) {},
+      onExecute(ctx) {
+      ctx.cyclist.computeForces_4(ctx.first);
+      },
+    },
+    computeTransition(ctx){
+      if (!ctx.cyclist.shouldReduceDraft()) {
+        return {
+          target: 'init',
+          action(){}
+        };
+      }
+    }
+  },
+  
   first: {
     actions: {
       onEnter(ctx) {},

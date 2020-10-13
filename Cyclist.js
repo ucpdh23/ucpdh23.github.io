@@ -7,7 +7,7 @@
         this._mDemarrajeGoodPosition = 3;
         this.selfAccTimer = 3;
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
-        this.velocity = createVector(13, 0);
+        this.velocity = createVector(10, 0);
         this.acceleration = createVector(0, 0) //random(3),0);
         this.neighbour = []
         this.maxSteeringForce = 0.2 //0.0045
@@ -102,7 +102,12 @@
         stroke(0, 250, 0)
         if (this._separation != undefined)
             this.drawVector(this._separation, posX, posY);
-
+        //
+        if (this._reduceDraft != undefined) {
+        stroke(200,100,0)
+        this.drawVector(this._reduceDraft,
+            posX, posY);
+        }
 
         // red
         stroke(255, 0, 0)
@@ -397,20 +402,24 @@
     goAfter(target) {
       
       var endPos = p5.Vector.add(target.position, createVector(-1.5, 0));
+      //endPos.add(target.velocity);
       var diff = p5.Vector.sub(endPos, this.position);
       var dist = diff.mag();
       diff.normalize();
       
      // this.log = "follow:" + target.id + " x:"+diff.x+" y:"+diff.y;
-      this.log = "follow:" + target.id + " dist:"+dist;
       
-      var speed = dist / 0.0003;
-      speed = Math.min(speed, 15);
       
+      var speed = dist / 5;
+      speed = Math.min(speed, target.velocity.x * 1.1);
+      this.log = "follow:" + target.id + " dist:"+ dist
+      
+      var diffVel = p5.Vector.sub(target.velocity, this.velocity);
+      diffVel.mult(-1)
       
       diff.mult(speed);
       
-      diff.sub(this.velocity);
+      diff.sub(diffVel);
       
       return diff;
       //return diff;
@@ -757,8 +766,35 @@
       
       return createVector(0,0);
     }
+    
+    shouldReduceDraft() {
+      return (this.energy.pulse2 > 120) 
+       && (this.energy.draftReduction <= 2);
+    }
+    
+    findCandidate() {
+      var candidate = this.findCandidateToReduceDraft(45, 4)
+
+      if (candidate === null) {
+        candidate = this.findCandidateToReduceDraft(90, 6)
+      }
+
+      if (candidate === null) {
+        candidate = this.findCandidateToReduceDraft(45,12)
+      }
+
+      if (candidate !== null
+       && candidate !== undefined) {
+         return candidate;
+      } else {
+        return null;
+      }
+    }
 
     reduceDraft() {
+      return this.goAfter(this._reduceDraftCandidate);
+    }
+    _reduceDraft() {
         if (this._reduceDraftEnabled) {
           if (this.energy.draftReduction > 2) {
             this._reduceDraftEnabled = false;
@@ -830,7 +866,6 @@
       this._borderAvoid = this.borderAvoid();
      
         this._selfAcc = this.selfAcc();
-        this._reduceDraft = this.reduceDraft();
       
       this._alignment.mult(mAlig);
       this._separation.mult(mSep);
@@ -850,7 +885,7 @@
       
       this.acceleration.add(this._borderAvoid);
       this.acceleration.add(this._selfAcc);
-      this.acceleration.add(this._reduceDraft);
+      
     }
 
 
@@ -890,6 +925,16 @@
 
     computeForces_3(first) {
         this.computeForces(1, 0.2, 0.2);
+    }
+    
+    computeForces_4(first) {
+        this.computeForces(0.5, 0.75, 0);
+        
+        this._reduceDraft = this.reduceDraft();
+        
+       this.acceleration.add(this._reduceDraft);
+       
+       this.acceleration.limit(this.maxSteeringForce);
     }
     
     update(time) {
