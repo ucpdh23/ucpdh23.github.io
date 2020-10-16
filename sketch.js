@@ -8,7 +8,7 @@ let _debug_item = 2;
 let _drawHull = false;
 
 
-let items = 80;
+let items = 40;
 
 let sepRange = 1.8;
 let neighborDist = 7;

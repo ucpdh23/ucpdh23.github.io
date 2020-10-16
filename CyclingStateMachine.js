@@ -123,7 +123,6 @@ function createDefaultStateMachine() {
         onExecute(ctx){
           if (tirando.includes(ctx.cyclist)) {
            ctx.cyclist.computeForces_0(ctx.first);
-          
           }
 
         

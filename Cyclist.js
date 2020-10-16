@@ -128,6 +128,7 @@
             text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
             text("id:" + (int)(this.id), 240, 15)
             text("pulse:" + (int)(this.energy.pulse2),240, 30)
+            text("status:" + this.peekStateMachine().value, 300, 30);
             text(" red.:" + this.energy.draftReduction, 240, 45);
             text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
             text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
@@ -897,6 +898,13 @@
     }
 
     computeForces_0(first) {
+      if (first.id !== this.id) {
+        this.computeForces(1, 1, 1);
+        var after = this.goAfter(first);
+        this.acceleration.add(after);
+        
+        this.acceleration.limit(this.maxSteeringForce);
+      } else {
         this._wander = this.wander(4, 15);
         this._drive = this.drive();
         this._borderAvoid = this.borderAvoid();
@@ -910,9 +918,7 @@
         this.acceleration.add(this._selfAcc);
         
         this.acceleration.limit(this.maxSteeringForce);
-        
-      // this.acceleration.x = 0;
-
+      }  
     }
 
     computeForces_2(first) {

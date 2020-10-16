@@ -38,7 +38,7 @@ class Energy {
 
     this.pulse2 = this.pulse - this.draftReduction;
     
-    this.points -= this.pulse2/ 2500 * delta;
+    this.points -= this.pulse2 / 2500 * delta;
   }
   
   computeAccVar(acc) {
