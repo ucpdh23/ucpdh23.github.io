@@ -10,8 +10,12 @@ let _drawHull = false;
 
 let items = 40;
 
-let sepRange = 1.8;
-let neighborDist = 7;
+
+let SEP_RANGE = 1.8;
+let NEIGHBOR_DIST = 7;
+let MAX_SPEED = 20;
+let MAX_STEERING_FORCE = 0.2;
+let ANGLE = 210;
 
 let tirando =[];
 
@@ -31,6 +35,8 @@ let showSliderLastClickTime = null;
 let showSliderValue = 0;
 
 let button;
+
+let etapa = [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -91,9 +97,10 @@ function draw() {
   var hullPoints = hull(localHull, 10);
   globalHull = hullPoints;
   
-  for (i = 0; i < items; i++) {
-    cyclists[i].computeNeighbour(cyclists,i, first, last);
-  }
+    for (i = 0; i < items; i++) {
+        var slope = computeSlope(cyclists[i].position);
+        cyclists[i].computeNeighbour(cyclists, i, first, last, slope);
+    }
 
   
   for (i = 0; i < items; i++) {
@@ -144,6 +151,17 @@ function draw() {
 function hideOptions() {
   _hideSlider();
   _hideButton();
+}
+
+
+function computeSlope(position) {
+    var index = (int)(position.x / 1000);
+
+    if (index < etapa.length) {
+        return etapa[index];
+    } else {
+        return 0;
+    }
 }
 
 function _hideButton() {

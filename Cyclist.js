@@ -1,27 +1,35 @@
 ﻿class Cyclist {
     constructor(id) {
         this.id = id;
-        this.maxSpeed = 20;
-        this.state = 1;
+
+        this.maxSpeed = MAX_SPEED;
+
+        this.slope = 0;
+
         this._mGoodPosition = 7;
         this._mDemarrajeGoodPosition = 3;
         this.selfAccTimer = 3;
+
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
         this.velocity = createVector(10, 0);
-        this.acceleration = createVector(0, 0) //random(3),0);
+        this.acceleration = createVector(0, 0)
+
         this.neighbour = []
-        this.maxSteeringForce = 0.2 //0.0045
-        var angle = 210;
-        this.viewingAngle = angle * (Math.PI / 180);
+        this.maxSteeringForce = MAX_STEERING_FORCE;
+        this.neighborDist = NEIGHBOR_DIST;
+
+        this.setViewingAngle(ANGLE);
+        
         this.secuence = random(4);
-        //print("myId:"+this.id);
-        this._mSeparation = sepRange;
+
+        this._mSeparation = SEP_RANGE;
         this._stateMachine = [];
         this.actualBodyColor = createVector(144 - this.id, 255 - this.id, this.id);
 
         this.pushStateMachine(createDefaultStateMachine());
 
         this.energy = new Energy(this);
+
         if (this.energy.llano < 80) {
           this._mSeparation = this._mSeparation + 0.2;
         } else if (this.energy.llano > 85) {
@@ -29,6 +37,9 @@
         }
     }
 
+    setViewingAngle(angle) {
+        this.viewingAngle = angle * (Math.PI / 180);
+    }
 
 
     show(reference) {
@@ -115,25 +126,22 @@
 
         // purple
         stroke(255, 255, 255);
-        if (false) { //this.id == globalFirst.id) {
-            this._drawVector(this.velocity, posX, posY + 5, 50);
-        } else {
             //this._drawVector(p5.Vector.sub(globalFirst.velocity, this.velocity), posY+5, 50);
-            var diffX = (globalFirst.velocity.x - this.velocity.x);
-            var diffY = globalFirst.velocity.
-                y - this.velocity.y;
-            text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, 140, 30);
-            text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, 140, 45);
-            text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
-            text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
-            text("id:" + (int)(this.id), 240, 15)
-            text("pulse:" + (int)(this.energy.pulse2),240, 30)
-            text("status:" + this.peekStateMachine().value, 300, 30);
-            text(" red.:" + this.energy.draftReduction, 240, 45);
-            text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
-            text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
-            text("log:" + this.log, 240, 60);
-        }
+        var diffX = (globalFirst.velocity.x - this.velocity.x);
+        var diffY = globalFirst.velocity.y - this.velocity.y;
+
+        text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, 140, 30);
+        text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, 140, 45);
+        text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
+        text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
+        text("id:" + (int)(this.id), 240, 15)
+        text("pulse:" + (int)(this.energy.pulse2),240, 30)
+        text("status:" + this.peekStateMachine().value, 300, 30);
+        text(" red.:" + this.energy.draftReduction, 240, 45);
+        text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
+        text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
+        text("log:" + this.log, 240, 60);
+        text("slope:" + this.slope, 30, 60);
 
         // blue - cohesion
         stroke(0, 0, 255)
@@ -148,17 +156,17 @@
         stroke(90);
 
         noFill()
-        //ellipse(posX, posY, neighborDist*10, neighborDist*10);
-        circle(posX, posY, neighborDist * 20);
+        //ellipse(posX, posY, this.neighborDist*10, this.neighborDist*10);
+        circle(posX, posY, this.neighborDist * 20);
         //ellipse(posX,posY,sepRange*10, sepRange*10);
         circle(posX, posY, this._mSeparation * 20);
 
         line(posX, posY,
-            posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10,
-            posY + Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10);
+            posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10,
+            posY + Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10);
         line(posX, posY,
-            posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10,
-            posY - Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * neighborDist * 10);
+            posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10,
+            posY - Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10);
     }
 
 
@@ -271,48 +279,6 @@
 
     }
 
-    pursuit() {
-        if (this.target == undefined) return null;
-
-        var steer = this.seek(this.cyclists[this.target].position);
-        steer.limit(this.maxSteeringForce)
-
-        return steer;
-    }
-
-    computeBestEscape() {
-
-
-    }
-
-    aerodynamic() {
-        var mass = createVector(0, 0)
-        var count = 0
-
-        for (var i = this.neighbour.length - 1; i >= 0; i--) {
-            var other = this.neighbour[i]
-
-
-            var d = this.position.dist(other.position)
-            if (d < neighborDist && this.inBoidViewRange(other) && other.position.x - 1.80 > this.position.x) {
-                mass.add(other.position)
-                count++
-            }
-        }
-
-        if (count > 0) {
-            mass.div(count) /* Centre of mass */
-
-            // if (mass.x < this.position.x) return createVector(0);
-            var steer = this.seek(mass);
-            steer.limit(this.maxSteeringForce)
-
-            return steer;
-        }
-
-        return mass
-    }
-
     separation() {
         var steer = createVector(0, 0)
         var diff = createVector(0, 0)
@@ -423,51 +389,6 @@
       diff.sub(diffVel);
       
       return diff;
-      //return diff;
-      //diff.norm();
-      
-      //var steer = this.seek(target);
-      //steer.limit(this.maxSteeringForce);
-     // return steer;
-      
-      
-     return createVector(0,0);
-      
-        var offset = createVector(-1.8, 0);
-        var pointToGo = p5.Vector.add(target.position, offset);
-
-        var toOffset = p5.Vector.sub(this.position, pointToGo);
-
-        var toOffsetMag = toOffset.mag();
-
-        var lookAheadTime = toOffsetMag / (this.maxSpeed + target.velocity.x);
-
-        var futurePosition = p5.Vector.mult(target.velocity, lookAheadTime);
-
-        var pointToFoInFuture = p5.Vector.add(futurePosition, pointToGo);
-
-
-        return this.arrive(pointToFoInFuture, 1);
-    }
-
-    arrive(target, level) {
-        if (target.x > this.position.x) {
-            var deceleration = 0.3;
-
-            var toTarget = p5.Vector.sub(target, this.position);
-            var dist = toTarget.mag();
-
-            var speed = dist / (deceleration * level);
-            speed = Math.min(speed, this.maxSpeed);
-
-            var desiredVel = toTarget.mult(speed / dist);
-            desiredVel.sub(this.velocity);
-            return desiredVel;
-        } else {
-            console.log("cannot go back");
-        }
-
-
     }
 
     inBorder() {
@@ -505,69 +426,6 @@
         }
     }
 
-
-    __goodPositionToFirst(first) {
-        //var targetPosition = this.computeTargetPosition(first);
-        if (this.position.x < first.position.x) {
-            if (!this.canGoForward()) {
-                var steer = createVector(0.2, 1);
-                if (this.position.y < first.position.y) {
-                    steer.mult(-1);
-                } else {
-
-                }
-                steer.limit(this.maxSteeringForce);
-                return steer;
-            } else {
-
-                var deltaX = 0; //first.velocity.x;
-                var deltaY = (first.position.y < this.position.y) ? 1 : -1;
-                var delta = createVector(deltaX, deltaY);
-
-                //!!!!!!!!!!!!!
-                var target = p5.Vector.add(first.position, delta);
-
-                var diff = p5.Vector.sub(target, this.position)
-
-                var mag = diff.mag();
-
-                diff.normalize();
-
-                if (mag < 1) {
-                    diff.mult(this.maxSpeed);
-                } else
-
-                    if (mag < 6) {
-                        var firstRef = p5.Vector.mult(first.velocity, (6 - mag) / 6);
-                        diff.mult(mag / 6 * this.maxSpeed);
-                        diff.add(firstRef)
-                        //diff.mult(0.2);
-                    } else {
-                        diff.mult(this.maxSpeed);
-                    }
-
-                //var diffVel = p5.Vector.sub(first.velocity, this.velocity); 
-                //diff.sub(diffVel)
-                diff.sub(this.velocity)
-
-                diff.limit(this.maxSteeringForce)
-
-                var finalMag = diff.mag();
-                if (finalMag < 0.004)
-                    print('finito');
-                // print(diff.mag())
-
-                return diff;
-            }
-
-        }
-
-        return createVector(0, 0);
-    }
-
-    computeTargetPosition(first) {
-
-    }
 
     goodPositionInsideGroup(first) {
         if (this.position.x < first.position.x - this._mGoodPosition) {
@@ -637,7 +495,7 @@
             var other = this.neighbour[i]
 
             var d = this.position.dist(other.position)
-            if (d < neighborDist && this.inBoidViewRange(other)) {
+            if (d < this.neighborDist && this.inBoidViewRange(other)) {
                 steer.add(other.velocity)
                 count++
             }
@@ -663,17 +521,6 @@
         return diff;
     }
 
-    peloton(first) {
-        if (first.id == this.id) return;
-
-        var mass = createVector(0, 0)
-
-        if (this.position.y < first.position.y)
-            return createVector(0, 0.00001)
-        else
-            return createVector(0, -0.00001)
-    }
-
     cohesion() {
         var mass = createVector(0, 0)
         var count = 0
@@ -682,7 +529,7 @@
             var other = this.neighbour[i]
 
             var d = this.position.dist(other.position)
-            var neighDist = neighborDist;
+            var neighDist = this.neighborDist;
             if (this.id > 80) neighDist * 2;
 
             if (d < neighDist && d > 1.6 && this.inBoidViewRange(other)) { //&& !this.isColliding(other)) {
@@ -968,14 +815,16 @@
         this._stateMachine.pop();
     }
 
-    computeNeighbour(cyclists, i, first, last) {
-      this.log = "";
+    computeNeighbour(cyclists, i, first, last, slope) {
+        this.slope = slope;
+
+        this.log = "";
         this.neighbour = []
         for (i = 0; i < items; i++) {
             if (this !== cyclists[i]) {
                 let dist = this.position.dist(cyclists[i].position);
                 //print("dist("+this.id+"):"+dist);
-                if (dist < neighborDist) {
+                if (dist < this.neighborDist) {
                     this.neighbour.push(cyclists[i]);
                 }
             }
