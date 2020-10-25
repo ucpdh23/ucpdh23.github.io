@@ -139,7 +139,8 @@
         text("status:" + this.peekStateMachine().value, 300, 30);
         text(" red.:" + this.energy.draftReduction, 240, 45);
         text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
-        text("energy:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
+        text("E:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
+        text("pwr:" + ((int)(this.energy.pot * 1000)) / 1000, 360, 45);
         text("log:" + this.log, 240, 60);
         text("slope:" + this.slope, 30, 60);
 
@@ -817,6 +818,9 @@
 
     computeNeighbour(cyclists, i, first, last, slope) {
         this.slope = slope;
+        if (this.velocity.x > 15) {
+            this._mSeparation = SEP_RANGE * (1 + (this.velocity.x - 15) / 10);
+        }
 
         this.log = "";
         this.neighbour = []

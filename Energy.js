@@ -3,14 +3,41 @@ class Energy {
   constructor(cyclist) {
     this.cyclist = cyclist;
     this.pulse = 80;
-    this.llano = 75 + random(15);
+      this.llano = 75 + random(15);
+      this.montana = 75 + random(15);
     this.refProp = 15 + this.llano / 10;
-    this.lastAcc = [0,0,0,0,0,0,0,0,0,0]
+      this.lastAcc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.lastAccIndex = 0;
     this.points = 100;
   }
-  
-  update(delta) {
+
+
+    computePower() {
+        // P = F x V
+        var pot = 0;
+
+        // Resistencia Aire
+        this.r_air = this.cyclist.velocity.x / (this.draftReduction + 1) / this.llano * 100;
+
+        // Resistencia Mecanica
+        this.r_mec = 5;
+
+        // Resistencia Pendiente
+        this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
+
+        // aceleracion
+        this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
+
+        this.pot = (this.r_air + this.r_mec + this.r_pend + this.f_acel) * this.cyclist.velocity.x;
+    }
+
+    computeVelocity(pot) {
+
+    }
+
+
+
+    update(delta) {
     var ms= this.cyclist.velocity.x * 3.6;
     var prop = ms / this.refProp;
     var g = prop * prop;
@@ -38,7 +65,9 @@ class Energy {
 
     this.pulse2 = this.pulse - this.draftReduction;
     
-    this.points -= this.pulse2 / 2500 * delta;
+        this.points -= this.pulse2 / 2500 * delta;
+
+        this.computePower();
   }
   
   computeAccVar(acc) {
