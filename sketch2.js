@@ -47,9 +47,9 @@ class Cyclist {
     
     var posDisco = createVector(20, 0);
     
-    var transform = c
+   // var transform = c
     
-    posWheel1.mult()
+    //posWheel1.mult()
     
     var transport = createVector(100, 100);
     posWheel1.add(transport);
