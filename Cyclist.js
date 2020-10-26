@@ -138,12 +138,14 @@
         text("pulse:" + (int)(this.energy.pulse2),240, 30)
         text("status:" + this.peekStateMachine().value, 300, 30);
         text(" red.:" + this.energy.draftReduction, 240, 45);
-        text("llano:" + ((int)(this.energy.llano * 1000))/1000, 300, 15)
+        text("l:" + ((int)(this.energy.llano * 10))/10 + " m:" + ((int)(this.energy.montana*10))/10, 300, 15)
         text("E:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
-        text("pwr:" + ((int)(this.energy.pot * 1000)) / 1000, 360, 45);
+        text("pwr:" + dec(this.energy.pot, 1000), posX, 255);
         text("log:" + this.log, 240, 60);
         text("slope:" + this.slope, 30, 60);
-
+        text("f:" + dec(this.energy.force, 10) + " p:"+dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
+        
+        
         // blue - cohesion
         stroke(0, 0, 255)
         if (this._cohesion != undefined)
@@ -753,6 +755,8 @@
         
         this.acceleration.limit(this.maxSteeringForce);
       } else {
+        
+        
         this._wander = this.wander(4, 15);
         this._drive = this.drive();
         this._borderAvoid = this.borderAvoid();
@@ -817,7 +821,13 @@
     }
 
     computeNeighbour(cyclists, i, first, last, slope) {
+      if (this.slope !== slope) {
         this.slope = slope;
+        this.targetPot = this.energy.pot;
+      } else {
+        this.targetPot = 0;
+      }
+      
         if (this.velocity.x > 15) {
             this._mSeparation = SEP_RANGE * (1 + (this.velocity.x - 15) / 10);
         }

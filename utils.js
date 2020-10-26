@@ -4,6 +4,10 @@ function pad(num, size) {
     return s;
 }
 
+function dec(num, mul){
+  return ""+((int)(num*mul))/mul;
+}
+
 function findCyclist(id) {
     for (var i = 0; i < cyclists.length; i++) {
         if (cyclists[i].id === id) {

@@ -27,12 +27,14 @@ class Energy {
 
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
+        
+        this.force = this.r_air + this.r_mec + this.r_pend + this.f_acel;
 
-        this.pot = (this.r_air + this.r_mec + this.r_pend + this.f_acel) * this.cyclist.velocity.x;
+        this.pot = this.force * this.cyclist.velocity.x;
     }
 
     computeVelocity(pot) {
-
+      
     }
 
 
