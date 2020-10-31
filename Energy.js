@@ -3,16 +3,18 @@ class Energy {
   constructor(cyclist) {
     this.cyclist = cyclist;
     this.pulse = 80;
-      this.llano = 75 + random(15);
-      this.montana = 75 + random(15);
+      this.llano = 60 + random(30);
+      this.montana = 60 + random(30);
+      this.estadoForma = 80 + random(20);
     this.refProp = 15 + this.llano / 10;
       this.lastAcc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.lastAccIndex = 0;
-    this.points = 100;
+      this.points = 100;
+      this.maxPot = 425 - (100 - this.estadoForma);
   }
 
 
-    computePower() {
+    computeForce() {
         // P = F x V
         var pot = 0;
 
@@ -30,11 +32,26 @@ class Energy {
         
         this.force = this.r_air + this.r_mec + this.r_pend + this.f_acel;
 
-        this.pot = this.force * this.cyclist.velocity.x;
     }
 
-    computeVelocity(pot) {
-      
+    forceCompensation() {
+        var pot = this.force * this.cyclist.velocity.x;
+        var currMaxPot = this.maxPot - (100 - this.points / 2);
+
+        if (pot > currMaxPot) {
+
+            var restPot = pot - currMaxPot;
+            var restForce = restPot / this.cyclist.velocity.x;
+
+            var delta = this.force - restForce;
+
+            var acc = delta / 8;
+
+            return createVector(-acc, 0);
+        } else {
+            return createVector(0, 0);
+        }
+
     }
 
 
@@ -69,7 +86,8 @@ class Energy {
     
         this.points -= this.pulse2 / 2500 * delta;
 
-        this.computePower();
+        this.pot = this.force * this.cyclist.velocity.x;
+
   }
   
   computeAccVar(acc) {

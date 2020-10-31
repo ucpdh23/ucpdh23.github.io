@@ -72,7 +72,7 @@
         
         
         var heading = 0;
-        if (this.acceleration.x > 0.1) {
+        if (this.acceleration.x > 0.1 || (this.energy.r_pend > 20 && this.acceleration.x > 0)) {
           if (this.secuence < 2)
             heading = -1;
           else if (this.secuence < 4)
@@ -143,7 +143,8 @@
         text("pwr:" + dec(this.energy.pot, 1000), posX, 255);
         text("log:" + this.log, 240, 60);
         text("slope:" + this.slope, 30, 60);
-        text("f:" + dec(this.energy.force, 10) + " p:"+dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
+        text("f:" + dec(this.energy.force, 10) + " p:" + dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
+        line(posX, 290, posX - this._forcesCompensation.x * 10, 290);
         
         
         // blue - cohesion
@@ -710,13 +711,17 @@
     }
     
 
-    computeForces(mAlig, mSep, mCoh){
+    computeForces(mAlig, mSep, mCoh) {
+        // 1o physics
+        this._forcesCompensation = this.energy.forceCompensation();
+
+        // 2o rest of forces
       this._separation = this.separation();
       this._alignment = this.alignment();
       this._cohesion = this.cohesion();
       this._borderAvoid = this.borderAvoid();
      
-        this._selfAcc = this.selfAcc();
+      this._selfAcc = this.selfAcc();
       
       this._alignment.mult(mAlig);
       this._separation.mult(mSep);
@@ -728,7 +733,9 @@
         this._alignment.x /= 2;
         this._separation.x /= 2;
         this._cohesion.x /= 2;
-      }
+        }
+
+        this.acceleration.add(this._forcesCompensation);
       
       this.acceleration.add(this._separation);
       this.acceleration.add(this._alignment);
@@ -755,19 +762,13 @@
         
         this.acceleration.limit(this.maxSteeringForce);
       } else {
-        
+          this.computeForces(0, 0, 0);
         
         this._wander = this.wander(4, 15);
         this._drive = this.drive();
-        this._borderAvoid = this.borderAvoid();
-        this._selfAcc = this.selfAcc();
-
-        this.acceleration.mult(0);
 
         this.acceleration.add(this._wander);
         this.acceleration.add(this._drive);
-        this.acceleration.add(this._borderAvoid);
-        this.acceleration.add(this._selfAcc);
         
         this.acceleration.limit(this.maxSteeringForce);
       }  
@@ -831,6 +832,8 @@
         if (this.velocity.x > 15) {
             this._mSeparation = SEP_RANGE * (1 + (this.velocity.x - 15) / 10);
         }
+
+        this.energy.computeForce();
 
         this.log = "";
         this.neighbour = []
