@@ -36,7 +36,7 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [2, 4, 4, 4, 5, 7, 8, 6, 7, 8, 9, 10];
+let etapa = [0, -2, -4, -7, 0, 0, 4, 4, 4, 5, 7, 8, 6, 7, 8, 9, 10];
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);

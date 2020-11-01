@@ -6,11 +6,14 @@ class Energy {
       this.llano = 60 + random(30);
       this.montana = 60 + random(30);
       this.estadoForma = 80 + random(20);
+      this.sprint = 60 + random(30);
     this.refProp = 15 + this.llano / 10;
       this.lastAcc = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.lastAccIndex = 0;
       this.points = 100;
-      this.maxPot = 425 - (100 - this.estadoForma);
+      this.maxPot = 450 - (100 - this.estadoForma);
+      this.maxAnaerobicPot = this.maxPot + this.sprint;
+      this.force = 0;
   }
 
 
@@ -19,13 +22,14 @@ class Energy {
         var pot = 0;
 
         // Resistencia Aire
-        this.r_air = this.cyclist.velocity.x / (this.draftReduction + 1) / this.llano * 100;
+        this.r_air = this.cyclist.velocity.x / (this.draftReduction + 2) / this.llano * 100;
 
         // Resistencia Mecanica
         this.r_mec = 5;
 
         // Resistencia Pendiente
-        this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
+        //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
+        this.r_pend = this.cyclist.slope * 400 / this.montana;
 
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
@@ -84,9 +88,12 @@ class Energy {
 
     this.pulse2 = this.pulse - this.draftReduction;
     
-        this.points -= this.pulse2 / 2500 * delta;
+        //this.points -= this.pulse2 / 2500 * delta;
 
-        this.pot = this.force * this.cyclist.velocity.x;
+    this.pot = this.force * this.cyclist.velocity.x;
+    if (!Number.isNaN(this.pot)) {
+      this.points -= this.pot/4000 * delta;
+    }
 
   }
   
