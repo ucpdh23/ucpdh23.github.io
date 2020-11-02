@@ -145,6 +145,20 @@
         text("slope:" + this.slope, 30, 60);
         text("f:" + dec(this.energy.force, 10) + " p:" + dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
         text("aPwr:" + dec(this.energy.anaerobicPoints, 10), posX + 70, 255);
+
+        var powerLineStartX = posX - 10;
+        var powerLineEndX = posX + 90;
+
+        line(powerLineStartX, 290, powerLineEndX, 290);
+
+        var power = this.energy.getPower();
+        var powerPoint = powerLineStartX + power;
+
+        triangle(
+            powerPoint, 290,
+            powerPoint - 5, 295,
+            powerPoint + 5, 295);
+
         line(posX, 290, posX - this._forcesCompensation.x * 10, 290);
         
         

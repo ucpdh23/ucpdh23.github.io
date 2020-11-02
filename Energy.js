@@ -15,7 +15,11 @@ class Energy {
       this.maxAnaerobicPot = this.maxPot + this.sprint;
       this.force = 0;
       this.anaerobicPoints = 100;
-  }
+    }
+
+    getPower() {
+        return (int) (this.pot * 100 / this.maxPot);
+    }
 
 
     computeForce() {
@@ -30,7 +34,8 @@ class Energy {
 
         // Resistencia Pendiente
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
-        this.r_pend = this.cyclist.slope * 400 / this.montana;
+        var multFactor = (this.cyclist.slope > 0)? 450 : 30;
+        this.r_pend = this.cyclist.slope * multFactor / this.montana;
 
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
@@ -39,7 +44,7 @@ class Energy {
 
     }
 
-    forceCompensation() {
+    forceCompensation_option() {
         var pot = this.force * this.cyclist.velocity.x;
         var currMaxPot = this.maxPot - (100 - this.points / 2);
 
@@ -67,6 +72,29 @@ class Energy {
           if (this.anaerobicPoints > 100)
             this.anaerobicPoints = 100;
           return createVector(0, 0);
+        }
+
+    }
+
+    forceCompensation() {
+        var pot = this.force * this.cyclist.velocity.x;
+        var currMaxPot = this.maxPot - (100 - this.points / 2);
+
+        if (pot > currMaxPot) {
+
+            var restPot = pot - currMaxPot;
+            var restForce = restPot / this.cyclist.velocity.x;
+
+            var delta = this.force - restForce;
+
+            var acc = delta / 8;
+
+            return createVector(-acc, 0);
+        } else {
+            this.anaerobicPoints += 1;
+            if (this.anaerobicPoints > 100)
+                this.anaerobicPoints = 100;
+            return createVector(0, 0);
         }
 
     }

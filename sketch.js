@@ -29,6 +29,7 @@ const canvasWidth = 1000;
 const canvasHeight = 300;
 
 let slider = null;
+let powerSlider = null;
 let showSlider = false;
 let showSliderStartTime = null;
 let showSliderLastClickTime = null;
@@ -36,7 +37,7 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [0, -2, -4, -7, 0, 0, 4, 4, 4, 5, 7, 8, 6, 7, 8, 9, 10];
+let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10];
 
 function setup() {
   createCanvas(canvasWidth, canvasHeight);
@@ -150,7 +151,8 @@ function draw() {
 }
 function hideOptions() {
   _hideSlider();
-  _hideButton();
+    _hideButton();
+    _hidePowerSlider();
 }
 
 
@@ -166,7 +168,7 @@ function computeSlope(position) {
 
 function _hideButton() {
   button.hide();
-  button.remove();
+    button.remove();
 }
 
 function _hideSlider() {
@@ -175,8 +177,15 @@ function _hideSlider() {
         showSlider = false;
 }
 
+
+function _hidePowerSlider() {
+    powerSlider.hide();
+    powerSlider.remove();
+}
+
 function showOptions() {
-  _showSlider();
+    _showSlider();
+    _showPowerSlider();
   _showButton();
 }
 
@@ -201,6 +210,14 @@ function _showSlider() {
     showSliderStartTime = time;
 }
 
+function _showPowerSlider() {
+    powerSlider = createSlider(0, 100, 50);
+    powerSlider.position(mouseX, mouseY + 60);
+    powerSlider.style('width', '80px');
+    powerSlider.touchEnded(powerSliderMouseClicked);
+    powerSlider.mouseReleased(powerSliderMouseClicked);
+}
+
 function mouseClicked() {
     ellipse(mouseX, mouseY, 5, 5);
   
@@ -222,6 +239,18 @@ function sliderMouseClicked() {
     showSliderStartTime = time - 1
     
     cyclists[_debug_item].sendMessage('acelera#'+showSliderValue);
+
+    return false;
+}
+
+function powerSliderMouseClicked() {
+    showPowerSliderValue = powerSlider.value();
+
+    console.log("powerSlider:" + showPowerSliderValue)
+
+    showSliderStartTime = time - 1;
+
+    cyclists[_debug_item].sendMessage('power#' + showPowerSliderValue);
 
     return false;
 }
