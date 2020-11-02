@@ -145,7 +145,7 @@ function draw() {
 
     showSliderValue = 0;
 
-    if (showSlider && showSliderStartTime + 3 < time) {
+    if (showSlider && showSliderStartTime + 5 < time) {
       hideOptions();
     }
 }
@@ -211,7 +211,8 @@ function _showSlider() {
 }
 
 function _showPowerSlider() {
-    powerSlider = createSlider(0, 100, 50);
+    var maxPotLevel = cyclists[_debug_item].energy.maxPotLevel;
+    powerSlider = createSlider(0, 100, maxPotLevel);
     powerSlider.position(mouseX, mouseY + 60);
     powerSlider.style('width', '80px');
     powerSlider.touchEnded(powerSliderMouseClicked);
@@ -250,7 +251,7 @@ function powerSliderMouseClicked() {
 
     showSliderStartTime = time - 1;
 
-    cyclists[_debug_item].sendMessage('power#' + showPowerSliderValue);
+    cyclists[_debug_item].energy.maxPotLevel = showPowerSliderValue;
 
     return false;
 }

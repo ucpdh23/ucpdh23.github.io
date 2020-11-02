@@ -15,6 +15,7 @@ class Energy {
       this.maxAnaerobicPot = this.maxPot + this.sprint;
       this.force = 0;
       this.anaerobicPoints = 100;
+      this.maxPotLevel = 100;
     }
 
     getPower() {
@@ -79,6 +80,8 @@ class Energy {
     forceCompensation() {
         var pot = this.force * this.cyclist.velocity.x;
         var currMaxPot = this.maxPot - (100 - this.points / 2);
+        
+        currMaxPot *= this.maxPotLevel/100;
 
         if (pot > currMaxPot) {
 
