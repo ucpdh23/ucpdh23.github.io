@@ -14,6 +14,7 @@ class Energy {
       this.maxPot = 450 - (100 - this.estadoForma);
       this.maxAnaerobicPot = this.maxPot + this.sprint;
       this.force = 0;
+      this.anaerobicPoints = 100;
   }
 
 
@@ -42,7 +43,7 @@ class Energy {
         var pot = this.force * this.cyclist.velocity.x;
         var currMaxPot = this.maxPot - (100 - this.points / 2);
 
-        if (pot > currMaxPot) {
+        if (pot > this.maxAnaerobicPot) {
 
             var restPot = pot - currMaxPot;
             var restForce = restPot / this.cyclist.velocity.x;
@@ -52,8 +53,20 @@ class Energy {
             var acc = delta / 8;
 
             return createVector(-acc, 0);
+        } else if (pot > currMaxPot ) {
+          var diffPot = pot - currMaxPot;
+            this.anaerobicPoints =- diffPot * delta;
+            var deltaX = 0;
+            if (this.anaerobicPoints < 10)
+              deltaX = -this.force;
+            else
+              deltaX = -0.01
+            return createVector(deltaX, 0);
         } else {
-            return createVector(0, 0);
+          this.anaerobicPoints +=1;
+          if (this.anaerobicPoints > 100)
+            this.anaerobicPoints = 100;
+          return createVector(0, 0);
         }
 
     }
