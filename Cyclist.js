@@ -43,12 +43,16 @@
 
 
     show(reference) {
+      if (globalFirst.position.x - this.position.x > 100) return;
+      
       if (this.acceleration.x >= 0 || globalFirst.id === this.id)
         this.secuence = (this.secuence + 1) % 8;
         
         stroke(255)
         let posX = (reference - this.position.x) * 10
+        this.posX = posX
         let posY = 160 + this.position.y * 10
+        this.posY = posY
 
         if (clicked != null) {
           var diffClickedX = posX - clicked.x;
@@ -59,7 +63,7 @@
               diffClickedX > -20 &&
               diffClickedY < 7 &&
               diffClickedY > -7) {
-                console.log("sel:"+ this.id)
+               // console.log("sel:"+ this.id)
                 _debug_item = this.id;
               }
         }
@@ -106,45 +110,39 @@
             // this.drawVector(this.velocity, posX, posY);
         }
 
-        if (!_debug) return;
+        
         if (_debug_item != this.id) return;
 
-        // green separation
-        stroke(0, 250, 0)
-        if (this._separation != undefined)
-            this.drawVector(this._separation, posX, posY);
-        //
-        if (this._reduceDraft != undefined) {
-        stroke(200,100,0)
-        this.drawVector(this._reduceDraft,
-            posX, posY);
-        }
-
-        // red
-        stroke(255, 0, 0)
-        this._drawVector(this.acceleration, posX, posY + 5, 10000);
+        
 
         // purple
         stroke(255, 255, 255);
             //this._drawVector(p5.Vector.sub(globalFirst.velocity, this.velocity), posY+5, 50);
         var diffX = (globalFirst.velocity.x - this.velocity.x);
         var diffY = globalFirst.velocity.y - this.velocity.y;
-
-        text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, 140, 30);
-        text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, 140, 45);
-        text("vel:"+((int)(this.velocity.x*3600))/1000, 140, 15);
-        text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, 140, 60);
-        text("id:" + (int)(this.id), 240, 15)
-        text("pulse:" + (int)(this.energy.pulse2),240, 30)
-        text("status:" + this.peekStateMachine().value, 300, 30);
-        text(" red.:" + this.energy.draftReduction, 240, 45);
-        text("l:" + ((int)(this.energy.llano * 10))/10 + " m:" + ((int)(this.energy.montana*10))/10, 300, 15)
-        text("E:" + ((int)(this.energy.points * 1000))/1000, 300, 45);
+        
+        var headX = posX;
+        if (posX < 140) headX = 140;
+        textSize(8);
+        text(((diffX > 0) ? ">>" : "<<") + " dVx:" + ((int)(diffX * 1000))/1000, headX, 30);
+        text(((diffY < 0) ? "V" : "∆") + " dVy:" + ((int)(diffY * 1000))/1000, headX, 40);
+        textSize(12);
+        text("vel:"+((int)(this.velocity.x*3600))/1000, headX, 15);
+        text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, headX, 60);
+        text("id:" + (int)(this.id), headX + 100, 15)
+        text("pulse:" + (int)(this.energy.pulse2),headX+100, 30)
+        text("status:" + this.peekStateMachine().value, headX + 160, 30);
+        text(" red.:" + this.energy.draftReduction, headX+ 100, 45);
+        text("l:" + ((int)(this.energy.llano * 10))/10 + " m:" + ((int)(this.energy.montana*10))/10, headX+160, 15)
+        text("E:" + ((int)(this.energy.points * 1000))/1000, headX+160, 45);
         text("pwr:" + dec(this.energy.pot, 1000), posX, 255);
-        text("log:" + this.log, 240, 60);
+        text("log:" + this.log, headX+100, 60);
         text("slope:" + this.slope, 30, 60);
         text("f:" + dec(this.energy.force, 10) + " p:" + dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
         text("aPwr:" + dec(this.energy.anaerobicPoints, 10), posX + 70, 255);
+        
+        
+        
 
         var powerLineStartX = posX - 10;
         var powerLineEndX = posX + 90;
@@ -161,7 +159,22 @@
 
         line(posX, 290, posX - this._forcesCompensation.x * 10, 290);
         
+        if (_debug) {
         
+        // green separation
+        stroke(0, 250, 0)
+        if (this._separation != undefined)
+            this.drawVector(this._separation, posX, posY);
+        //
+        if (this._reduceDraft != undefined) {
+        stroke(200,100,0)
+        this.drawVector(this._reduceDraft,
+            posX, posY);
+        }
+
+        // red
+        stroke(255, 0, 0)
+        this._drawVector(this.acceleration, posX, posY + 5, 10000);
         // blue - cohesion
         stroke(0, 0, 255)
         if (this._cohesion != undefined)
@@ -172,6 +185,7 @@
         if (this._alignment != undefined)
             this.drawVector(this._alignment, posX, posY)
 
+}
         stroke(90);
 
         noFill()

@@ -3,12 +3,12 @@ let cyclists = [];
 let road;
 let meters;
 let time = 0;
-let _debug = true;
+let _debug = false;
 let _debug_item = 2;
 let _drawHull = false;
 
 
-let items = 40;
+let items = 60;
 
 
 let SEP_RANGE = 1.8;
@@ -201,7 +201,7 @@ function _showButton() {
 function _showSlider() {
     slider = createSlider(0, 100, 50);
     slider.position(mouseX, mouseY + 30);
-    slider.style('width', '80px');
+    slider.style('width', '100px');
     slider.touchEnded(sliderMouseClicked);
     slider.mouseReleased(sliderMouseClicked);
 
@@ -212,9 +212,10 @@ function _showSlider() {
 
 function _showPowerSlider() {
     var maxPotLevel = cyclists[_debug_item].energy.maxPotLevel;
+    
     powerSlider = createSlider(0, 100, maxPotLevel);
     powerSlider.position(mouseX, mouseY + 60);
-    powerSlider.style('width', '80px');
+    powerSlider.style('width', '100px');
     powerSlider.touchEnded(powerSliderMouseClicked);
     powerSlider.mouseReleased(powerSliderMouseClicked);
 }
