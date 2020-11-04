@@ -22,15 +22,37 @@ canvas {
 }
 
 .item {
-  background: tomato;
+  background: #DAA520;
   padding: 5px;
   width: 100px;
   height: 100px;
   margin: 10px;
   
-  line-height: 100px;
+  line-height_: 100px;
   color: white;
   font-weight: bold;
   font-size: 2em;
   text-align: center;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.item-header {
+  background: moccasin;
+  height: 25%;
+  font-size: 10px;
+  text-align: left;
+  color: black;
+}
+
+.item-body {
+  background: green;
+  height: 50%;
+  text-align: left;
+}
+
+.item-footer {
+  background: blue;
+  height: 25%;
 }

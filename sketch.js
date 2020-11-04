@@ -41,7 +41,8 @@ let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10];
 
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
-  canvas.parent('sketch-holder')
+  canvas.parent('sketch-holder');
+  buildList();
   
 frameRate(20)
   
@@ -102,6 +103,9 @@ function draw() {
     for (i = 0; i < items; i++) {
         var slope = computeSlope(cyclists[i].position);
         cyclists[i].computeNeighbour(cyclists, i, first, last, slope);
+        if (i < 10) {
+          updateBox(document.getElementById('id_'+i), cyclists[i]);
+        }
     }
 
   
@@ -154,6 +158,25 @@ function hideOptions() {
   _hideSlider();
     _hideButton();
     _hidePowerSlider();
+}
+
+function buildList() {
+  for (var i=1; i< 10; i++) {
+    
+  
+  var clone = document.getElementById('id_0').cloneNode(true);
+  clone.setAttribute('id', 'id_'+i);
+  document.getElementById('list').appendChild(clone);
+  }
+}
+
+function updateBox(item, cyclist) {
+  item.onclick = function() {
+    _debug_item = cyclist.id;
+  };
+  item.getElementsByClassName('item-header')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
+  item.getElementsByClassName('item-body')[0].innerHTML = cyclist.energy.points;
+  //item.innerHTML= cyclist.energy.pulse;
 }
 
 
