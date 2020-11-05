@@ -170,15 +170,24 @@ function buildList() {
   }
 }
 
+let selected = null;
 function updateBox(item, cyclist) {
   item.onclick = function() {
     _debug_item = cyclist.id;
+    item.style.backgroundColor = 'red';
+    if (selected != null) selected.style.backgroundColor = '#DAA520';
+    selected = item;
+    showSelected(cyclist);
   };
-  item.getElementsByClassName('item-header')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
-  item.getElementsByClassName('item-body')[0].innerHTML = cyclist.energy.points;
-  //item.innerHTML= cyclist.energy.pulse;
+  item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.id;
+  item.getElementsByClassName('item-header-features')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
+  item.getElementsByClassName('item-body')[0].innerHTML =(int) (cyclist.energy.points);
 }
 
+function showSelected(cyclist) {
+  var details = document.getElementById('details');
+  details.getElementsByClassName("details-header-id")[0].innerHTML = cyclist.id;
+}
 
 function computeSlope(position) {
     var index = (int)(position.x / 1000);

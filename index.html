@@ -28,14 +28,17 @@
       <input type="button" value="tira" onclick="JavaScript:cyclists[_debug_item].sendMessage('tira')" />
       <input type="button" value="acelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('acelera')" />
       <input type="button" value="desacelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('desacelera')" />
-
+<div class="viewport">
 <div id="sketch-holder">
       <!-- Our sketch will go here! -->
     </div>
-    <div id='list' class="container">
+    </div>
+  <div class="container">
+    <div id='list' class="container-left">
       <div id="id_0" class="item">
         <div class="item-header">
-          a
+          <div class="item-header-id">N</div>
+          <div class="item-header-features">abc</div>
         </div>
         <div class="item-body">
           b
@@ -45,6 +48,16 @@
         </div>
       </div>
     </div>
+    <div id="details" class="container-right">
+      <div class="details-header">
+        <div class="details-header-id"></div>
+      </div>
+      <div class="details-body"></div>
+      <div class="details-footer">
+        <input type="button" name="pull" />
+      </div>
+    </div>
+  </div>
     <h1>hola</h1>
   </body>
 </html>
