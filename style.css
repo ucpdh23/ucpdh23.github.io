@@ -146,14 +146,35 @@ canvas {
 .details-body {
     height: 55%;
     width: 100%;
-    background: blue;
+
+  background: #eaeaed;
+
+  position: relative;
 }
 
-.details-body-acc {
-  width: 100%;
+.box {
+  background: #2db34a;
+  height: 80px;
+  position: absolute;
+  width: 80px;
 }
-
-.details-body-pwr {
+.box-1 {
+  top: 25%;
+  left: 0px;
+}
+.box-2 {
+  top: 0;
+  right: 35%;
+}
+.box-3 {
+  top: 25%;
+  right: 0px;
+}
+.box-4 {
+  bottom: 0px;
+  right: 35%;
+}
+.details-footer-slider {
   width: 100%;
 }
 
