@@ -202,7 +202,9 @@ function showSelected(cyclist) {
     document.getElementById("details-header-status-velocity-id").innerHTML = dec(cyclist.velocity.x * 3600/1000, 10);
     document.getElementById("details-header-status-distance-id").innerHTML = dec(cyclist.position.x/1000, 1000);
     document.getElementById("details-header-status-pts-id").innerHTML = dec(cyclist.energy.points, 1000);
-  
+    document.getElementById("details-body-air-id").innerHTML = dec(cyclist.energy.r_air, 100);
+    document.getElementById("details-body-slope-id").innerHTML = dec(cyclist.energy.r_pend, 100);
+    document.getElementById("details-body-acc-id").innerHTML = dec(cyclist.energy.f_acel, 100);
 }
 
 function drawProfile() {
