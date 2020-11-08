@@ -56,9 +56,31 @@
     </div>
     <div id="details" class="container-right">
       <div class="details-header">
-        <div class="details-header-id"></div>
-        <div class="details-header-features"></div>
-      </div>
+        <div class="details-header-identification">
+            <div class="details-header-id">
+                <span id="details-header-id">4</span>
+            </div>
+            <div id="details-header-features-id" class="details-header-features"></div>
+        </div>
+        <div class="details-header-status">
+            <div class="details-header-status-item">
+                <span class="details-header-status-value" id="details-header-status-power-id">230</span>
+                <span class="details-header-status-metric">WATTS</span>
+            </div>
+            <div class="details-header-status-item">
+                <span class="details-header-status-value" id="details-header-status-pulse-id">140</span>
+                <span class="details-header-status-metric">PPM</span>
+            </div>
+            <div class="details-header-status-item">
+                <span class="details-header-status-value" id="details-header-status-velocity-id">23</span>
+                <span class="details-header-status-metric">K/M</span>
+            </div>
+            <div class="details-header-status-item">
+                <span class="details-header-status-value" id="details-header-status-distance-id">80</span>
+                <span class="details-header-status-metric">Kmeters</span>
+            </div>
+        </div>
+          </div>
       <div class="details-body">
         Acc: <input class="details-body-acc" type="range" min="0" max="100" value="50"/>
         MaxPower: <input class="details-body-pwr" type="range" min="0" max="100" value="100"/>
