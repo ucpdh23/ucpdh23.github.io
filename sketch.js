@@ -72,6 +72,8 @@ frameRate(20)
   
   meters = 0;
   time = 0;
+  
+  drawProfile();
 }
 
 function draw() {
@@ -187,6 +189,29 @@ function updateBox(item, cyclist) {
 function showSelected(cyclist) {
   var details = document.getElementById('details');
   details.getElementsByClassName("details-header-id")[0].innerHTML = cyclist.id;
+  details.getElementsByClassName("details-header-features")[0].innerHTML =
+    "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
+  
+}
+
+function drawProfile() {
+  var offset = 10;
+  var offsetY = 200;
+  var elevation = 0;
+  for (var i=0;i<etapa.length;i++) {
+    var desn = etapa[i];
+  var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  newLine.setAttribute('id', 'line'+ i);
+  newLine.setAttribute('x1', ''+(offset + i*
+  15));
+  newLine.setAttribute('y1', '' + (200 - elevation));
+  newLine.setAttribute('x2', ''+(offset +(i+1)*15));
+  elevation = elevation + desn * 5;
+  newLine.setAttribute('y2', '' +(200 - elevation));
+  newLine.setAttribute("stroke", "black");
+  var profile = document.getElementById('profile');
+  profile.append(newLine);
+  }
 }
 
 function computeSlope(position) {

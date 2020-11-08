@@ -19,6 +19,7 @@
       <script src="Energy.js"></script>
       <script src="sketch.js"></script>
       
+      <!--
       <a href="Menu.html">menu</a>
 
       amarillo alignment<br />
@@ -30,6 +31,8 @@
       <input type="button" value="tira" onclick="JavaScript:cyclists[_debug_item].sendMessage('tira')" />
       <input type="button" value="acelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('acelera')" />
       <input type="button" value="desacelera" onclick="JavaScript:cyclists[_debug_item].sendMessage('desacelera')" />
+      
+      -->
 <div class="viewport">
 <div id="sketch-holder">
       <!-- Our sketch will go here! -->
@@ -46,6 +49,7 @@
           b
         </div>
         <div class="item-footer">
+          <img src="https://raw.githubusercontent.com/microsoft/fluentui-system-icons/master/assets/Heart%20Pulse/SVG/ic_fluent_heart_pulse_32_regular.svg" />
           c
         </div>
       </div>
@@ -53,13 +57,21 @@
     <div id="details" class="container-right">
       <div class="details-header">
         <div class="details-header-id"></div>
+        <div class="details-header-features"></div>
       </div>
-      <div class="details-body"></div>
+      <div class="details-body">
+        Acc: <input class="details-body-acc" type="range" min="0" max="100" value="50"/>
+        MaxPower: <input class="details-body-pwr" type="range" min="0" max="100" value="100"/>
+      </div>
       <div class="details-footer">
-        <input type="button" name="pull" />
+        <input type="button" value="pull"  />
       </div>
     </div>
   </div>
-    <h1>hola</h1>
+  <div>
+     <svg id="profile" height="100" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+       <circle cx="50" cy="50" r="40" stroke ="green" stroke-width="4" fill="yellow" /> 
+     </svg>
+  </div>
   </body>
 </html>

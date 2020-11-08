@@ -98,7 +98,16 @@ canvas {
   background: blue;
 }
 
+.details-body-acc {
+  width: 100%;
+}
+
+.details-body-pwr {
+  width: 100%;
+}
+
 .details-footer {
   height: 25%;
   width: 100%;
+  align-items: center;
 }
