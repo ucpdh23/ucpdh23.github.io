@@ -201,6 +201,7 @@ function showSelected(cyclist) {
     document.getElementById("details-header-status-pulse-id").innerHTML = (int)(cyclist.energy.pulse2);
     document.getElementById("details-header-status-velocity-id").innerHTML = dec(cyclist.velocity.x * 3600/1000, 10);
     document.getElementById("details-header-status-distance-id").innerHTML = dec(cyclist.position.x/1000, 1000);
+    document.getElementById("details-header-status-pts-id").innerHTML = dec(cyclist.energy.points, 1000);
   
 }
 

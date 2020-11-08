@@ -87,7 +87,7 @@ canvas {
 }
 
 .details-header {
-  height: 25%;
+  height: 20%;
   width: 100%;
   background: red;
   display: flex;
@@ -98,6 +98,17 @@ canvas {
     display: flex;
     flex-direction: row;
     height: 50%;
+}
+
+.details-header-id {
+  margin-left: 10px;
+  font-size: 1.5rem;
+}
+
+.details-header-features {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
 }
 
 .details-header-status {
@@ -133,7 +144,7 @@ canvas {
 
 
 .details-body {
-    height: 50%;
+    height: 55%;
     width: 100%;
     background: blue;
 }
