@@ -147,14 +147,17 @@ canvas {
     height: 55%;
     width: 100%;
 
-  background: #eaeaed;
-
+  background: #42445A;
+background-image: url("Assets/311822.png");
   position: relative;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .box {
-  background: #2db34a;
-  height: 80px;
+  background: rgba(255,255,255,.3);
+  height: 40px;
   position: absolute;
   width: 80px;
 }
