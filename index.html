@@ -46,11 +46,10 @@
           <div class="item-header-features">abc</div>
         </div>
         <div class="item-body">
-          b
-        </div>
-        <div class="item-footer">
-          <img src="https://raw.githubusercontent.com/microsoft/fluentui-system-icons/master/assets/Heart%20Pulse/SVG/ic_fluent_heart_pulse_32_regular.svg" />
-          c
+          <span class="icon icon-batery"></span>
+           <span class="icon icon-heart"></span>
+           <span class="icon icon-wind"></span>
+           <span class="icon icon-watts"></span>
         </div>
       </div>
     </div>
@@ -109,7 +108,8 @@
       </div>
       <div class="details-footer">
         <div class="details-footer-buttons">
-          <input type="button" value="pull"  />
+          <input type="button" value="pull"  onclick="
+    javascript:cyclists[_debug_item].sendMessage('tira');"/>
         </div>
         <div class="details-footer-sliders">
           <div class="details-footer-sliders-item">

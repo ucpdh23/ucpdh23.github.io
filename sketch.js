@@ -176,18 +176,64 @@ let selected = null;
 function updateBox(item, cyclist) {
   item.onclick = function() {
     _debug_item = cyclist.id;
-    item.style.backgroundColor = 'red';
-    if (selected != null) selected.style.backgroundColor = '#DAA520';
+    item.classList.toggle('selected');
+    console.log(item.classList)
+   // item.style.backgroundColor='red';
+    
+    if (selected != null)
+      selected.classList.toggle('selected');
+      
     selected = item;
     showSelected(cyclist);
   };
   item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.id;
   item.getElementsByClassName('item-header-features')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
-  item.getElementsByClassName('item-body')[0].innerHTML = (int)(cyclist.energy.points);
+ // item.getElementsByClassName('item-body')[0].innerHTML = (int)(cyclist.energy.points);
+    
+    var color = getColorForPercentage(cyclist.energy.points/100);
+    item.getElementsByClassName('icon-batery')
+    [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
+ 
+     color = getColorForPercentage(1-cyclist.energy.pulse2/200);
+    item.getElementsByClassName('icon-heart')
+    [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
+    
+    color = getColorForPercentage(1-cyclist.energy.r_air/20);
+    item.getElementsByClassName('icon-wind')
+    [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
+ 
+    color = getColorForPercentage(cyclist.energy.getPower()/100);
+    item.getElementsByClassName('icon-watts')
+    [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
 
     if (selected === item) {
         showSelected(cyclist);
     }
+}
+
+var percentColors = [
+    { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+    { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+    { pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } } ];
+
+function getColorForPercentage(pct) {
+    for (var i = 1; i < percentColors.length - 1; i++) {
+        if (pct < percentColors[i].pct) {
+            break;
+        }
+    }
+    var lower = percentColors[i - 1];
+    var upper = percentColors[i];
+    var range = upper.pct - lower.pct;
+    var rangePct = (pct - lower.pct) / range;
+    var pctLower = 1 - rangePct;
+    var pctUpper = rangePct;
+    var color = {
+        r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+        g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+        b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+    };
+    return color;
 }
 
 function showSelected(cyclist) {
