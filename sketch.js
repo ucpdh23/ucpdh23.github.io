@@ -286,7 +286,7 @@ function drawProfile() {
   newLine.setAttribute('x2', ''+(offset +(i+1)*15));
   elevation = elevation + desn * 5;
   newLine.setAttribute('y2', '' +(200 - elevation));
-  newLine.setAttribute("stroke", "black");
+  newLine.setAttribute("stroke", "#ff00aa");
   var profile = document.getElementById('profile');
   profile.append(newLine);
   }
