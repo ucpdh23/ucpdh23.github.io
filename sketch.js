@@ -37,7 +37,7 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10];
+let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
 
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
@@ -184,6 +184,23 @@ function updateBox(item, cyclist) {
       selected.classList.toggle('selected');
       
     selected = item;
+    
+    var maxPotLevel = cyclist.energy.maxPotLevel;
+    
+    var pwrSlider=document.getElementById('powerSliderId');
+    pwrSlider.value = maxPotLevel;
+    pwrSlider.onchange = function() {
+      cyclist.energy.maxPotLevel = pwrSlider.value;
+    };
+    
+    var accSlider = document.getElementById('accSliderId');
+    accSlider.onchange = function() {
+      var acc = (50 - accSlider.value)/50;
+      cyclist.sendMessage('acelera#'+acc);
+      accSlider.value = 50;
+    };
+    
+    
     showSelected(cyclist);
   };
   item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.id;
@@ -202,7 +219,7 @@ function updateBox(item, cyclist) {
     item.getElementsByClassName('icon-wind')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
  
-    color = getColorForPercentage(cyclist.energy.getPower()/100);
+    color = getColorForPercentage(1-cyclist.energy.getPower()/100);
     item.getElementsByClassName('icon-watts')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
 
@@ -238,6 +255,8 @@ function getColorForPercentage(pct) {
 
 function showSelected(cyclist) {
     var details = document.getElementById('details');
+    
+    
 
     document.getElementById("details-header-id").innerHTML = cyclist.id;
     document.getElementById("details-header-features-id").innerHTML =
@@ -360,6 +379,10 @@ function sliderMouseClicked() {
     cyclists[_debug_item].sendMessage('acelera#'+showSliderValue);
 
     return false;
+}
+
+function maxPowerUpdate(value) {
+  
 }
 
 function powerSliderMouseClicked() {
