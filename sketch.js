@@ -270,6 +270,51 @@ function showSelected(cyclist) {
     document.getElementById("details-body-air-id").innerHTML = dec(cyclist.energy.r_air, 100);
     document.getElementById("details-body-slope-id").innerHTML = dec(cyclist.energy.r_pend, 100);
     document.getElementById("details-body-acc-id").innerHTML = dec(cyclist.energy.f_acel, 100);
+    
+    var canvas = document.getElementById('idForces');
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0000FF"
+    ctx.fillRect(50, 10,
+      cyclist.energy.f_acel *100, 5);
+    ctx.fillStyle = "#00FF00";
+    ctx.fillRect(50, 20,
+      cyclist.energy.r_pend *100, 5);
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(50, 30,
+      cyclist.energy.r_air * 10, 5);
+    
+      
+    var canvas2 = document.getElementById('idPower');
+    var ctx2 = canvas2.getContext("2d");
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+    ctx2.fillStyle = '#FFFFFF'
+    ctx2.fillRect(50,5, 100, 5);
+    ctx2.fillStyle = "#0000FF"
+    ctx2.fillRect(50, 10,
+      cyclist.energy.getPower(), 10);
+    
+    var canvas3 = document.getElementById('idEnergy');
+    var ctx3 = canvas3.getContext("2d");
+    ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+    
+    var end = 1.5 * Math.PI * cyclist.energy.points / 100 - Math.PI/4;
+    
+    
+    ctx3.beginPath()
+    ctx3.lineWidth = 1;
+    ctx3.fillStyle = "#0000FF"
+    ctx3.arc(55, 50, 50, -Math.PI / 4, 1.25 * Math.PI, false);
+    ctx3.stroke();
+    ctx3.beginPath();
+    ctx3.lineWidth = 10;
+    ctx3.fillStyle = '#000000'
+    ctx3.arc(55, 50, 50, -Math.PI / 4, end, false);
+    
+    ctx3.stroke();
+    ctx3.lineWidth = 1;
+    
+    
 }
 
 function drawProfile() {
