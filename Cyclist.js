@@ -858,6 +858,12 @@
         this.targetPot = 0;
       }
       
+      if (this.energy.points < 0) {
+        this.acceleration = createVector(0,0);
+        this.velocity = createVector(0,0);
+        return;
+      }
+      
         if (this.velocity.x > 15) {
             this._mSeparation = SEP_RANGE * (1 + (this.velocity.x - 15) / 10);
         }

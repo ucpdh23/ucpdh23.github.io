@@ -279,7 +279,7 @@ function showSelected(cyclist) {
       cyclist.energy.f_acel *100, 5);
     ctx.fillStyle = "#00FF00";
     ctx.fillRect(50, 20,
-      cyclist.energy.r_pend *100, 5);
+      cyclist.energy.r_pend *10, 5);
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(50, 30,
       cyclist.energy.r_air * 10, 5);
@@ -290,6 +290,7 @@ function showSelected(cyclist) {
     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
     ctx2.fillStyle = '#FFFFFF'
     ctx2.fillRect(50,5, 100, 5);
+   
     ctx2.fillStyle = "#0000FF"
     ctx2.fillRect(50, 10,
       cyclist.energy.getPower(), 10);
@@ -300,15 +301,15 @@ function showSelected(cyclist) {
     
     var end = 1.5 * Math.PI * cyclist.energy.points / 100 - Math.PI/4;
     
-    
+   var color = getColorForPercentage(cyclist.energy.points/100);
     ctx3.beginPath()
     ctx3.lineWidth = 1;
-    ctx3.fillStyle = "#0000FF"
+    ctx3.strokeStyle = "#000000"
     ctx3.arc(55, 50, 50, -Math.PI / 4, 1.25 * Math.PI, false);
     ctx3.stroke();
     ctx3.beginPath();
     ctx3.lineWidth = 10;
-    ctx3.fillStyle = '#000000'
+    ctx3.strokeStyle = '#' + rgbToHex(color.r) + rgbToHex(color.g) + rgbToHex(color.b);
     ctx3.arc(55, 50, 50, -Math.PI / 4, end, false);
     
     ctx3.stroke();
