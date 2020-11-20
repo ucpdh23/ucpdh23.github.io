@@ -276,13 +276,13 @@ function showSelected(cyclist) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#0000FF"
     ctx.fillRect(50, 10,
-      cyclist.energy.f_acel *100, 5);
+      cyclist.energy.f_acel *100, 10);
     ctx.fillStyle = "#00FF00";
     ctx.fillRect(50, 20,
-      cyclist.energy.r_pend *10, 5);
+      cyclist.energy.r_pend *10, 10);
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(50, 30,
-      cyclist.energy.r_air * 10, 5);
+      cyclist.energy.r_air * 10, 10);
     
       
     var canvas2 = document.getElementById('idPower');
