@@ -3,8 +3,8 @@ let cyclists = [];
 let road;
 let meters;
 let time = 0;
-let _debug = false;
-let _debug_item = 2;
+let _debug = true;
+let _debug_item = 1;
 let _drawHull = false;
 
 
@@ -37,7 +37,9 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
+//let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
+
+let etapa = [-1, -3, -4, -6, -4, -5, -6]
 
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);

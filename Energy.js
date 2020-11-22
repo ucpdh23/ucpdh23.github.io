@@ -35,7 +35,7 @@ class Energy {
 
         // Resistencia Pendiente
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
-        var multFactor = (this.cyclist.slope > 0)? 450 : 30;
+        var multFactor = (this.cyclist.slope > 0)? 450 : 200;
         this.r_pend = this.cyclist.slope * multFactor / this.montana;
 
         // aceleracion
@@ -78,6 +78,11 @@ class Energy {
     }
 
     forceCompensation() {
+      if (this.force < 0) {
+        var acc = this.force / 8;
+        return createVector(-acc, 0);
+      }
+      
         var pot = this.force * this.cyclist.velocity.x;
         var currMaxPot = this.maxPot - (100 - this.points / 2);
         

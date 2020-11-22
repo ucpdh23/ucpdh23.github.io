@@ -184,6 +184,11 @@
         stroke(255, 255, 0);
         if (this._alignment != undefined)
             this.drawVector(this._alignment, posX, posY)
+        
+        stroke(125, 125, 0);
+        if (this._forcesCompensation != undefined)
+          this.drawVector(this._forcesCompensation, posX, posY);
+        
 
 }
         stroke(90);
@@ -764,7 +769,7 @@
         this._cohesion.x /= 2;
         }
 
-        this.acceleration.add(this._forcesCompensation);
+      this.acceleration.add(this._forcesCompensation);
       
       this.acceleration.add(this._separation);
       this.acceleration.add(this._alignment);
