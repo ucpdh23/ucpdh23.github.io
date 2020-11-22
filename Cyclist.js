@@ -745,9 +745,13 @@
     }
     
 
-    computeForces(mAlig, mSep, mCoh) {
+    computeForces(mAlig, mSep, mCoh, mComp = 0) {
         // 1o physics
         this._forcesCompensation = this.energy.forceCompensation();
+
+        if (this._forcesCompensation.x > 0) {
+            this._forcesCompensation.mult(mComp);
+        }
 
         // 2o rest of forces
       this._separation = this.separation();
@@ -796,7 +800,7 @@
         
         this.acceleration.limit(this.maxSteeringForce);
       } else {
-          this.computeForces(0, 0, 0);
+          this.computeForces(0, 0, 0, 1);
         
         this._wander = this.wander(4, 15);
         this._drive = this.drive();
