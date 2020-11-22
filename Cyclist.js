@@ -43,7 +43,8 @@
 
 
     show(reference) {
-      if (globalFirst.position.x - this.position.x > 100) return;
+      if (reference < this.position.x
+        || reference - this.position.x > 100) return;
       
       if (this.acceleration.x >= 0 || globalFirst.id === this.id)
         this.secuence = (this.secuence + 1) % 8;

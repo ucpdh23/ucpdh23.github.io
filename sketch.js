@@ -121,7 +121,16 @@ function draw() {
   
   background(40);
   
+  var selectedMeters = cyclists[_debug_item].position.x;
+  if (selectedMeters < meters - 100) {
+    road.update(selectedMeters + 10);
+  } else {
+    road.update(meters);
+  }
+  
+  // road.update(meters);
   reference = road.show();
+  
   for (i=0; i < items; i++)
     cyclists[i].show(reference);
     
@@ -179,7 +188,7 @@ function updateBox(item, cyclist) {
   item.onclick = function() {
     _debug_item = cyclist.id;
     item.classList.toggle('selected');
-    console.log(item.classList)
+    //console.log(item.classList)
    // item.style.backgroundColor='red';
     
     if (selected != null)
@@ -420,7 +429,7 @@ function sliderMouseClicked() {
 
     //slider.value(50);
     
-    console.log("slider:"+showSliderValue)
+   // console.log("slider:"+showSliderValue)
     
     showSliderStartTime = time - 1
     
@@ -436,7 +445,7 @@ function maxPowerUpdate(value) {
 function powerSliderMouseClicked() {
     showPowerSliderValue = powerSlider.value();
 
-    console.log("powerSlider:" + showPowerSliderValue)
+   // console.log("powerSlider:" + showPowerSliderValue)
 
     showSliderStartTime = time - 1;
 

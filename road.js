@@ -18,7 +18,7 @@ class Road {
     stroke(255);
     fill(255)
     textSize(13)
-    text("meters:" + (int)(meters), 30, 30)
+    text("meters:" + (int)(this.meters), 30, 30)
     text("speed:" + ((int)(globalFirst.velocity.x*3600))/1000, 30, 45)
     line(0, this.y1, canvasWidth, this.y1);
     line(0, this.y2, canvasWidth, this.y2);
@@ -40,13 +40,13 @@ class Road {
     
     return start / 100;
    */
-    var start = (int)(meters) + 10;
+    var start = (int)(this.meters) + 10;
     
     for (var i = start; i >= start - 100; i--) {
       if (i %8 == 0) line((start - i)*10, this.middle, (start - i + 4)*10, this.middle);
     }
     
-    return meters + 10;
+    return this.meters + 10;
     
     
     var startPoint = meters % 40;

@@ -68,7 +68,7 @@ function createDefaultStateMachine() {
   reduceDraft: {
     actions: {
       onEnter(ctx) {
-        console.log('reduceDraft '+ ctx.cyclist.id)
+       // console.log('reduceDraft '+ ctx.cyclist.id)
       },
       onExit(ctx) {},
       onExecute(ctx) {
@@ -232,7 +232,7 @@ function createDefaultStateMachine() {
                           action() { }
                       };
                   } else if (ctx.first.velocity.x < ctx.cyclist.velocity.x - 0.3) {
-                      console.log("wait a while");
+                      //console.log("wait a while");
                   } else {
                     ctx.cyclist.startSelfAcc = true;
                   }
