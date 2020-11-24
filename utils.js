@@ -25,3 +25,13 @@ function rgbToHex(rgb) {
   }
   return hex;
 };
+
+function incrementalUpdate(actual, expected) {
+        
+        if (Math.abs(actual - expected) < 2)
+          return expected;
+        else if (actual < expected)
+          return actual + 1;
+        else
+          return actual - 1;
+}

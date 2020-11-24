@@ -3,12 +3,12 @@ let cyclists = [];
 let road;
 let meters;
 let time = 0;
-let _debug = false;
+let _debug = true;
 let _debug_item = 1;
 let _drawHull = false;
 
 
-let items = 60;
+let items = 3;
 
 
 let SEP_RANGE = 1.8;
@@ -46,7 +46,7 @@ function setup() {
   canvas.parent('sketch-holder');
   buildList();
   
-frameRate(20)
+frameRate(10)
   
   for (i = 0; i < items; i++) {
     cyclists.push(new Cyclist(i))
@@ -350,7 +350,7 @@ function drawProfile() {
 }
 
 function computeSlope(position) {
-    var index = (int)(position.x / 1000);
+    var index = (int)(position.x / 200); // 1000
 
     if (index < etapa.length) {
         return etapa[index];

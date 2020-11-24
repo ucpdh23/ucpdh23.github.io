@@ -16,6 +16,8 @@ class Energy {
       this.force = 0;
       this.anaerobicPoints = 100;
       this.maxPotLevel = 100;
+      this.r_pend = 0;
+      this.r_air =0;
     }
 
     getPower() {
@@ -28,7 +30,10 @@ class Energy {
         var pot = 0;
 
         // Resistencia Aire
-        this.r_air = this.cyclist.velocity.x / (this.draftReduction + 2) / this.llano * 100;
+        var expected_r_air = this.cyclist.velocity.x / (this.draftReduction + 2) / this.llano * 100;
+        this.r_air = incrementalUpdate(
+          this.r_air,
+          expected_r_air);
 
         // Resistencia Mecanica
         this.r_mec = 5;
@@ -36,7 +41,11 @@ class Energy {
         // Resistencia Pendiente
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
         var multFactor = (this.cyclist.slope > 0)? 450 : 200;
-        this.r_pend = this.cyclist.slope * multFactor / this.montana;
+        var expected_r_pend = this.cyclist.slope * multFactor / this.montana;
+        this.r_pend = incrementalUpdate(
+          this.r_pend,
+          expected_r_pend);
+        
 
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
@@ -95,7 +104,7 @@ class Energy {
 
             var delta = this.force - restForce;
 
-            var acc = delta / 8;
+            var acc = delta / 50;
 
             return createVector(-acc, 0);
         } else {
