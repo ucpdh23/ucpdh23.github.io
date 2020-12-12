@@ -18,6 +18,10 @@ class Energy {
       this.maxPotLevel = 100;
       this.r_pend = 0;
       this.r_air =0;
+      this.pot = 100;
+      
+      // potencia a desarrollar si esta tirando.
+      this.expected_power = 200;
     }
 
     getPower() {
@@ -25,7 +29,7 @@ class Energy {
     }
 
 
-    computeForce() {
+    computePhysics() {
         // P = F x V
         var pot = 0;
 
@@ -42,16 +46,19 @@ class Energy {
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
         var multFactor = (this.cyclist.slope > 0)? 450 : 200;
         var expected_r_pend = this.cyclist.slope * multFactor / this.montana;
-        this.r_pend = incrementalUpdate(
-          this.r_pend,
-          expected_r_pend);
+        //this.r_pend = incrementalUpdate(
+         // this.r_pend,
+          //expected_r_pend);
+        this.r_pend = expected_r_pend;
         
-
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
         
         this.force = this.r_air + this.r_mec + this.r_pend + this.f_acel;
 
+      if (this.cyclist.slope == 0)
+      this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
+      else this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
     }
 
     forceCompensation_option() {
@@ -86,14 +93,69 @@ class Energy {
 
     }
 
-    forceCompensation() {
+    forceCompensation(velAvg=0) {
+      const lastPot = this.pot;
+      
       if (this.force < 0) {
         var acc = this.force / 8;
+        this.cyclist.log= 'force negative:'+acc
         return createVector(-acc, 0);
       }
       
-        var pot = this.force * this.cyclist.velocity.x;
+      var acc = this.force / 8;
+      if (velAvg != 0) {
+        // no soy el primero
+        var ptarget = velAvg * this.force;
+        
+        var currPower=incrementalUpdate(lastPot, ptarget);
+        
+        var expected_vel = currPower / this.force;
+        this.cyclist.log = 'p:'+ ptarget + ' c:'+currPower+' expVel:'+(int)(expected_vel*3600)/1000;
+        var required_acc_x = expected_vel - this.cyclist.velocity.x;
+        return createVector(required_acc_x, 0);
+        
+      } else {
+        // soy el primero
+        var expected_vel = this.expected_power / this.force;
+        this.cyclist.log = 'expVel:' + expected_vel;
+        var required_acc_x = expected_vel - this.cyclist.velocity.x;
+        return createVector(required_acc_x, 0);
+        
+      }
+      
+      
+    }
+    __forceCompensation(vel_average =0) {
+      const lastPot = this.pot;
+      
+      if (this.force < 0) {
+        var acc = this.force / 8;
+        this.cyclist.log= 'force negative:'+acc
+        return createVector(-acc, 0);
+      }
+      
+      // si vel_average es 0 entonces calcula velocidades a partir de la potencia.
+      
+      if (vel_average == 0) {
+        var expected_vel = this.expected_power / this.force;
+        this.cyclist.log = 'expVel:'+expected_vel;
+        var required_acc_x = expected_vel - this.cyclist.velocity.x;
+        return createVector(required_acc_x, 0);
+      }
+      
+       this.cyclist.log = 'avVel:'+vel_average;
+      
+       // var pot = this.force * this.cyclist.velocity.x;
+       var pot = this.force * vel_average;
         var currMaxPot = this.maxPot - (100 - this.points / 2);
+        
+        var acc_base = vel_average - this.cyclist.velocity.x;
+        
+        
+        if (acc_base>0)
+        acc_base *= 0.8;
+        else
+        acc_base *= 0.5;
         
         currMaxPot *= this.maxPotLevel/100;
 
@@ -106,12 +168,12 @@ class Energy {
 
             var acc = delta / 50;
 
-            return createVector(-acc, 0);
+            return createVector(acc_base -acc, 0);
         } else {
             this.anaerobicPoints += 1;
             if (this.anaerobicPoints > 100)
                 this.anaerobicPoints = 100;
-            return createVector(0, 0);
+            return createVector(acc_base, 0);
         }
 
     }
@@ -147,11 +209,22 @@ class Energy {
     this.pulse2 = this.pulse - this.draftReduction;
     
         //this.points -= this.pulse2 / 2500 * delta;
+        
+    var expectedPot = this.force * this.cyclist.velocity.x;
+    
+    if  (!Number.isNaN(expectedPot)) {
+      
+      this.pot = incrementalUpdate(this.pot, expectedPot);
+      
+      this.points -= this.pot/4000 * delta;
+    } else {
+      console.log(this.force)
+    }
 
-    this.pot = this.force * this.cyclist.velocity.x;
+    /*this.pot = this.force * this.cyclist.velocity.x;
     if (!Number.isNaN(this.pot)) {
       this.points -= this.pot/4000 * delta;
-    }
+    }*/
 
   }
   

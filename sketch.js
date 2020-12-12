@@ -8,7 +8,7 @@ let _debug_item = 1;
 let _drawHull = false;
 
 
-let items = 3;
+let items = 30;
 
 
 let SEP_RANGE = 1.8;
@@ -46,7 +46,7 @@ function setup() {
   canvas.parent('sketch-holder');
   buildList();
   
-frameRate(10)
+frameRate(20)
   
   for (i = 0; i < items; i++) {
     cyclists.push(new Cyclist(i))
@@ -79,6 +79,14 @@ frameRate(10)
 }
 
 function draw() {
+ /* if (meters > 820) frameRate(20);
+  else if (meters > 780) frameRate(2);
+  else if (meters > 620) frameRate(20);
+  else if (meters > 580) frameRate(2);
+  else if (meters > 420) frameRate(20);
+  else if (meters > 380) frameRate(2);
+  else if (meters > 220) frameRate(20);
+  else if (meters > 180) frameRate(2);*/
   var delta = 1/20;
   meters = 0;
   var selected = _debug_item;

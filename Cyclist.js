@@ -13,6 +13,7 @@
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
         this.velocity = createVector(10, 0);
         this.acceleration = createVector(0, 0)
+        this.acc_physics = createVector(0, 0);
 
         this.neighbour = []
         this.maxSteeringForce = MAX_STEERING_FORCE;
@@ -186,7 +187,7 @@
         if (this._alignment != undefined)
             this.drawVector(this._alignment, posX, posY)
         
-        stroke(125, 125, 0);
+        stroke(125, 125, 120);
         if (this._forcesCompensation != undefined)
           this.drawVector(this._forcesCompensation, posX, posY);
         
@@ -745,14 +746,32 @@
         return bestCandidate;
     }
     
+    
+computeAvVel() {
+  let inRange = this.computeItems(170, 5);
+
+  if (inRange.length == 0) return 0;
+
+  var vel =0;
+  var acc= 0;
+  for(var i= 0; i<inRange.length; i++){
+    var item = inRange[i]
+    vel += item.velocity.x;
+    acc += item.acc_physics.x;
+  }
+  
+  
+  return vel/inRange.length;
+}
 
     computeForces(mAlig, mSep, mCoh, mComp = 0) {
         // 1o physics
-        this._forcesCompensation = this.energy.forceCompensation();
+        this._forcesCompensation = this.energy.forceCompensation(this.computeAvVel());
+        //this._forcesCompensation.limit(2);
 
-        if (this._forcesCompensation.x > 0) {
+       /* if (this._forcesCompensation.x > 0) {
             this._forcesCompensation.mult(mComp);
-        }
+        }*/
 
         // 2o rest of forces
       this._separation = this.separation();
@@ -774,7 +793,8 @@
         this._cohesion.x /= 2;
         }
 
-      this.acceleration.add(this._forcesCompensation);
+     // this.acceleration.add(this._forcesCompensation);
+      this.acc_physics = this._forcesCompensation;
       
       this.acceleration.add(this._separation);
       this.acceleration.add(this._alignment);
@@ -838,6 +858,7 @@
     update(time) {
         this.position.add(p5.Vector.mult(this.velocity, time));
         this.velocity.add(p5.Vector.mult(this.acceleration, time));
+        this.velocity.add(p5.Vector.mult(this.acc_physics, time));
         this.velocity.limit(this.maxSpeed);
         //this.acceleration.mult(0);
         this.energy.update(time)
@@ -878,7 +899,7 @@
             this._mSeparation = SEP_RANGE * (1 + (this.velocity.x - 15) / 10);
         }
 
-        this.energy.computeForce();
+        this.energy.computePhysics();
 
         this.log = "";
         this.neighbour = []
