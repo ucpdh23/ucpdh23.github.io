@@ -52,24 +52,7 @@ frameRate(20)
     cyclists.push(new Cyclist(i))
   }
   
-  /*
-  setTimeout(
-    function(){
-   print('tira!');
-      cyclists[2].sendMessage('tira!');
-    },
-    35000
-
-  );
-  
-  setTimeout(
-    function() {
-        cyclists[4].sendMessage('adelanta');
-    },
-    50000
-  );
-  */
-  
+ 
   road = new Road();
   
   meters = 0;
@@ -79,14 +62,14 @@ frameRate(20)
 }
 
 function draw() {
- /* if (meters > 820) frameRate(20);
+  if (meters > 820) frameRate(20);
   else if (meters > 780) frameRate(2);
   else if (meters > 620) frameRate(20);
   else if (meters > 580) frameRate(2);
   else if (meters > 420) frameRate(20);
   else if (meters > 380) frameRate(2);
   else if (meters > 220) frameRate(20);
-  else if (meters > 180) frameRate(2);*/
+  else if (meters > 180) frameRate(2);
   var delta = 1/20;
   meters = 0;
   var selected = _debug_item;

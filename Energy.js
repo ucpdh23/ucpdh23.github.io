@@ -13,12 +13,12 @@ class Energy {
       this.points = 100;
       this.maxPot = 450 - (100 - this.estadoForma);
       this.maxAnaerobicPot = this.maxPot + this.sprint;
-      this.force = 0;
+      this.preForce = this.force = 0;
       this.anaerobicPoints = 100;
       this.maxPotLevel = 100;
       this.r_pend = 0;
       this.r_air =0;
-      this.pot = 100;
+      this.prePot = this.pot = 100;
       
       // potencia a desarrollar si esta tirando.
       this.expected_power = 200;
@@ -40,7 +40,7 @@ class Energy {
           expected_r_air);
 
         // Resistencia Mecanica
-        this.r_mec = 5;
+        this.r_mec = (this.cyclist.velocity.x > 0)? 5 : 0;
 
         // Resistencia Pendiente
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
@@ -54,11 +54,16 @@ class Energy {
         // aceleracion
         this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
         
-        this.force = this.r_air + this.r_mec + this.r_pend + this.f_acel;
+        const newForce = this.r_air + this.r_mec + this.r_pend + this.f_acel;
 
-      if (this.cyclist.slope == 0)
-      this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
-      else this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
+        this.preForce = this.force;
+        this.force = newForce;
+
+        if (this.cyclist.slope == 0)
+        this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
+        else this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
+
+        this.prePot = this.pot;
     }
 
     forceCompensation_option() {
@@ -93,13 +98,38 @@ class Energy {
 
     }
 
-    forceCompensation(velAvg=0) {
+    forceCompensation(velAvg = 0) {
+        var negAcc = this.force / 8;
+
+        // F * V = pot
+        const forceCyclist = 16;
+
+        // F = m * a
+        const accCyclist = forceCyclist / 8;
+        const accRes = negAcc - accCyclist;
+
+        this.cyclist.log = '' + negAcc + '-' + accCyclist + '=' + accRes;
+
+
+        return createVector(-accRes, 0);
+
+
+        if (Math.abs(this.force - this.preForce) < 1) {
+            return createVector(0, 0);
+            // No hay cambios el ciclista está estable
+        } else {
+            // Hay cambios, el ciclista tiene que establecer cuales son los nuevos márgenes de potencia
+            var negAcc = this.force / 8;
+            this.cyclist.log = 'acc:' + negAcc;
+            return createVector(-negAcc, 0);
+        }
+
       const lastPot = this.pot;
       
       if (this.force < 0) {
-        var acc = this.force / 8;
-        this.cyclist.log= 'force negative:'+acc
-        return createVector(-acc, 0);
+          var negAcc = this.force / 8;
+          this.cyclist.log = 'force negative:' + negAcc;
+          return createVector(-negAcc, 0);
       }
       
       var acc = this.force / 8;
@@ -110,7 +140,7 @@ class Energy {
         var currPower=incrementalUpdate(lastPot, ptarget);
         
         var expected_vel = currPower / this.force;
-        this.cyclist.log = 'p:'+ ptarget + ' c:'+currPower+' expVel:'+(int)(expected_vel*3600)/1000;
+        this.cyclist.log = 'target:'+ ptarget + ' c:'+currPower+' expVel:'+(int)(expected_vel*3600)/1000;
         var required_acc_x = expected_vel - this.cyclist.velocity.x;
         return createVector(required_acc_x, 0);
         
