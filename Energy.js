@@ -22,6 +22,7 @@ class Energy {
       
       // potencia a desarrollar si esta tirando.
       this.expected_power = 200;
+      this.forceCyclist=10;
     }
 
     getPower() {
@@ -43,8 +44,12 @@ class Energy {
         this.r_mec = (this.cyclist.velocity.x > 0)? 5 : 0;
 
         // Resistencia Pendiente
+        var slope = this.cyclist.slope;
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
-        var multFactor = (this.cyclist.slope > 0)? 450 : 200;
+        //var multFactor = (this.cyclist.slope > 0)? 450 : 200;
+        var multFactor = (slope < 0)?
+            100 :
+            slope * 10;
         var expected_r_pend = this.cyclist.slope * multFactor / this.montana;
         //this.r_pend = incrementalUpdate(
          // this.r_pend,
@@ -52,8 +57,9 @@ class Energy {
         this.r_pend = expected_r_pend;
         
         // aceleracion
-        this.f_acel = (this.cyclist.acceleration.x > 0)? this.cyclist.acceleration.x * 8 : 0;
+       // this.f_acel = (this.cyclist.acceleration.x > 10000)? this.cyclist.acceleration.x * 8 : 0;
         
+        this.f_acel = 0;
         const newForce = this.r_air + this.r_mec + this.r_pend + this.f_acel;
 
         this.preForce = this.force;
@@ -99,26 +105,42 @@ class Energy {
     }
 
     forceCompensation(velAvg = 0) {
-        var negAcc = this.force / 8;
+      var negAcc = this.force / 8;
+      
+      if (velAvg != 0) {
+        const currVel = this.cyclist.velocity.x;
+        var diff = velAvg - currVel;
+        
+        var expAcc = negAcc + diff;
+        this.forceCyclist = 8* expAcc;
+        
+        this.cyclist.log = '' +
+            dec(expAcc, 100) + '=' +
+            dec(negAcc, 100) + '-' + diff;
+      }
+      
 
         // F * V = pot
-        const forceCyclist = 16;
+        var forceCyclist = this.forceCyclist //+ this.cyclist.acceleration.x*8;
+        
+        //this.cyclist.log='acc'+ this.cyclist.acceleration.x;
 
         // F = m * a
-        const accCyclist = forceCyclist / 8;
+        var accCyclist = forceCyclist / 8;
         const accRes = negAcc - accCyclist;
 
-        this.cyclist.log = '' + negAcc + '-' + accCyclist + '=' + accRes;
+      
 
+       // accRes += this.cyclist.acceleration.x;
 
         return createVector(-accRes, 0);
 
 
         if (Math.abs(this.force - this.preForce) < 1) {
             return createVector(0, 0);
-            // No hay cambios el ciclista está estable
+            // No hay cambios el ciclista estï¿½ estable
         } else {
-            // Hay cambios, el ciclista tiene que establecer cuales son los nuevos márgenes de potencia
+            // Hay cambios, el ciclista tiene que establecer cuales son los nuevos mï¿½rgenes de potencia
             var negAcc = this.force / 8;
             this.cyclist.log = 'acc:' + negAcc;
             return createVector(-negAcc, 0);
@@ -208,9 +230,49 @@ class Energy {
 
     }
 
-
-
     update(delta) {
+      var expectedPot = this.forceCyclist * this.cyclist.velocity.x;
+      
+      this.draftReduction = this.computeDraftReduction();
+      
+      if  (!Number.isNaN(expectedPot)) {
+        this.pot = incrementalUpdate(this.pot, expectedPot);
+      
+        this.points -= this.pot/4000 * delta;
+      }
+      
+      var newPulse = this.computePulse(
+        this.pot,
+        this.forceCyclist,
+        this.cyclist.velocity.x)
+      this.pulse = this.incrementPulse(
+        this.pulse, newPulse);
+      
+      var accX = this.cyclist.acceleration.x;
+      if (accX < 0) accX = 0;
+      else accX = accX * 5 * delta;
+      
+      var accVar = this.computeAccVar(accX);
+      this.pulse = this.pulse + accVar;
+      
+      this.pulse2 = this.pulse - this.draftReduction;
+    }
+    
+    computePulse(pot, force, vel) {
+      return 45 + pot / 500 * 120;
+    }
+    
+    incrementPulse(curr, exp) {
+      if (exp +2 < curr) {
+        return curr - 0.3;
+      } else if (curr +2<exp) {
+        return curr + 0.5;
+      } else {
+        return exp;
+      }
+    }
+
+    __update(delta) {
     var ms= this.cyclist.velocity.x * 3.6;
     var prop = ms / this.refProp;
     var g = prop * prop;
@@ -231,10 +293,7 @@ class Energy {
     var accVar = this.computeAccVar(accX);
     this.pulse = this.pulse + accVar;
     
-    var items = this.cyclist.computeItems(20,4).length;
-    var items2 = this.cyclist.computeItems(90, 6).length;
-    var itemsPulse = items + items2 / 2;
-    this.draftReduction = itemsPulse * 2;
+    this.draftReduction = this.computeDraftReduction();
 
     this.pulse2 = this.pulse - this.draftReduction;
     
@@ -256,6 +315,13 @@ class Energy {
       this.points -= this.pot/4000 * delta;
     }*/
 
+  }
+  
+  computeDraftReduction() {
+    var items = this.cyclist.computeItems(20,4).length;
+    var items2 = this.cyclist.computeItems(90, 6).length;
+    var itemsPulse = items + items2 / 2;
+    return itemsPulse * 2;
   }
   
   computeAccVar(acc) {

@@ -115,6 +115,10 @@
         <div class="details-footer-buttons">
           <input type="button" value="pull"  onclick="
     javascript:cyclists[_debug_item].sendMessage('tira');"/>
+          <input type="button" value="  +  "  onclick="
+    javascript:cyclists[_debug_item].energy.forceCyclist += 0.5;"/>
+          <input type="button" value="  -  " onclick="
+              javascript:cyclists[_debug_item].energy.forceCyclist -= 0.5;" />
         </div>
         <div class="details-footer-sliders">
           <div class="details-footer-sliders-item">

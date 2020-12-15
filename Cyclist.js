@@ -11,7 +11,7 @@
         this.selfAccTimer = 3;
 
         this.position = createVector(0 - random(items / 1.5), 3 - random(6));
-        this.velocity = createVector(10, 0);
+        this.velocity = createVector(9, 0);
         this.acceleration = createVector(0, 0)
         this.acc_physics = createVector(0, 0);
 
@@ -188,8 +188,12 @@
             this.drawVector(this._alignment, posX, posY)
         
         stroke(125, 125, 120);
-        if (this._forcesCompensation != undefined)
-          this.drawVector(this._forcesCompensation, posX, posY);
+        if (this._forcesCompensation != undefined) {
+          this.drawVector(createVector(-this.energy.force,0), posX, posY);
+          stroke(255,120,120)
+          var vectorPosX = -this.energy.force*1000;
+          this.drawVector(createVector(this.energy.forceCyclist,0), posX - vectorPosX, posY+5);
+        }
         
 
 }
@@ -748,6 +752,8 @@
     
     
 computeAvVel() {
+  if (this.first == this) return 0;
+  return this.first.velocity.x;
   let inRange = this.computeItems(170, 5);
 
   if (inRange.length == 0) return 0;
@@ -882,6 +888,8 @@ computeAvVel() {
     }
 
     computeNeighbour(cyclists, i, first, last, slope) {
+      this.first = first;
+      
       if (this.slope !== slope) {
         this.slope = slope;
         this.targetPot = this.energy.pot;
