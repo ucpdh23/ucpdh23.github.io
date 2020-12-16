@@ -26,12 +26,12 @@ function rgbToHex(rgb) {
   return hex;
 };
 
-function incrementalUpdate(actual, expected) {
+function incrementalUpdate(actual, expected, step=1) {
         
-        if (Math.abs(actual - expected) < 2)
+        if (Math.abs(actual - expected) < step*2)
           return expected;
         else if (actual < expected)
-          return actual + 1;
+          return actual + step;
         else
-          return actual - 1;
+          return actual - step;
 }

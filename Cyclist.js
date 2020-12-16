@@ -753,7 +753,10 @@
     
 computeAvVel() {
   if (this.first == this) return 0;
-  return this.first.velocity.x;
+  
+  if (this.position.x< 100)
+    return this.first.velocity.x;
+    
   let inRange = this.computeItems(170, 5);
 
   if (inRange.length == 0) return 0;

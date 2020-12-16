@@ -112,7 +112,9 @@ class Energy {
         var diff = velAvg - currVel;
         
         var expAcc = negAcc + diff;
-        this.forceCyclist = 8* expAcc;
+        
+        this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
+        //this.forceCyclist = 8* expAcc;
         
         this.cyclist.log = '' +
             dec(expAcc, 100) + '=' +
