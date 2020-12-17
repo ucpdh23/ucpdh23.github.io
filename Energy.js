@@ -5,6 +5,7 @@ class Energy {
     this.pulse = 80;
       this.llano = 60 + random(30);
       this.montana = 60 + random(30);
+      this.bajada = 70 + random(10);
       this.estadoForma = 80 + random(20);
       this.sprint = 60 + random(30);
     this.refProp = 15 + this.llano / 10;
@@ -48,9 +49,11 @@ class Energy {
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
         //var multFactor = (this.cyclist.slope > 0)? 450 : 200;
         var multFactor = (slope < 0)?
-            100 :
+            30 :
             slope * 10;
-        var expected_r_pend = this.cyclist.slope * multFactor / this.montana;
+           
+        var expected_r_pend = (slope >= 0)? this.cyclist.slope * multFactor / this.montana:
+        this.cyclist.slope * multFactor / this.bajada;
         //this.r_pend = incrementalUpdate(
          // this.r_pend,
           //expected_r_pend);
@@ -116,7 +119,7 @@ class Energy {
         this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
         //this.forceCyclist = 8* expAcc;
         
-        this.cyclist.log = '' +
+       // this.cyclist.log = '' +
             dec(expAcc, 100) + '=' +
             dec(negAcc, 100) + '-' + diff;
       }

@@ -46,7 +46,7 @@ function setup() {
   canvas.parent('sketch-holder');
   buildList();
   
-frameRate(10)
+frameRate(20)
   
   for (i = 0; i < items; i++) {
     cyclists.push(new Cyclist(i))
@@ -114,9 +114,9 @@ function draw() {
   
   var selectedMeters = cyclists[_debug_item].position.x;
   if (selectedMeters < meters - 100) {
-    road.update(selectedMeters + 10);
+    road.update(selectedMeters + 10, computeSlope(createVector(selectedMeters,0)));
   } else {
-    road.update(meters);
+    road.update(meters, computeSlope(createVector(meters,0)));
   }
   
   // road.update(meters);

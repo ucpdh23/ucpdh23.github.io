@@ -10,8 +10,9 @@ class Road {
   }
   
 
-  update(meters) {
+  update(meters, slope) {
     this.meters = meters;
+    this.slope = slope;
   }
   
   show() {
@@ -20,6 +21,9 @@ class Road {
     textSize(13)
     text("meters:" + (int)(this.meters), 30, 30)
     text("speed:" + ((int)(globalFirst.velocity.x*3600))/1000, 30, 45)
+    text("" + this.slope, 33, this.y1+22)
+    line (30, this.y1+10, 40, this.y1+10);
+    line(30,this.y1+10, 40, this.y1+10-this.slope)
     line(0, this.y1, canvasWidth, this.y1);
     line(0, this.y2, canvasWidth, this.y2);
     /*
