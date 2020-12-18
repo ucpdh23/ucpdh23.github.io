@@ -139,7 +139,13 @@
         text("E:" + ((int)(this.energy.points * 1000))/1000, headX+160, 45);
         text("pwr:" + dec(this.energy.pot, 1000), posX, 255);
         text("log:" + this.log, headX+100, 60);
-        text("slope:" + this.slope, 30, 60);
+        
+        text("" + this.slope, 30, 60)
+        line (30, 80, 45, 80);
+        line(30, 80, 45, 80-this.slope)
+        
+        
+        //text("slope:" + this.slope, 30, 60);
         text("f:" + dec(this.energy.force, 10) + " p:" + dec(this.energy.r_pend, 10) + " air:" + dec(this.energy.r_air, 10) + " ac:" + dec(this.energy.f_acel, 10), posX, 280);
         text("aPwr:" + dec(this.energy.anaerobicPoints, 10), posX + 70, 255);
         

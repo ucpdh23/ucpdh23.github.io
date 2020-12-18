@@ -21,46 +21,24 @@ class Road {
     textSize(13)
     text("meters:" + (int)(this.meters), 30, 30)
     text("speed:" + ((int)(globalFirst.velocity.x*3600))/1000, 30, 45)
-    text("" + this.slope, 33, this.y1+22)
-    line (30, this.y1+10, 40, this.y1+10);
-    line(30,this.y1+10, 40, this.y1+10-this.slope)
+
     line(0, this.y1, canvasWidth, this.y1);
     line(0, this.y2, canvasWidth, this.y2);
-    /*
-    var start = (int)((meters + 10)*100);
-    var segment = start / 8;
-    var suelo = Math.floor(segment);
+
+    this.drawLines(this.meters + 10);
     
-    for (var item = 0; item < 5; item++) {
-      var point = (start - suelo*8 -item*8) *10;
-      line(
-        point,
-        this.middle,
-        point + 40,
-        this.middle
-        );
+    return this.meters+10;
+  }
+  
+  drawLines(meters) {
+    var diff = ((int) (meters*10)) % 80;
+    
+      // start with white
+      var start = diff - 120;
       
-    }
-    
-    return start / 100;
-   */
-    var start = (int)(this.meters) + 10;
-    
-    for (var i = start; i >= start - 100; i--) {
-      if (i %8 == 0) line((start - i)*10, this.middle, (start - i + 4)*10, this.middle);
-    }
-    
-    return this.meters + 10;
-    
-    
-    var startPoint = meters % 40;
-    for (var i = -2; i < 40; i++) {
-      if (i%2 != 0) continue;
-      
-      var itemPoint = startPoint + i*20
-      line(itemPoint, this.middle, itemPoint + 20, this.middle);
-    }
-    
-    return meters + 10
+      for(var i = 0; i<15; i++) {
+        line(start, this.middle, start+40, this.middle);
+        start += 80;
+      }
   }
 }
