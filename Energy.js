@@ -110,23 +110,25 @@ class Energy {
 
     }
 
-    forceCompensation(velAvg = 0) {
+    forceCompensation(velAvg = 0, selfAcc=0) {
       var negAcc = this.force / 8;
       
+      // hay gente delante
       if (velAvg != 0) {
         const currVel = this.cyclist.velocity.x;
         var diff = velAvg - currVel;
         
         var expAcc = negAcc + diff;
+        // se calcula la aceleración necesaria para adaptarse a la velocidad del grupo
         
         this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
         //this.forceCyclist = 8* expAcc;
-        
+        // se calcula la fuerza necesaria para ejercer esa aceleración
       }
       
 
         // F * V = pot
-        var forceCyclist = this.forceCyclist //+ this.cyclist.acceleration.x*8;
+        var forceCyclist = this.forceCyclist + selfAcc*8;
         
         //this.cyclist.log='acc'+ this.cyclist.acceleration.x;
 

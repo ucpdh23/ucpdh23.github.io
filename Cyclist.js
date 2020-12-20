@@ -780,8 +780,10 @@ computeAvVel() {
 }
 
     computeForces(mAlig, mSep, mCoh, mComp = 0) {
+      this._selfAcc = this.selfAcc();
+      
         // 1o physics
-        this._forcesCompensation = this.energy.forceCompensation(this.computeAvVel());
+        this._forcesCompensation = this.energy.forceCompensation(this.computeAvVel(), this._selfAcc.x);
         //this._forcesCompensation.limit(2);
 
        /* if (this._forcesCompensation.x > 0) {
@@ -794,7 +796,7 @@ computeAvVel() {
       this._cohesion = this.cohesion();
       this._borderAvoid = this.borderAvoid();
      
-      this._selfAcc = this.selfAcc();
+      // this._selfAcc = this.selfAcc();
       
       this._alignment.mult(mAlig);
       this._separation.mult(mSep);
