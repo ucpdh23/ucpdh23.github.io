@@ -69,8 +69,11 @@ class Energy {
         this.force = newForce;
 
         if (this.cyclist.slope == 0)
-        this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
-        else this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
+          this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
+        else if (this.cyclist.slope > 0)
+          this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
+        else
+          this.expected_power = 30;
 
         this.prePot = this.pot;
     }
@@ -119,9 +122,6 @@ class Energy {
         this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
         //this.forceCyclist = 8* expAcc;
         
-       // this.cyclist.log = '' +
-            dec(expAcc, 100) + '=' +
-            dec(negAcc, 100) + '-' + diff;
       }
       
 

@@ -8,7 +8,7 @@ let _debug_item = 0;
 let _drawHull = false;
 
 
-let items = 100;
+let items = 20;
 
 
 let SEP_RANGE = 1.8;
@@ -37,7 +37,7 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [0, 2, 4, 7, -3, -5, -5, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
+let etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
 
 // let etapa = [-1, -3, -4, -6, -4, -5, -6]
 
@@ -209,19 +209,19 @@ function updateBox(item, cyclist) {
   item.getElementsByClassName('item-header-features')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
  // item.getElementsByClassName('item-body')[0].innerHTML = (int)(cyclist.energy.points);
     
-    var color = getColorForPercentage(cyclist.energy.points/100);
+    var color = getColorForPercentage(cyclist.energy.points/100, percentColors);
     item.getElementsByClassName('icon-batery')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
  
-     color = getColorForPercentage(1-cyclist.energy.pulse2/200);
+     color = getColorForPercentage(1-cyclist.energy.pulse2/200, percentColors);
     item.getElementsByClassName('icon-heart')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
     
-    color = getColorForPercentage(1-cyclist.energy.r_air/20);
+    color = getColorForPercentage(1-cyclist.energy.r_air/20, percentColors);
     item.getElementsByClassName('icon-wind')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
  
-    color = getColorForPercentage(1-cyclist.energy.getPower()/100);
+    color = getColorForPercentage(1-cyclist.energy.getPower()/100, percentColors);
     item.getElementsByClassName('icon-watts')
     [0].style.backgroundColor = "rgb("+color.r+","+color.g+","+color.b+")";
 
@@ -235,25 +235,6 @@ var percentColors = [
     { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
     { pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } } ];
 
-function getColorForPercentage(pct) {
-    for (var i = 1; i < percentColors.length - 1; i++) {
-        if (pct < percentColors[i].pct) {
-            break;
-        }
-    }
-    var lower = percentColors[i - 1];
-    var upper = percentColors[i];
-    var range = upper.pct - lower.pct;
-    var rangePct = (pct - lower.pct) / range;
-    var pctLower = 1 - rangePct;
-    var pctUpper = rangePct;
-    var color = {
-        r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
-        g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-        b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
-    };
-    return color;
-}
 
 function showSelected(cyclist) {
     var details = document.getElementById('details');
@@ -303,7 +284,7 @@ function showSelected(cyclist) {
     
     var end = 1.5 * Math.PI * cyclist.energy.points / 100 - Math.PI/4;
     
-   var color = getColorForPercentage(cyclist.energy.points/100);
+   var color = getColorForPercentage(cyclist.energy.points/100, percentColors);
     ctx3.beginPath()
     ctx3.lineWidth = 1;
     ctx3.strokeStyle = "#000000"
@@ -320,6 +301,12 @@ function showSelected(cyclist) {
     
 }
 
+var percentColorsProfile = [
+    { pct: 0.0, color: { r: 0x00, g: 0x00, b: 0xff } },
+    { pct: 0.5, color: { r: 0x00, g: 0xff, b: 0 } },
+    { pct: 0.75, color: { r: 0xff, g: 0x00, b: 0 } },
+    { pct: 1.0, color: { r: 0x00, g: 0x00, b: 0 } } ];
+
 function drawProfile() {
   var offset = 10;
   var offsetY = 200;
@@ -334,14 +321,32 @@ function drawProfile() {
   newLine.setAttribute('x2', ''+(offset +(i+1)*15));
   elevation = elevation + desn * 5;
   newLine.setAttribute('y2', '' +(200 - elevation));
-  newLine.setAttribute("stroke", "#ff00aa");
+  var percent = (desn + 30) / 60;
+  var color = getColorForPercentage(
+    percent,
+    percentColorsProfile)
+  var colorCode = '#' + rgbToHex(color.r) + rgbToHex(color.g) + rgbToHex(color.b);
+  newLine.setAttribute("stroke", colorCode);
+  newLine.setAttribute("stroke-width", 2);
+  
   var profile = document.getElementById('profile');
   profile.append(newLine);
   }
+  var kms = etapa.length;
+  
+ var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+ text.setAttribute("x", 10);
+ text.setAttribute("y", 10);
+ text.setAttribute("font-size", 30)
+ text.textContent=''+kms+'kms'
+ 
+ profile.append(text);
+ 
+  
 }
 
 function computeSlope(position) {
-    var index = (int)(position.x / 250);
+    var index = (int)(position.x / 1000);
 
     if (index < etapa.length) {
         return etapa[index];
