@@ -37,9 +37,7 @@ let showSliderValue = 0;
 
 let button;
 
-let etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
-
-// let etapa = [-1, -3, -4, -6, -4, -5, -6]
+let profile = new Profile();
 
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
@@ -96,7 +94,7 @@ function draw() {
   globalHull = hullPoints;
   
     for (i = 0; i < items; i++) {
-        var slope = computeSlope(cyclists[i].position);
+        var slope = profile.computeEnvironment(cyclists[i]);
         cyclists[i].computeNeighbour(cyclists, i, first, last, slope);
         if (i < 10) {
           updateBox(document.getElementById('id_'+i), cyclists[i]);
@@ -114,9 +112,9 @@ function draw() {
   
   var selectedMeters = cyclists[_debug_item].position.x;
   if (selectedMeters < meters - 100) {
-    road.update(selectedMeters + 10, computeSlope(createVector(selectedMeters,0)));
+    road.update(selectedMeters + 10, profile.computeSlope(createVector(selectedMeters,0)));
   } else {
-    road.update(meters, computeSlope(createVector(meters,0)));
+    road.update(meters, profile.computeSlope(createVector(meters,0)));
   }
   
   // road.update(meters);
@@ -301,59 +299,12 @@ function showSelected(cyclist) {
     
 }
 
-var percentColorsProfile = [
-    { pct: 0.0, color: { r: 0x00, g: 0x00, b: 0xff } },
-    { pct: 0.5, color: { r: 0x00, g: 0xff, b: 0 } },
-    { pct: 0.75, color: { r: 0xff, g: 0x00, b: 0 } },
-    { pct: 1.0, color: { r: 0x00, g: 0x00, b: 0 } } ];
-
 function drawProfile() {
-  var offset = 10;
-  var offsetY = 200;
-  var elevation = 0;
-  for (var i=0;i<etapa.length;i++) {
-    var desn = etapa[i];
-  var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  newLine.setAttribute('id', 'line'+ i);
-  newLine.setAttribute('x1', ''+(offset + i*
-  15));
-  newLine.setAttribute('y1', '' + (200 - elevation));
-  newLine.setAttribute('x2', ''+(offset +(i+1)*15));
-  elevation = elevation + desn * 5;
-  newLine.setAttribute('y2', '' +(200 - elevation));
-  var percent = (desn + 30) / 60;
-  var color = getColorForPercentage(
-    percent,
-    percentColorsProfile)
-  var colorCode = '#' + rgbToHex(color.r) + rgbToHex(color.g) + rgbToHex(color.b);
-  newLine.setAttribute("stroke", colorCode);
-  newLine.setAttribute("stroke-width", 2);
-  
-  var profile = document.getElementById('profile');
-  profile.append(newLine);
-  }
-  var kms = etapa.length;
-  
- var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
- text.setAttribute("x", 10);
- text.setAttribute("y", 10);
- text.setAttribute("font-size", 30)
- text.textContent=''+kms+'kms'
- 
- profile.append(text);
- 
+   var div = document.getElementById('profile');
+  profile.drawProfile(div);
   
 }
 
-function computeSlope(position) {
-    var index = (int)(position.x / 1000);
-
-    if (index < etapa.length) {
-        return etapa[index];
-    } else {
-        return 0;
-    }
-}
 
 function _hideButton() {
   button.hide();

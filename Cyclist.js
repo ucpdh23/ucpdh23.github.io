@@ -5,6 +5,7 @@
         this.maxSpeed = MAX_SPEED;
 
         this.slope = 0;
+        this.log='';
 
         this._mGoodPosition = 7;
         this._mDemarrajeGoodPosition = 3;
