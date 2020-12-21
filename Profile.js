@@ -14,7 +14,7 @@ class Profile {
       var slope = this.etapa[i];
       
       if (prevSlope == 0 && slope > 0) {
-        this.addListener(i*100, cyclist => {
+        this.addListener(i*1000, cyclist => {
           console.log('starting port ' + port);
         });
       } else if (prevSlope > 0 && slope < 0) {
