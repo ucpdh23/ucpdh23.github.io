@@ -106,6 +106,12 @@ function createDefaultStateMachine() {
           
           ctx.cyclist.startSelfAcc = true;
           ctx.cyclist.selfAccLevel = val;
+        } else if (ctx.message == 'tira') {
+          return {
+            target: 'pulling',
+            action() {},
+          };
+        
         }
       
     if (ctx.first.id != ctx.cyclist.id)
@@ -143,8 +149,19 @@ function createDefaultStateMachine() {
           
             ctx.cyclist.startSelfAcc = true;
             ctx.cyclist.selfAccLevel = val;
+          } else if (ctx.first.id != ctx.cyclist.id && tirando.length == 1) {
+            tirando = [];
+            
+            return {
+        target: 'preparePulling',
+        action(){},
+        };
+            
           }
-        }
+          
+          
+          
+    }
       
   },
     
