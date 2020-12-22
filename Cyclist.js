@@ -6,6 +6,9 @@
 
         this.slope = 0;
         this.log='';
+        
+        this.message = '';
+        this.msgPayload = null;
 
         this._mGoodPosition = 7;
         this._mDemarrajeGoodPosition = 3;
@@ -938,13 +941,15 @@ computeAvVel() {
     }
 
 
-    sendMessage(msg) {
+    sendMessage(msg, payload=null) {
         this.flashing = {
             tics: 300,
             color: createVector(0, 0, 255)
         };
 
         this.message = msg;
+        this.msgPayload = payload;
+        
         this.peekStateMachine().transition({ first: globalFirst, cyclist: this, message: msg });
     }
 

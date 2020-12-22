@@ -1,6 +1,8 @@
 class Profile {
   etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
   
+  portInfos = [];
+  
   percentColorsProfile = [
     { pct: 0.0, color: { r: 0x00, g: 0x00, b: 0xff } },
     { pct: 0.5, color: { r: 0x00, g: 0xff, b: 0 } },
@@ -10,26 +12,50 @@ class Profile {
   constructor() {
     var prevSlope = 0;
     var port = 0;
+    
+    var portInfo = null;
     for (var i=0;i<this.etapa.length;i++) {
       var slope = this.etapa[i];
       
       if (prevSlope == 0 && slope > 0) {
-        this.addListener(i*1000, cyclist => {
-          console.log('starting port ' + port);
-        });
+        this.addListener(i*1000, (cyclist, portNumber) => {
+          cyclist.sendMessage('startPort', this.portInfos[portNumber]);
+        }, port);
+        
+        portInfo = {
+          kms: 0,
+          slope: 0
+        };
+        
+        
       } else if (prevSlope > 0 && slope < 0) {
-        this.addListener(i*1000, cyclist => {
-          cyclist.log = 'completing port ' + port;
-        });
+        this.addListener(i*1000, (cyclist, portNumber) => {
+          cyclist.sendMessage('endPort', this.portInfos[portNumber]);
+        }, port);
+        
+        portInfo.slope = portInfo.slope / portInfo.kms;
+        
+        this.portInfos.push(portInfo);
+        
+        portInfo = null;
         
         port++;
       }
+      
+      if (portInfo != null) {
+        portInfo.kms = portInfo.kms + 1;
+        portInfo.slope = portInfo.slope + slope;
+      }
+      
+      prevSlope = slope;
     }
   }
   
   listeners = {};
-  addListener(meters, listener) {
+  listenersPort = {}
+  addListener(meters, listener, portNumber) {
     this.listeners[meters] = listener;
+    this.listenersPort[meters] = portNumber;
   }
   
   events = {};
@@ -42,7 +68,7 @@ class Profile {
     
     var kms = this.events[cyclist.id][0];
     if (kms < cyclist.position.x) {
-      this.listeners[kms].apply(this, [cyclist]);
+      this.listeners[kms].apply(this, [cyclist, this.listenersPort[kms]]);
       this.events[cyclist.id].shift();
     }
   }
