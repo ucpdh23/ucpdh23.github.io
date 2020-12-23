@@ -8,7 +8,7 @@ let _debug_item = 0;
 let _drawHull = false;
 
 
-let items = 20;
+let items = 70;
 
 
 let SEP_RANGE = 1.8;
@@ -46,8 +46,11 @@ function setup() {
   
 frameRate(20)
   
+  var number=1;
   for (i = 0; i < items; i++) {
-    cyclists.push(new Cyclist(i))
+    cyclists.push(new Cyclist(i, number))
+    number++;
+    if (i!=0 && i % 6== 0) number += 3;
   }
   
  
@@ -96,7 +99,7 @@ function draw() {
     for (i = 0; i < items; i++) {
         var slope = profile.computeEnvironment(cyclists[i]);
         cyclists[i].computeNeighbour(cyclists, i, first, last, slope);
-        if (i < 10) {
+        if (i < 7) {
           updateBox(document.getElementById('id_'+i), cyclists[i]);
         }
     }
@@ -163,7 +166,7 @@ function hideOptions() {
 }
 
 function buildList() {
-  for (var i=1; i< 10; i++) {
+  for (var i=1; i< 7; i++) {
     
   
   var clone = document.getElementById('id_0').cloneNode(true);
@@ -203,7 +206,7 @@ function updateBox(item, cyclist) {
     
     showSelected(cyclist);
   };
-  item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.id;
+  item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.number;
   item.getElementsByClassName('item-header-features')[0].innerHTML = "Ll:" + (int)(cyclist.energy.llano) + "-Mn:"+(int)(cyclist.energy.montana) + "-Sp:"+(int)(cyclist.energy.sprint) + "-Fo:"+(int)(cyclist.energy.estadoForma);
  // item.getElementsByClassName('item-body')[0].innerHTML = (int)(cyclist.energy.points);
     
@@ -239,7 +242,7 @@ function showSelected(cyclist) {
     
     
 
-    document.getElementById("details-header-id").innerHTML = cyclist.id;
+    document.getElementById("details-header-id").innerHTML = cyclist.number;
     document.getElementById("details-header-features-id").innerHTML =
         "Ll:" + (int)(cyclist.energy.llano) + "-Mn:" + (int)(cyclist.energy.montana) + "-Sp:" + (int)(cyclist.energy.sprint) + "-Fo:" + (int)(cyclist.energy.estadoForma);
 

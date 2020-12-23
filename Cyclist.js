@@ -1,6 +1,7 @@
 ﻿class Cyclist {
-    constructor(id) {
+    constructor(id, number) {
         this.id = id;
+        this.number=number;
 
         this.maxSpeed = MAX_SPEED;
 
@@ -970,7 +971,7 @@ computeAvVel() {
     }
 
     drawMallot(posX, posY, heading) {
-      if (this.id < 10) {
+      if (this.number < 10) {
         stroke(218, 165, 32)
         fill(218, 165, 32);
        triangle(
@@ -983,7 +984,7 @@ computeAvVel() {
              //posX + 9, posY - 1+ heading
             //);
              
-      } else if (this.id < 20) {
+      } else if (this.number < 20) {
       
         stroke(  0, 191, 225)
         fill(  0, 191, 225);
@@ -993,7 +994,7 @@ computeAvVel() {
             posX + 15, posY);
             noFill()
            
-      } else if  (this.id < 30) {
+      } else if  (this.number < 30) {
       
         stroke(  255, 255, 255)
         fill(  255, 255, 255);
@@ -1011,7 +1012,7 @@ computeAvVel() {
             posX + 15, posY);
             noFill()
            
-      } else if  (this.id < 40) {
+      } else if  (this.number < 40) {
       
         stroke(  255, 0,0)
         fill(  255, 0,0);
@@ -1029,7 +1030,7 @@ computeAvVel() {
             posX + 12, posY);
             noFill()
            
-      } else if  (this.id < 50) {
+      } else if  (this.number < 50) {
       
         stroke( 0 , 0,228)
         fill(  0,0,228);
@@ -1047,7 +1048,7 @@ computeAvVel() {
             posX + 11, posY);
             noFill()
            
-      } else if  (this.id < 60) {
+      } else if  (this.number < 60) {
       
         stroke(  255, 0, 0)
         fill(  255, 0, 0);
