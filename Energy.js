@@ -78,37 +78,7 @@ class Energy {
         this.prePot = this.pot;
     }
 
-    forceCompensation_option() {
-        var pot = this.force * this.cyclist.velocity.x;
-        var currMaxPot = this.maxPot - (100 - this.points / 2);
-
-        if (pot > this.maxAnaerobicPot) {
-
-            var restPot = pot - currMaxPot;
-            var restForce = restPot / this.cyclist.velocity.x;
-
-            var delta = this.force - restForce;
-
-            var acc = delta / 8;
-
-            return createVector(-acc, 0);
-        } else if (pot > currMaxPot ) {
-          var diffPot = pot - currMaxPot;
-            this.anaerobicPoints =- diffPot * delta;
-            var deltaX = 0;
-            if (this.anaerobicPoints < 10)
-              deltaX = -this.force;
-            else
-              deltaX = -0.01
-            return createVector(deltaX, 0);
-        } else {
-          this.anaerobicPoints +=1;
-          if (this.anaerobicPoints > 100)
-            this.anaerobicPoints = 100;
-          return createVector(0, 0);
-        }
-
-    }
+    
 
     forceCompensation(velAvg = 0, selfAcc=0) {
       var negAcc = this.force / 8;
@@ -130,113 +100,16 @@ class Energy {
         // F * V = pot
         var forceCyclist = this.forceCyclist + selfAcc*8;
         
-        //this.cyclist.log='acc'+ this.cyclist.acceleration.x;
+        this.cyclist.log='force:'+ this.forceCyclist;
 
         // F = m * a
         var accCyclist = forceCyclist / 8;
         const accRes = negAcc - accCyclist;
 
-      
-
-       // accRes += this.cyclist.acceleration.x;
 
         return createVector(-accRes, 0);
-
-
-        if (Math.abs(this.force - this.preForce) < 1) {
-            return createVector(0, 0);
-            // No hay cambios el ciclista est� estable
-        } else {
-            // Hay cambios, el ciclista tiene que establecer cuales son los nuevos m�rgenes de potencia
-            var negAcc = this.force / 8;
-            this.cyclist.log = 'acc:' + negAcc;
-            return createVector(-negAcc, 0);
-        }
-
-      const lastPot = this.pot;
-      
-      if (this.force < 0) {
-          var negAcc = this.force / 8;
-          this.cyclist.log = 'force negative:' + negAcc;
-          return createVector(-negAcc, 0);
-      }
-      
-      var acc = this.force / 8;
-      if (velAvg != 0) {
-        // no soy el primero
-        var ptarget = velAvg * this.force;
-        
-        var currPower=incrementalUpdate(lastPot, ptarget);
-        
-        var expected_vel = currPower / this.force;
-        this.cyclist.log = 'target:'+ ptarget + ' c:'+currPower+' expVel:'+(int)(expected_vel*3600)/1000;
-        var required_acc_x = expected_vel - this.cyclist.velocity.x;
-        return createVector(required_acc_x, 0);
-        
-      } else {
-        // soy el primero
-        var expected_vel = this.expected_power / this.force;
-        this.cyclist.log = 'expVel:' + expected_vel;
-        var required_acc_x = expected_vel - this.cyclist.velocity.x;
-        return createVector(required_acc_x, 0);
-        
-      }
-      
-      
     }
-    __forceCompensation(vel_average =0) {
-      const lastPot = this.pot;
-      
-      if (this.force < 0) {
-        var acc = this.force / 8;
-        this.cyclist.log= 'force negative:'+acc
-        return createVector(-acc, 0);
-      }
-      
-      // si vel_average es 0 entonces calcula velocidades a partir de la potencia.
-      
-      if (vel_average == 0) {
-        var expected_vel = this.expected_power / this.force;
-        this.cyclist.log = 'expVel:'+expected_vel;
-        var required_acc_x = expected_vel - this.cyclist.velocity.x;
-        return createVector(required_acc_x, 0);
-      }
-      
-       this.cyclist.log = 'avVel:'+vel_average;
-      
-       // var pot = this.force * this.cyclist.velocity.x;
-       var pot = this.force * vel_average;
-        var currMaxPot = this.maxPot - (100 - this.points / 2);
-        
-        var acc_base = vel_average - this.cyclist.velocity.x;
-        
-        
-        if (acc_base>0)
-        acc_base *= 0.8;
-        else
-        acc_base *= 0.5;
-        
-        currMaxPot *= this.maxPotLevel/100;
-
-        if (pot > currMaxPot) {
-
-            var restPot = pot - currMaxPot;
-            var restForce = restPot / this.cyclist.velocity.x;
-
-            var delta = this.force - restForce;
-
-            var acc = delta / 50;
-
-            return createVector(acc_base -acc, 0);
-        } else {
-            this.anaerobicPoints += 1;
-            if (this.anaerobicPoints > 100)
-                this.anaerobicPoints = 100;
-            return createVector(acc_base, 0);
-        }
-
-    }
-
+    
     update(delta) {
       var expectedPot = this.forceCyclist * this.cyclist.velocity.x;
       
@@ -279,50 +152,7 @@ class Energy {
       }
     }
 
-    __update(delta) {
-    var ms= this.cyclist.velocity.x * 3.6;
-    var prop = ms / this.refProp;
-    var g = prop * prop;
-    var newPulse = g * 21.0084034 +58.9915966;
     
-    if (newPulse +2 < this.pulse) {
-        this.pulse -= 0.3;
-    } else if (this.pulse +2<newPulse) {
-        this.pulse += 0.5;
-    } else {
-        this.pulse = newPulse;
-    }
-    
-    var accX = this.cyclist.acceleration.x;
-    if (accX < 0) accX = 0;
-    else accX = accX *5*delta;
-
-    var accVar = this.computeAccVar(accX);
-    this.pulse = this.pulse + accVar;
-    
-    this.draftReduction = this.computeDraftReduction();
-
-    this.pulse2 = this.pulse - this.draftReduction;
-    
-        //this.points -= this.pulse2 / 2500 * delta;
-        
-    var expectedPot = this.force * this.cyclist.velocity.x;
-    
-    if  (!Number.isNaN(expectedPot)) {
-      
-      this.pot = incrementalUpdate(this.pot, expectedPot);
-      
-      this.points -= this.pot/4000 * delta;
-    } else {
-      console.log(this.force)
-    }
-
-    /*this.pot = this.force * this.cyclist.velocity.x;
-    if (!Number.isNaN(this.pot)) {
-      this.points -= this.pot/4000 * delta;
-    }*/
-
-  }
   
   computeDraftReduction() {
     var items = this.cyclist.computeItems(20,4).length;
