@@ -90,6 +90,14 @@ function createDefaultStateMachine() {
       onEnter(ctx) {},
       onExit(ctx) {},
       onExecute(ctx) {
+        if (ctx.cyclist.energy.pot < 60)
+          ctx.cyclist.energy.forceCyclist += 0.5;
+        else if (ctx.cyclist.energy.pot > 130) {
+          ctx.cyclist.energy.forceCyclist -= 0.5;
+          if (ctx.cyclist.energy.forceCyclist< 0) ctx.cyclist.energy.forceCyclist=0;
+        }
+        
+         
       ctx.cyclist.computeForces_0(ctx.first);
       },
     },
