@@ -124,7 +124,9 @@ class Energy {
       var newPulse = this.computePulse(
         this.pot,
         this.forceCyclist,
-        this.cyclist.velocity.x)
+        this.cyclist.velocity.x,
+        this.points);
+        
       this.pulse = this.incrementPulse(
         this.pulse, newPulse);
       
@@ -138,8 +140,8 @@ class Energy {
       this.pulse2 = this.pulse - this.draftReduction;
     }
     
-    computePulse(pot, force, vel) {
-      return 45 + pot / 500 * 120;
+    computePulse(pot, force, vel, point) {
+      return 45 + force * 6 + (100 - point)/10;
     }
     
     incrementPulse(curr, exp) {
