@@ -91,9 +91,9 @@ function createDefaultStateMachine() {
       onExit(ctx) {},
       onExecute(ctx) {
         if (ctx.cyclist.energy.pot < 60)
-          ctx.cyclist.energy.forceCyclist += 0.5;
+          ctx.cyclist.energy.forceCyclist += 0.25;
         else if (ctx.cyclist.energy.pot > 130) {
-          ctx.cyclist.energy.forceCyclist -= 0.5;
+          ctx.cyclist.energy.forceCyclist -= 0.25;
           if (ctx.cyclist.energy.forceCyclist< 0) ctx.cyclist.energy.forceCyclist=0;
         }
         
@@ -136,6 +136,8 @@ function createDefaultStateMachine() {
         onExit(ctx){},
         onExecute(ctx){
           if (tirando.includes(ctx.cyclist)) {
+            if (ctx.cyclist.energy.pot < 75)
+          ctx.cyclist.energy.forceCyclist += 0.25;
            ctx.cyclist.computeForces_0(ctx.first);
           }
 
@@ -157,7 +159,8 @@ function createDefaultStateMachine() {
           
             ctx.cyclist.startSelfAcc = true;
             ctx.cyclist.selfAccLevel = val;
-          } else if (ctx.first.id != ctx.cyclist.id && tirando.length == 1) {
+          } else if (ctx.first.id != ctx.cyclist.id) {
+            // && tirando.length == 1) {
             tirando = [];
             
             return {

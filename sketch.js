@@ -138,9 +138,7 @@ function draw() {
         }
     }
 
-    var mins = (int)(time / 60);
-    var secs = (int)(time) % 60;
-    text(pad(mins, 2) + ":" + pad(secs, 2), 30, 13);
+    text(strTime(time), 30, 13);
 
     time = time + delta;
     
@@ -251,9 +249,12 @@ function showSelected(cyclist) {
     document.getElementById("details-header-status-velocity-id").innerHTML = dec(cyclist.velocity.x * 3600/1000, 10);
     document.getElementById("details-header-status-distance-id").innerHTML = dec(cyclist.position.x/1000, 1000);
     document.getElementById("details-header-status-pts-id").innerHTML = dec(cyclist.energy.points, 1000);
-    document.getElementById("details-body-air-id").innerHTML = dec(cyclist.energy.r_air, 100);
+   // document.getElementById("details-body-air-id").innerHTML = dec(cyclist.energy.r_air, 100);
     document.getElementById("details-body-slope-id").innerHTML = dec(cyclist.energy.r_pend, 100);
     document.getElementById("details-body-acc-id").innerHTML = dec(cyclist.energy.f_acel, 100);
+
+    var msg_ul = document.getElementById('details-body-messages');
+    buildUl(msg_ul, cyclist);
     
     var canvas = document.getElementById('idForces');
     var ctx = canvas.getContext("2d");
@@ -298,7 +299,29 @@ function showSelected(cyclist) {
     
     ctx3.stroke();
     ctx3.lineWidth = 1;
-    
+}
+
+function buildUl(element, cyclist) {
+  var arr = cyclist.texts;
+  
+  element.innerHTML = '';
+  
+  
+  for (var i=0; i < arr.length; i++) {
+    var li = document.createElement('li')
+    li.innerHTML = arr[i];
+    li.setAttribute('style', 'display: block;');
+    element.appendChild(li);
+  }
+  
+  /*for (i = 0; i <= arr.length - 1; i++) {
+     /*   var li = document.createElement('li');     // create li element.
+        li.innerHTML = arr[i];      // assigning text to li using array value.
+           // remove the bullets.
+
+        element.appendChild(li);     // append li to ul.
+        
+    }*/
     
 }
 

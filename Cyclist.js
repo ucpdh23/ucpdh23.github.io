@@ -10,6 +10,8 @@
         
         this.message = '';
         this.msgPayload = null;
+        
+        this.texts = [];
 
         this._mGoodPosition = 7;
         this._mDemarrajeGoodPosition = 3;
@@ -951,7 +953,28 @@ computeAvVel() {
         this.message = msg;
         this.msgPayload = payload;
         
+        this.managePort();
+        
         this.peekStateMachine().transition({ first: globalFirst, cyclist: this, message: msg });
+    }
+    
+    ports=[];
+    
+    managePort() {
+      if (this.message == 'startPort') {
+        this.texts.push(strTime(time)+'-Starting port '+this.msgPayload.id +'('+this.msgPayload.kms+'kms at '+ this.msgPayload.slope+')');
+        
+        var portInfo = Object.assign({}, this.msgPayload);
+        
+        portInfo.time = time;
+        this.ports.push(portInfo);
+      } else if(this.message == 'endPort') {
+        var portInfo = this.ports.pop();
+        var elapseTime = time-portInfo.time;
+        var velAvg = portInfo.kms / (elapseTime/3600);
+        
+        this.texts.push(strTime(time) + '-Finidhed port ' + this.msgPayload.id + ' in ' + strTime(elapseTime) + ' ' + velAvg + ')');
+      }
     }
 
     computeStroke(actual, flashing) {

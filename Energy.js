@@ -145,10 +145,16 @@ class Energy {
     }
     
     incrementPulse(curr, exp) {
-      if (exp +2 < curr) {
-        return curr - 0.3;
-      } else if (curr +2<exp) {
-        return curr + 0.5;
+      if (exp < curr) {
+        var diff = 0.05;
+        if (curr - exp > 5) diff = 0.1;
+        
+        return curr - diff;
+      } else if (curr < exp) {
+        var diff = 0.075;
+        if (exp + 5 > curr) diff = 0.1;
+        
+        return curr + diff;
       } else {
         return exp;
       }

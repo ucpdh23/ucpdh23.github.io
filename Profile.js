@@ -23,6 +23,7 @@ class Profile {
         }, port);
         
         portInfo = {
+          id: port,
           kms: 0,
           slope: 0
         };

@@ -26,6 +26,13 @@ function rgbToHex(rgb) {
   return hex;
 };
 
+function strTime(time){
+  var mins = (int)(time / 60);
+  var secs = (int)(time) % 60;
+  
+  return pad(mins, 2) + ":" + pad(secs, 2);
+}
+
 function getColorForPercentage(pct, percentColors) {
     for (var i = 1; i < percentColors.length - 1; i++) {
         if (pct < percentColors[i].pct) {

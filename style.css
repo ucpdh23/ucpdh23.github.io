@@ -218,7 +218,7 @@ background-image: url("Assets/311822.png");
 }
 .box-4 {
   bottom: 0px;
-  left: 35%;
+  width: 100%;
   display: flex;
   flex-direction: column-reverse;
 }
