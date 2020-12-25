@@ -97,8 +97,8 @@ function draw() {
   globalHull = hullPoints;
   
     for (i = 0; i < items; i++) {
-        var slope = profile.computeEnvironment(cyclists[i]);
-        cyclists[i].computeNeighbour(cyclists, i, first, last, slope);
+        var environment = profile.computeEnvironment(cyclists[i]);
+        cyclists[i].computeNeighbour(cyclists, i, first, last, environment);
         if (i < 7) {
           updateBox(document.getElementById('id_'+i), cyclists[i]);
         }
@@ -115,9 +115,9 @@ function draw() {
   
   var selectedMeters = cyclists[_debug_item].position.x;
   if (selectedMeters < meters - 100) {
-    road.update(selectedMeters + 10, profile.computeSlope(createVector(selectedMeters,0)));
+    road.update(selectedMeters + 10, profile.computeEnvironmentByPos(selectedMeters));
   } else {
-    road.update(meters, profile.computeSlope(createVector(meters,0)));
+    road.update(meters, profile.computeEnvironmentByPos(meters));
   }
   
   // road.update(meters);

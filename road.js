@@ -2,17 +2,24 @@ class Road {
   constructor() {
     this.width = 8;
     
+    this.middle = canvasHeight / 2;
+    
+    this.computeLines();
+  }
+  
+  computeLines() {
     var line = this.width * 10;
-    this.middle = canvasHeight / 2
     
     this.y1 = this.middle - line;
     this.y2 = this.middle + line;
   }
-  
 
-  update(meters, slope) {
+  update(meters, environment) {
     this.meters = meters;
-    this.slope = slope;
+    this.slope = environment.slope;
+    this.width = environment.width;
+    
+    this.computeLines();
   }
   
   show() {

@@ -111,16 +111,31 @@ class Profile {
 
 computeEnvironment(cyclist) {
   this.onEvent(cyclist);
-  return this.computeSlope(cyclist.position)
+  
+  return this.computeEnvironmentByPos(
+    cyclist.position.x);
 }
 
+computeEnvironmentByPos(pos) {
+  var computeSlope=this.computeSlope(pos);
+  
+  var computeWidth = computeSlope == 0?
+    8 : 4;
+  
+  return {
+   slope: computeSlope,
+   width: computeWidth
+  };
+}
+
+
 computeSlope(position) {
-    var index = (int)(position.x / 1000);
+    var index = (int)(position / 1000);
 
     if (index < this.etapa.length) {
         return this.etapa[index];
     } else {
         return 0;
     }
-}
+  }
 }

@@ -8,6 +8,8 @@
         this.slope = 0;
         this.log='';
         
+        this.roadWidth = 8;
+        
         this.message = '';
         this.msgPayload = null;
         
@@ -635,9 +637,9 @@
 
         futurePos = p5.Vector.add(this.position, futurePos);
 
-        if (futurePos.y > 7) {
+        if (futurePos.y > (this.roadWidth * 0.8)) {
             result.add(createVector(0, -1))
-        } else if (futurePos.y < -7) {
+        } else if (futurePos.y < -(this.roadWidth*0.8)) {
             result.add(
                 createVector(0, 1));
         }
@@ -905,8 +907,10 @@ computeAvVel() {
         this._stateMachine.pop();
     }
 
-    computeNeighbour(cyclists, i, first, last, slope) {
+    computeNeighbour(cyclists, i, first, last, environment) {
       this.first = first;
+      var slope = environment.slope;
+      this.roadWidth=environment.width;
       
       if (this.slope !== slope) {
         this.slope = slope;
