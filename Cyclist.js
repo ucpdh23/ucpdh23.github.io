@@ -973,7 +973,7 @@ computeAvVel() {
         var elapseTime = time-portInfo.time;
         var velAvg = portInfo.kms / (elapseTime/3600);
         
-        this.texts.push(strTime(time) + '-Finidhed port ' + this.msgPayload.id + ' in ' + strTime(elapseTime) + ' ' + velAvg + ')');
+        this.texts.push(strTime(time) + '-Finidhed port ' + this.msgPayload.id + ' in ' + strTime(elapseTime) + ' ' + velAvg);
       }
     }
 

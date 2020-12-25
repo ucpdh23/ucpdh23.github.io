@@ -225,6 +225,12 @@ background-image: url("Assets/311822.png");
 .box-x {
   display: none;
 }
+
+.details-body-messages {
+  padding: 5px;
+  color: white;
+}
+
 .details-footer-slider {
   width: 100%;
 }
