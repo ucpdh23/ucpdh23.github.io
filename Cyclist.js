@@ -237,7 +237,6 @@
                 return steer;
             }
         } else {
-          print("cerca");
           return createVector(0,0);
         }
     }
@@ -707,104 +706,4 @@ computeAvVel() {
       }
     }
 
-    
-
-    drawMallot(posX, posY, heading) {
-      if (this.number < 10) {
-        stroke(218, 165, 32)
-        fill(218, 165, 32);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-            //stroke(0);
-            //line(posX + 9, posY - 3+ heading,
-             //posX + 9, posY - 1+ heading
-            //);
-             
-      } else if (this.number < 20) {
-      
-        stroke(  0, 191, 225)
-        fill(  0, 191, 225);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-           
-      } else if  (this.number < 30) {
-      
-        stroke(  255, 255, 255)
-        fill(  255, 255, 255);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-           
-           stroke (0,255,0)
-           fill(0, 255, 0)
-           triangle(
-            posX + 11, posY - 2+ heading,
-            posX + 11, posY + 2+ heading,
-            posX + 15, posY);
-            noFill()
-           
-      } else if  (this.number < 40) {
-      
-        stroke(  255, 0,0)
-        fill(  255, 0,0);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-           
-           stroke (0,0,0)
-           fill(0, 0, 0)
-           triangle(
-            posX + 11, posY - 2+ heading,
-            posX + 11, posY + 2+ heading,
-            posX + 12, posY);
-            noFill()
-           
-      } else if  (this.number < 50) {
-      
-        stroke( 0 , 0,228)
-        fill(  0,0,228);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-           
-           stroke (255)
-           fill(255)
-           triangle(
-            posX + 11, posY - 1+ heading,
-            posX + 11, posY + 1+ heading,
-            posX + 11, posY);
-            noFill()
-           
-      } else if  (this.number < 60) {
-      
-        stroke(  255, 0, 0)
-        fill(  255, 0, 0);
-       triangle(
-            posX + 9, posY - 3+ heading,
-            posX + 9, posY + 3+ heading,
-            posX + 15, posY);
-            noFill()
-           
-           stroke (250)
-           fill(250)
-           triangle(
-            posX + 11, posY - 2+ heading,
-            posX + 11, posY + 2+ heading,
-            posX + 15, posY);
-            noFill()
-           
-      } 
-    }
 }
