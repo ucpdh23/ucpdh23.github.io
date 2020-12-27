@@ -83,8 +83,10 @@ class Energy {
     forceCompensation(velAvg = 0, selfAcc=0) {
       var negAcc = this.force / 8;
       
-      // hay gente delante
-      if (velAvg != 0) {
+      //hay gente delant y solo depend d ello
+      if (velAvg != 0 /*&& selfAcc == 0*/) {
+        velAvg += selfAcc;
+        
         const currVel = this.cyclist.velocity.x;
         var diff = velAvg - currVel;
         
@@ -94,11 +96,14 @@ class Energy {
         this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
         //this.forceCyclist = 8* expAcc;
         // se calcula la fuerza necesaria para ejercer esa aceleración
+      } else if (velAvg!=0 && selfAcc!=0){
+        // hay gente delante, pero tiene comportamiento propio
+        this.forceCyclist += selfAcc * 1;
       }
       
 
         // F * V = pot
-        var forceCyclist = this.forceCyclist + selfAcc*8;
+        var forceCyclist = this.forceCyclist;
         
         this.cyclist.log='force:'+ this.forceCyclist;
 

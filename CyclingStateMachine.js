@@ -139,6 +139,8 @@ function createDefaultStateMachine() {
             if (ctx.cyclist.energy.pot < 75)
           ctx.cyclist.energy.forceCyclist += 0.25;
            ctx.cyclist.computeForces_0(ctx.first);
+          } else {
+            console.log('outside tirando')
           }
 
         
