@@ -229,6 +229,7 @@ background-image: url("Assets/311822.png");
 .details-body-messages {
   padding: 5px;
   color: white;
+  font-size: 0.6rem;
 }
 
 .details-footer-slider {

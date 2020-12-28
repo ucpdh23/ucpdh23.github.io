@@ -691,7 +691,7 @@ computeAvVel() {
     
     managePort() {
       if (this.message == 'startPort') {
-        this.texts.push(strTime(time)+'-Starting port '+this.msgPayload.id +'('+this.msgPayload.kms+'kms at '+ this.msgPayload.slope+')');
+        this.texts.push(strTime(time)+'-Starting port:'+this.msgPayload.kms+'kms at '+ dec(this.msgPayload.slope,10)+'%');
         
         var portInfo = Object.assign({}, this.msgPayload);
         
@@ -702,7 +702,7 @@ computeAvVel() {
         var elapseTime = time-portInfo.time;
         var velAvg = portInfo.kms / (elapseTime/3600);
         
-        this.texts.push(strTime(time) + '-Finidhed port ' + this.msgPayload.id + ' in ' + strTime(elapseTime) + ' ' + velAvg);
+        this.texts.push(strTime(time) + '-Finidhed port in ' + strTime(elapseTime) + ' ' + dec(velAvg,100));
       }
     }
 

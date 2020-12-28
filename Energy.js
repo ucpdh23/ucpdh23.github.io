@@ -87,7 +87,7 @@ class Energy {
       if (velAvg != 0 /*&& selfAcc == 0*/) {
         velAvg += selfAcc;
         
-        const currVel = this.cyclist.velocity.x;
+        const currVel=this.cyclist.velocity.x;
         var diff = velAvg - currVel;
         
         var expAcc = negAcc + diff;
@@ -101,6 +101,8 @@ class Energy {
         this.forceCyclist += selfAcc * 1;
       }
       
+      this.limitForce();
+      
 
         // F * V = pot
         var forceCyclist = this.forceCyclist;
@@ -113,6 +115,15 @@ class Energy {
 
 
         return createVector(-accRes, 0);
+    }
+    
+    limitForce() {
+      var maxForce = 20
+        - (100 - this.estadoForma) / 100 * 3
+        - (100 - this.points) / 100 * 3;
+      
+      if (this.forceCyclist > maxForce)
+        this.forceCyclist = maxForce;
     }
     
     update(delta) {

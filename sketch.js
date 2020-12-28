@@ -3,7 +3,7 @@ let cyclists = [];
 let road;
 let meters;
 let time = 0;
-let _debug = true;
+let _debug = false;
 let _debug_item = 0;
 let _drawHull = false;
 

@@ -1,6 +1,8 @@
 class Profile {
   etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
   
+  segment = 500;
+  
   //etapa = [0,0,0,0,0,0,0,0,0,0]
   
   portInfos = [];
@@ -20,7 +22,7 @@ class Profile {
       var slope = this.etapa[i];
       
       if (prevSlope == 0 && slope > 0) {
-        this.addListener(i*1000, (cyclist, portNumber) => {
+        this.addListener(i*this.segment, (cyclist, portNumber) => {
           cyclist.sendMessage('startPort', this.portInfos[portNumber]);
         }, port);
         
@@ -32,7 +34,7 @@ class Profile {
         
         
       } else if (prevSlope > 0 && slope < 0) {
-        this.addListener(i*1000, (cyclist, portNumber) => {
+        this.addListener(i*this.segment, (cyclist, portNumber) => {
           cyclist.sendMessage('endPort', this.portInfos[portNumber]);
         }, port);
         
@@ -46,8 +48,8 @@ class Profile {
       }
       
       if (portInfo != null) {
-        portInfo.kms = portInfo.kms + 1;
-        portInfo.slope = portInfo.slope + slope;
+        portInfo.kms += this.segment / 1000;
+        portInfo.slope += slope*this.segment/1000;
       }
       
       prevSlope = slope;
@@ -100,7 +102,7 @@ class Profile {
   
   profile.append(newLine);
   }
-  var kms = this.etapa.length;
+  var kms = this.etapa.length*this.segment/ 1000;
   
  var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
  text.setAttribute("x", 10);
@@ -132,7 +134,7 @@ computeEnvironmentByPos(pos) {
 
 
 computeSlope(position) {
-    var index = (int)(position / 1000);
+    var index = (int)(position/this.segment);
 
     if (index < this.etapa.length) {
         return this.etapa[index];
