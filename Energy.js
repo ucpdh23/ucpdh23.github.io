@@ -118,12 +118,12 @@ class Energy {
     }
     
     limitForce() {
-      var maxForce = 20
+      this.maxForce = 22
         - (100 - this.estadoForma) / 100 * 3
         - (100 - this.points) / 100 * 3;
       
-      if (this.forceCyclist > maxForce)
-        this.forceCyclist = maxForce;
+      if (this.forceCyclist > this.maxForce)
+        this.forceCyclist = this.maxForce;
     }
     
     update(delta) {
@@ -157,7 +157,7 @@ class Energy {
     }
     
     computePulse(pot, force, vel, point) {
-      return 45 + force * 6 + (100 - point)/10;
+      return 45 + force / this.maxForce*125;
     }
     
     incrementPulse(curr, exp) {
