@@ -21,7 +21,7 @@ class Profile {
     for (var i=0;i<this.etapa.length;i++) {
       var slope = this.etapa[i];
       
-      if (prevSlope == 0 && slope > 0) {
+      if (prevSlope == 0 && slope > 0 && portInfo == null) {
         this.addListener(i*this.segment, (cyclist, portNumber) => {
           cyclist.sendMessage('startPort', this.portInfos[portNumber]);
         }, port);
@@ -53,6 +53,16 @@ class Profile {
       }
       
       prevSlope = slope;
+    }
+    
+    if (portInfo != null) {
+      this.addListener(this.etapa.length *this.segment, (cyclist, portNumber) => {
+          cyclist.sendMessage('endPort', this.portInfos[portNumber]);
+        }, port);
+        
+        portInfo.slope = portInfo.slope / portInfo.kms;
+        
+        this.portInfos.push(portInfo);
     }
   }
   
