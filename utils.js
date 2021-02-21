@@ -18,6 +18,10 @@ function findCyclist(id) {
     return null;
 }
 
+function detectOrientation(){
+  return !navigator.maxTouchPoints ? 'desktop' : !window.screen.orientation.angle ? 'portrait' : 'landscape'
+}
+
 function rgbToHex(rgb) { 
   var hex = Number(rgb).toString(16);
   if (hex.length < 2) {

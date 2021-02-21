@@ -39,6 +39,8 @@ let button;
 
 let profile = new Profile();
 
+let orientation = 'desktop'
+
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent('sketch-holder');
@@ -63,6 +65,8 @@ frameRate(20)
 }
 
 function draw() {
+  orientation=detectOrientation();
+  
   /*if (meters > 820) frameRate(20);
   else if (meters > 780) frameRate(2);
   else if (meters > 620) frameRate(20);

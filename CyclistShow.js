@@ -67,6 +67,11 @@ Cyclist.prototype.show = function(reference) {
             // this.drawVector(this.velocity, posX, posY);
         }
 
+        if (orientation == 'landscape') {
+          if (_debug_item == this.id)
+            this.drawCircles(posX, posY);
+          return;
+        }
         
         if (_debug_item != this.id) return;
 
@@ -158,6 +163,12 @@ Cyclist.prototype.show = function(reference) {
         
 
 }
+
+        this.drawCircles(posX, posY);
+        
+}
+
+Cyclist.prototype.drawCircles = function( posX, posY) {
         stroke(90);
 
         noFill()
@@ -172,7 +183,7 @@ Cyclist.prototype.show = function(reference) {
         line(posX, posY,
             posX + Math.sin(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10,
             posY - Math.cos(3 / 2 * Math.PI + this.viewingAngle / 2) * this.neighborDist * 10);
-}
+    }
 
 
 Cyclist.prototype.drawVector = function(v, posX, posY) {
