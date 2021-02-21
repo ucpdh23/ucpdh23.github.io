@@ -20,6 +20,7 @@ class Energy {
       this.r_pend = 0;
       this.r_air =0;
       this.prePot = this.pot = 100;
+      this.preSlope = this.slope = 0;
       
       // potencia a desarrollar si esta tirando.
       this.expected_power = 200;
@@ -32,11 +33,13 @@ class Energy {
 
 
     computePhysics() {
-        // P = F x V
-        var pot = 0;
-
         // Resistencia Aire
         var expected_r_air = this.cyclist.velocity.x / (this.draftReduction + 2) / this.llano * 100;
+        if (this.cyclist.velocity.x > 12.5) {
+          var air_delta = this.cyclist.velocity.x - 12.5;
+          expected_r_air += air_delta*(air_delta);
+        }
+        
         this.r_air = incrementalUpdate(
           this.r_air,
           expected_r_air);
@@ -45,15 +48,16 @@ class Energy {
         this.r_mec = (this.cyclist.velocity.x > 0)? 5 : 0;
 
         // Resistencia Pendiente
-        var slope = this.cyclist.slope;
+        this.preSlope = this.slope;
+        this.slope = this.cyclist.slope;
         //this.r_pend = (this.cyclist.slope > 0) ? this.cyclist.slope * 400 / this.montana : 0;
         //var multFactor = (this.cyclist.slope > 0)? 450 : 200;
-        var multFactor = (slope < 0)?
+        var multFactor = (this.slope < 0)?
             30 :
-            slope * 10;
+            this.slope * 10;
            
-        var expected_r_pend = (slope >= 0)? this.cyclist.slope * multFactor / this.montana:
-        this.cyclist.slope * multFactor / this.bajada;
+        var expected_r_pend = (this.slope >= 0)? this.slope * multFactor / this.montana:
+          this.slope * multFactor / this.bajada;
         //this.r_pend = incrementalUpdate(
          // this.r_pend,
           //expected_r_pend);
@@ -67,13 +71,6 @@ class Energy {
 
         this.preForce = this.force;
         this.force = newForce;
-
-        if (this.cyclist.slope == 0)
-          this.expected_power = 120; //incrementalUpdate(this.expected_power, 120);
-        else if (this.cyclist.slope > 0)
-          this.expected_power = 200;// incrementalUpdate(this.expected_power, 200);
-        else
-          this.expected_power = 30;
 
         this.prePot = this.pot;
     }
@@ -99,9 +96,19 @@ class Energy {
       } else if (velAvg!=0 && selfAcc!=0){
         // hay gente delante, pero tiene comportamiento propio
         this.forceCyclist += selfAcc * 1;
+      } else {
+        if (this.preSlope == this.slope){
+          
+        } else {
+          //this.cyclist.log='update slope';
+          if (this.slope > this.preSlope) {
+            // hay que mantener la potencia
+           // var vel = this.forceCompensation * this.prePot;
+          }
+        }
       }
       
-      this.limitForce();
+      this.limitForce(this.cyclist.slope);
       
 
         // F * V = pot
@@ -117,8 +124,15 @@ class Energy {
         return createVector(-accRes, 0);
     }
     
-    limitForce() {
-      this.maxForce = 22
+    limitForce(slope) {
+      return;
+      if (slope == 0) {
+        this.maxForce = 20;
+      
+        return;
+      }
+      
+      this.maxForce = 15 + slope * 1.5
         - (100 - this.estadoForma) / 100 * 3
         - (100 - this.points) / 100 * 3;
       
@@ -127,14 +141,16 @@ class Energy {
     }
     
     update(delta) {
-      var expectedPot = this.forceCyclist * this.cyclist.velocity.x;
+      var expectedPot =
+        60 + 
+        this.forceCyclist * this.cyclist.velocity.x;
       
       this.draftReduction = this.computeDraftReduction();
       
       if  (!Number.isNaN(expectedPot)) {
         this.pot = incrementalUpdate(this.pot, expectedPot);
       
-        this.points -= this.pot/4000 * delta;
+        this.points -= this.pot/8000 * delta;
       }
       
       var newPulse = this.computePulse(

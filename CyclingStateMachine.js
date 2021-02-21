@@ -90,9 +90,9 @@ function createDefaultStateMachine() {
       onEnter(ctx) {},
       onExit(ctx) {},
       onExecute(ctx) {
-        if (ctx.cyclist.energy.pot < 60)
+        if (ctx.cyclist.energy.pot < 100)
           ctx.cyclist.energy.forceCyclist += 0.25;
-        else if (ctx.cyclist.energy.pot > 130) {
+        else if (ctx.cyclist.energy.pot > 180) {
           ctx.cyclist.energy.forceCyclist -= 0.25;
           if (ctx.cyclist.energy.forceCyclist< 0) ctx.cyclist.energy.forceCyclist=0;
         }
@@ -136,7 +136,7 @@ function createDefaultStateMachine() {
         onExit(ctx){},
         onExecute(ctx){
           if (tirando.includes(ctx.cyclist)) {
-            if (ctx.cyclist.energy.pot < 75)
+            if (ctx.cyclist.energy.pot < 95)
           ctx.cyclist.energy.forceCyclist += 0.25;
            ctx.cyclist.computeForces_0(ctx.first);
           } else {

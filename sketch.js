@@ -8,7 +8,7 @@ let _debug_item = 0;
 let _drawHull = false;
 
 
-let items = 70;
+let items = 5;
 
 
 let SEP_RANGE = 1.8;

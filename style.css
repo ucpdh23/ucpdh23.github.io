@@ -2,6 +2,8 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+
 canvas {
   display: block;
 }
@@ -12,7 +14,13 @@ canvas {
   height: 300px;
 }
 
-.container {
+
+
+
+
+
+@media (orientation: portrait) {
+  .container {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -31,7 +39,8 @@ canvas {
   height: 300px;
 }
 
-.container-left {
+  
+  .container-left {
   display: flex;
   width: 30%;
   max-width: 140px;
@@ -39,11 +48,73 @@ canvas {
   height: 100%;
   overflow-y: scroll;
 }
+  
 .container-right {
   width: 70%;
   display: flex;
   flex-direction: column;
 }
+}
+
+@media (orientation: landscape) {
+  
+  .container {
+  opacity:    0.5; 
+  background: #000; 
+  width:      100%;
+  height:     100%; 
+  z-index:    10;
+  bottom:      0; 
+  left:       0; 
+  position:   fixed; 
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border: 1px solid silver;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  
+  width: 100%;
+  height: 100px;
+}
+
+.stage {
+  opacity:    0.5; 
+  background: #000; 
+  width:      200px;
+  height:     150px; 
+  z-index:    10;
+  top:      0; 
+  right:       0; 
+  position:   fixed; 
+  padding: 0;
+  margin: 0;
+}
+
+  
+  .container-left {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  height: 100%;
+  overflow-y: auto;
+}
+  
+  
+.container-right {
+  width: 0px;
+  display: none;
+  flex-direction: column;
+}
+}
+
 
 .selected {
   color: red !important;
