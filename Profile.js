@@ -132,6 +132,7 @@ class Profile {
       .attr('width', '100%') //chartWidth)
       .attr('height', '100%'); //chartHeight);
     //const svg = profile;
+    this.svg = svg;
 
     const g = svg.append('g')
       .attr('transform', "translate(" + chartMargins.left + "," + chartMargins.top + ")");
@@ -140,6 +141,7 @@ class Profile {
       .range([0, width])
      // .domain(d3.extent(data, d => d.x));
      .domain([0, this.etapa.length * this.segment])
+     this.xScale = xScale;
 
     const yScale = d3.scaleLinear()
       .range([height, 0])
@@ -160,11 +162,11 @@ class Profile {
     g.append('g')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(xScale))
-      .append('text')
+     /* .append('text')
         .attr('fill', '#333')
         .attr('y', 35)
     		.attr('x', width / 2)
-        .text('Distance in miles');
+        .text('Distance in miles')*/;
 
   /*  g.append('g')
         .call(d3.axisLeft(yScale))
@@ -201,6 +203,31 @@ class Profile {
         .text(` ${elevGain.toLocaleString()} ft`);*/
   }
   
+  setCyclists(cyclists){
+    this.cyclists = cyclists;
+  }
+  
+  triangles = [];
+  
+  update(delta) {
+    for (i=0; i < 7 && i < this.cyclists.length; i++) {
+      if (this.triangles[i] == null) {
+        var sym =  
+d3.symbol().type(d3.symbolTriangle).size(25); 
+        this.triangles[i] =this.svg.append('path');
+    this.triangles[i].attr("d", sym)
+    .attr("transform", function(d) { return "translate(" + 10 + "," + 10 + ")"; })
+    .style("fill", "red");
+      } else {
+        const value =10+ this.xScale(this.cyclists[i].position.x);
+      this.triangles[i].attr("transform", function(d) { return "translate(" + 
+   // this.xScale(this.cyclists[i].position.x) 
+    value
+    + "," + 100 + ")"; });
+      }
+      
+    }
+  }
   
   __drawProfile(profile) {
   var offset = 10;

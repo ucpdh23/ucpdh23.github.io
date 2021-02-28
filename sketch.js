@@ -55,6 +55,7 @@ frameRate(20)
     if (i!=0 && i % 6== 0) number += 3;
   }
   
+  profile.setCyclists(cyclists);
  
   road = new Road();
   
@@ -116,6 +117,8 @@ function draw() {
   }
   
   background(40);
+  
+  profile.update(delta);
   
   var selectedMeters = cyclists[_debug_item].position.x;
   if (selectedMeters < meters - 100) {
