@@ -15,6 +15,10 @@ canvas {
 }
 
 
+.item-footer {
+ display: none;
+ background: blue;
+}
 
 
 
@@ -85,6 +89,21 @@ canvas {
   height: 60px;
 }
 
+.selected .item-header {
+  display: none !important;
+}
+
+.selected .item-body {
+  display: none !important;
+}
+
+.selected .item-footer {
+ display: flex;
+ background: blue;
+  height: 100px;
+  opacity: 1;
+}
+
 .selected:first-of-type {
   transform: translateY(-10px);
   width: 180px !important;
@@ -97,6 +116,8 @@ canvas {
   transform: translateY(-10px);
   width: 180px !important;
   margin: -20px !important;
+  height: 150px !important;
+  opacity: 1 !important;
 }
 
 .stage {
@@ -208,11 +229,6 @@ canvas {
   mask-image: url(https://raw.githubusercontent.com/microsoft/fluentui-system-icons/master/assets/Flash%20On/SVG/ic_fluent_flash_on_24_filled.svg);
 }
 
-
-.item-footer {
-  background: blue;
-  height: 25%;
-}
 
 .details-header {
   height: 20%;
