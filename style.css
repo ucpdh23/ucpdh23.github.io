@@ -90,18 +90,29 @@ canvas {
 }
 
 .selected .item-header {
-  display: none !important;
+  __display: none !important;
+  height: 20px !important;
 }
 
 .selected .item-body {
   display: none !important;
 }
 
+.selected .item-header-id{
+  font-size: 18px;
+  opacity: 1 !important;
+}
+
+
+
 .selected .item-footer {
  display: flex;
  background: blue;
-  height: 100px;
-  opacity: 1;
+  height: 60px;
+  opacity: 1 !important;
+  z-index: 10000;
+  overflow: visible;
+  align-items: stretch;
 }
 
 .selected:first-of-type {
@@ -203,6 +214,7 @@ canvas {
   height: 21px;
   background-size: cover;
   margin: -1px;
+  z-index: 10;
 }
 
 .icon-batery {
