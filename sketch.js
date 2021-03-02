@@ -184,9 +184,11 @@ let selected = null;
 function updateBox(item, cyclist) {
   item.onclick = function() {
     _debug_item = cyclist.id;
+    
     item.classList.toggle('selected');
     //console.log(item.classList)
    // item.style.backgroundColor='red';
+   //if (selected == item) return;
     
     if (selected != null)
       selected.classList.toggle('selected');
