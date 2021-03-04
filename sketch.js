@@ -211,6 +211,15 @@ function updateBox(item, cyclist) {
     };
     
     
+    var details = document.getElementById('id_details_header');
+    
+    if (orientation == 'landscape') {
+      var elements = selected.getElementsByClassName('item-props');
+      elements[0].appendChild(details);
+    }
+    
+    
+    
     showSelected(cyclist);
   };
   item.getElementsByClassName('item-header-id')[0].innerHTML = cyclist.number;
@@ -245,19 +254,19 @@ var percentColors = [
 
 
 function showSelected(cyclist) {
-    var details = document.getElementById('details');
-    
     
 
     document.getElementById("details-header-id").innerHTML = cyclist.number;
     document.getElementById("details-header-features-id").innerHTML =
         "Ll:" + (int)(cyclist.energy.llano) + "-Mn:" + (int)(cyclist.energy.montana) + "-Sp:" + (int)(cyclist.energy.sprint) + "-Fo:" + (int)(cyclist.energy.estadoForma);
+    var decimals = (orientation == 'landscape')? 10 : 1000;
 
     document.getElementById("details-header-status-power-id").innerHTML = (int) (cyclist.energy.pot);
     document.getElementById("details-header-status-pulse-id").innerHTML = (int)(cyclist.energy.pulse2);
     document.getElementById("details-header-status-velocity-id").innerHTML = dec(cyclist.velocity.x * 3600/1000, 10);
     document.getElementById("details-header-status-distance-id").innerHTML = dec(cyclist.position.x/1000, 1000);
-    document.getElementById("details-header-status-pts-id").innerHTML = dec(cyclist.energy.points, 1000);
+   
+    document.getElementById("details-header-status-pts-id").innerHTML = dec(cyclist.energy.points, decimals);
    // document.getElementById("details-body-air-id").innerHTML = dec(cyclist.energy.r_air, 100);
     document.getElementById("details-body-slope-id").innerHTML = dec(cyclist.energy.r_pend, 100);
     document.getElementById("details-body-acc-id").innerHTML = dec(cyclist.energy.f_acel, 100);

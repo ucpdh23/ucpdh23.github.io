@@ -56,15 +56,15 @@
            <span class="icon icon-watts"></span>
         </div>
         <div class="item-footer">
-          
+          <div class="item-props"></div>
+          <div class="item-actions">
           <input type="button" value="pull"  onclick="
     javascript:cyclists[_debug_item].sendMessage('tira');"/>
           <input type="button" value="  +  "  onclick="
     javascript:cyclists[_debug_item].energy.forceCyclist += 0.2;"/>
           <input type="button" value="  -  " onclick="
               javascript:cyclists[_debug_item].energy.forceCyclist -= 0.2;" />
-          
-          
+          </div>
         </div>
       </div>
       
@@ -77,7 +77,7 @@
             </div>
             <div id="details-header-features-id" class="details-header-features"></div>
         </div>
-        <div class="details-header-status">
+        <div id="id_details_header" class="details-header-status">
             <div class="details-header-status-item">
                 <span class="details-header-status-value" id="details-header-status-power-id">230</span>
                 <span class="details-header-status-metric">WATTS</span>

@@ -1,6 +1,7 @@
 class Road {
   constructor() {
     this.width = 8;
+    this.slope = 0;
     
     this.middle = canvasHeight / 2;
     

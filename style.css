@@ -20,7 +20,13 @@ canvas {
  background: blue;
 }
 
+.item-props {
+  height: 40px;
+}
 
+.item-actions {
+  height: 50%;
+}
 
 
 @media (orientation: portrait) {
@@ -103,7 +109,19 @@ canvas {
   opacity: 1 !important;
 }
 
-
+.details-header-status-item {
+    display: flex;
+    flex-direction: column;
+    width: 25px;
+    background-color: aquamarine;
+    align-items: center;
+}
+.details-header-status {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    background-color: green;
+}
 
 .selected .item-footer {
  display: flex;
@@ -113,6 +131,7 @@ canvas {
   z-index: 10000;
   overflow: visible;
   align-items: stretch;
+  flex-direction: column;
 }
 
 .selected:first-of-type {
@@ -120,6 +139,12 @@ canvas {
   width: 180px !important;
   margin: -20px !important;
   margin-left: 0px !important;
+}
+.selected:last-of-type {
+  transform: translateY(-10px);
+  width: 180px !important;
+  margin: -20px !important;
+  margin-right: 0px !important;
 }
 .selected {
   __margin-bottom: -100px;
