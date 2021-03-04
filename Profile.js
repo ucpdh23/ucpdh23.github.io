@@ -4,7 +4,7 @@ class Profile {
   //etapa = [0,5,11,11,11,11,12,13,14,15,16,17,18,19,20]
   data = [];
   
-  segment = 2500;
+  segment = 100;
   
  // etapa = [0,0,0,0,0,0,0,0,0,0]
   
@@ -217,13 +217,25 @@ d3.symbol().type(d3.symbolTriangle).size(25);
         this.triangles[i] =this.svg.append('path');
     this.triangles[i].attr("d", sym)
     .attr("transform", function(d) { return "translate(" + 10 + "," + 10 + ")"; })
-    .style("fill", "red");
+    .style("fill", "#0000FF");
       } else {
         const value =10+ this.xScale(this.cyclists[i].position.x);
+        
+        var index = (int)(this.cyclists[i].position.x/ this.segment);
+        var desn = this.etapa[index]
+        
       this.triangles[i].attr("transform", function(d) { return "translate(" + 
    // this.xScale(this.cyclists[i].position.x) 
-    value
-    + "," + 100 + ")"; });
+    value + "," + 100 + ")"; });
+    
+    var percent = (desn + 30) / 60;
+  var color = getColorForPercentage(
+    percent,
+    this.percentColorsProfile)
+  var colorCode = '#' + rgbToHex(color.r) + rgbToHex(color.g) + rgbToHex(color.b);
+    
+    this.triangles[i].style("fill", colorCode);
+    
       }
       
     }
