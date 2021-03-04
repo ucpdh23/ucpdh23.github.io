@@ -25,7 +25,7 @@ canvas {
 }
 
 .item-actions {
-  height: 50%;
+  height: 40px;
 }
 
 
@@ -112,7 +112,7 @@ canvas {
 .details-header-status-item {
     display: flex;
     flex-direction: column;
-    width: 25px;
+    width: 20px;
     background-color: aquamarine;
     align-items: center;
 }
