@@ -66,8 +66,13 @@ frameRate(20)
 }
 
 function draw() {
+  let prevOrientation = orientation;
   orientation=detectOrientation();
   
+  if (prevOrientation != orientation &&
+      orientation =='landscape') {
+    window.scrollTo(0,1);
+      }
   /*if (meters > 820) frameRate(20);
   else if (meters > 780) frameRate(2);
   else if (meters > 620) frameRate(20);
