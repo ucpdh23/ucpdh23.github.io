@@ -114,7 +114,7 @@ class Energy {
         // F * V = pot
         var forceCyclist = this.forceCyclist;
         
-        this.cyclist.log='force:'+ this.forceCyclist;
+        
 
         // F = m * a
         var accCyclist = forceCyclist / 8;
@@ -125,17 +125,15 @@ class Energy {
     }
     
     limitForce(slope) {
-      return;
-      if (slope == 0) {
-        this.maxForce = 20;
+      this.maxForce = (slope > 0)? 20 + 10 * slope : 20;
       
-        return;
-      }
+       //this.cyclist.log='force:'+ this.maxForce;
       
+      /*
       this.maxForce = 15 + slope * 1.5
         - (100 - this.estadoForma) / 100 * 3
         - (100 - this.points) / 100 * 3;
-      
+      */
       if (this.forceCyclist > this.maxForce)
         this.forceCyclist = this.maxForce;
     }
@@ -165,6 +163,8 @@ class Energy {
       var accX = this.cyclist.acceleration.x;
       if (accX < 0) accX = 0;
       else accX = accX * 5 * delta;
+      
+      
       
       var accVar = this.computeAccVar(accX);
       this.pulse = this.pulse + accVar;
