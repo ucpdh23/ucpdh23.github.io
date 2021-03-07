@@ -37,7 +37,9 @@ let showSliderValue = 0;
 
 let button;
 
-let profile = new Profile();
+let clasificacion = new Clasificacion();
+
+let profile = new Profile(clasificacion);
 
 let orientation = 'desktop'
 
@@ -178,7 +180,7 @@ function modeSlowMotion() {
  // console.log(diff)
  // console.log(div)
   
-  if (div < 15 || div > 95) {
+  if (div < 15 || div > 97) {
     if (mode == 1) {
       mode = 2;
       frameRate(2);
@@ -297,16 +299,9 @@ function showSelected(cyclist) {
     
     var canvas = document.getElementById('idForces');
     var ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#0000FF"
-    ctx.fillRect(50, 10,
-      cyclist.energy.f_acel *100, 10);
-    ctx.fillStyle = "#00FF00";
-    ctx.fillRect(50, 20,
-      cyclist.energy.r_pend *10, 10);
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(50, 30,
-      cyclist.energy.r_air * 10, 10);
+    
+    drawEnergy(ctx, cyclist.energy);
+    
     
       
     var canvas2 = document.getElementById('idPower');
@@ -338,6 +333,31 @@ function showSelected(cyclist) {
     
     ctx3.stroke();
     ctx3.lineWidth = 1;
+}
+
+function drawEnergy(ctx, energy){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  let factor = 10;
+  
+  let air = energy.r_air * factor;
+  let slp = energy.r_pend * factor;
+  let mec = 5 * factor;
+  
+  let force = energy.forceCyclist * factor;
+  
+    ctx.fillStyle = "#0000FF"
+    ctx.fillRect(50, 10,
+      air, 20);
+    ctx.fillStyle = "#00FF00";
+    ctx.fillRect(50+air, 10,
+      slp, 20);
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(50+air+slp, 10,
+      mec, 20);
+    ctx.fillStyle = '#FFFFFF'
+    ctx.fillRect(50+air+slp+mec, 30,
+      -force, 20);
 }
 
 function buildUl(element, cyclist) {

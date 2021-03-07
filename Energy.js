@@ -90,7 +90,14 @@ class Energy {
         var expAcc = negAcc + diff;
         // se calcula la aceleración necesaria para adaptarse a la velocidad del grupo
         
-        this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.5);
+        var delta = 0.2;
+        if (this.sprint < 75)
+          delta = 0.1;
+        else if (this.sprint > 85)
+          delta = 0.3;
+        
+        
+        this.forceCyclist = incrementalUpdate(this.forceCyclist, 8*expAcc, 0.2);
         //this.forceCyclist = 8* expAcc;
         // se calcula la fuerza necesaria para ejercer esa aceleración
       } else if (velAvg!=0 && selfAcc!=0){

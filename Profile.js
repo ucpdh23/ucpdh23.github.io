@@ -10,8 +10,7 @@ class Profile {
   
   portInfos = [];
   
-  clasPoint = 500;
-  clasificacion = [];
+  clasificacion;
   
   percentColorsProfile = [
     { pct: 0.0, color: { r: 0x00, g: 0x00, b: 0xff } },
@@ -19,12 +18,14 @@ class Profile {
     { pct: 0.75, color: { r: 0xff, g: 0x00, b: 0 } },
     { pct: 1.0, color: { r: 0x00, g: 0x00, b: 0 } } ];
   
-  constructor() {
+  constructor(clasificacion) {
     var prevSlope = 0;
     var port = 0;
     
     var elevation = 0;
     var dist = 0;
+    
+    this.clasificacion = clasificacion;
     
     
     this.data.push(
@@ -58,6 +59,11 @@ class Profile {
           cyclist.sendMessage('endPort', this.portInfos[portNumber]);
         }, port);
         
+        this.addListener(i*this.segment, (cyclist, portNumber) => {
+          this.clasificacion.register(cyclist, i*this.segment);
+        }, port);
+        
+        
         portInfo.slope = portInfo.slope / portInfo.kms;
         
         this.portInfos.push(portInfo);
@@ -89,8 +95,14 @@ class Profile {
   listeners = {};
   listenersPort = {}
   addListener(meters, listener, portNumber) {
-    this.listeners[meters] = listener;
-    this.listenersPort[meters] = portNumber;
+    if (meters in this.listeners) {
+      this.listeners[meters].push(listener);
+    } else {
+      this.listeners[meters] = [listener];
+    }
+    
+    if (!(meters in this.listenersPort))
+      this.listenersPort[meters]= portNumber;
   }
   
   events = {};
@@ -103,7 +115,10 @@ class Profile {
     
     var kms = this.events[cyclist.id][0];
     if (kms < cyclist.position.x) {
-      this.listeners[kms].apply(this, [cyclist, this.listenersPort[kms]]);
+      this.listeners[kms].forEach(item => {
+         item.apply(this, [cyclist, this.listenersPort[kms]]);
+      });
+      
       this.events[cyclist.id].shift();
     }
   }
