@@ -4,11 +4,14 @@ class Profile {
   //etapa = [0,5,11,11,11,11,12,13,14,15,16,17,18,19,20]
   data = [];
   
-  segment = 250;
+  segment = 200;
   
  // etapa = [0,0,0,0,0,0,0,0,0,0]
   
   portInfos = [];
+  
+  clasPoint = 500;
+  clasificacion = [];
   
   percentColorsProfile = [
     { pct: 0.0, color: { r: 0x00, g: 0x00, b: 0xff } },

@@ -35,7 +35,16 @@ class Road {
 
     this.drawLines(this.meters + 10);
     
+    this.drawKmLine(this.meters + 10);
+    
     return this.meters+10;
+  }
+  
+  drawKmLine(meters) {
+    let previous = (int)(meters / 100);
+    let diff = meters - previous*100;
+    line(diff * 10, this.y1, diff*10, this.y2)
+    text("kms:" + previous/10, diff*10, this.y1-10)
   }
   
   drawLines(meters) {

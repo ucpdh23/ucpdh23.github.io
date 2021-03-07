@@ -73,14 +73,9 @@ function draw() {
       orientation =='landscape') {
     window.scrollTo(0,1);
       }
-  /*if (meters > 820) frameRate(20);
-  else if (meters > 780) frameRate(2);
-  else if (meters > 620) frameRate(20);
-  else if (meters > 580) frameRate(2);
-  else if (meters > 420) frameRate(20);
-  else if (meters > 380) frameRate(2);
-  else if (meters > 220) frameRate(20);
-  else if (meters > 180) frameRate(2);*/
+  
+  modeSlowMotion();
+  
   var delta = 1/20;
   meters = 0;
   var selected = _debug_item;
@@ -173,6 +168,27 @@ function hideOptions() {
   _hideSlider();
     _hideButton();
     _hidePowerSlider();
+}
+
+mode=1;
+function modeSlowMotion() {
+  let diff = meters % profile.segment;
+  var div = diff * 100 / profile.segment;
+  
+ // console.log(diff)
+ // console.log(div)
+  
+  if (div < 15 || div > 95) {
+    if (mode == 1) {
+      mode = 2;
+      frameRate(2);
+    }
+  } else {
+    if (mode == 2) {
+      mode = 1;
+      frameRate(20);
+    }
+  }
 }
 
 function buildList() {
