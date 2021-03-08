@@ -19,6 +19,7 @@ class Energy {
       this.maxPotLevel = 100;
       this.r_pend = 0;
       this.r_air =0;
+      this.r_vel=0;
       this.prePot = this.pot = 100;
       this.preSlope = this.slope = 0;
       
@@ -63,11 +64,12 @@ class Energy {
           //expected_r_pend);
         this.r_pend = expected_r_pend;
         
+        this.r_vel = this.cyclist.velocity.x ;
         // aceleracion
        // this.f_acel = (this.cyclist.acceleration.x > 10000)? this.cyclist.acceleration.x * 8 : 0;
         
         this.f_acel = 0;
-        const newForce = this.r_air + this.r_mec + this.r_pend + this.f_acel;
+        const newForce = this.r_air + this.r_mec + this.r_pend + this.f_acel + this.r_vel;
 
         this.preForce = this.force;
         this.force = newForce;
@@ -132,6 +134,7 @@ class Energy {
     }
     
     limitForce(slope) {
+     
       this.maxForce = (slope > 0)? 20 + 10 * slope : 20;
       
        //this.cyclist.log='force:'+ this.maxForce;
@@ -141,8 +144,8 @@ class Energy {
         - (100 - this.estadoForma) / 100 * 3
         - (100 - this.points) / 100 * 3;
       */
-      if (this.forceCyclist > this.maxForce)
-        this.forceCyclist = this.maxForce;
+     // if (this.forceCyclist > this.maxForce)
+      //  this.forceCyclist = this.maxForce;
     }
     
     update(delta) {

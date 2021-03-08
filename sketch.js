@@ -76,7 +76,7 @@ function draw() {
     window.scrollTo(0,1);
       }
   
-  modeSlowMotion();
+ // modeSlowMotion();
   
   var delta = 1/20;
   meters = 0;
@@ -343,6 +343,7 @@ function drawEnergy(ctx, energy){
   let air = energy.r_air * factor;
   let slp = energy.r_pend * factor;
   let mec = 5 * factor;
+  let vel = energy.r_vel * factor;
   
   let force = energy.forceCyclist * factor;
   
@@ -355,8 +356,11 @@ function drawEnergy(ctx, energy){
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(50+air+slp, 10,
       mec, 20);
+    ctx.fillStyle = "#FFFF00";
+    ctx.fillRect(50+air+slp+mec, 10,
+      vel, 20);
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(50+air+slp+mec, 30,
+    ctx.fillRect(50+air+slp+mec+vel, 30,
       -force, 20);
 }
 
