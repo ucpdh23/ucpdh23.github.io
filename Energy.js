@@ -25,7 +25,7 @@ class Energy {
       
       // potencia a desarrollar si esta tirando.
       this.expected_power = 200;
-      this.forceCyclist=10;
+      this.forceCyclist=15;
     }
 
     getPower() {
@@ -135,7 +135,7 @@ class Energy {
     
     limitForce(slope) {
      
-      this.maxForce = (slope > 0)? 20 + 10 * slope : 20;
+      this.maxForce = (slope > 0)? 30 + 10 * slope : 30;
       
        //this.cyclist.log='force:'+ this.maxForce;
       
@@ -150,7 +150,7 @@ class Energy {
     
     update(delta) {
       var expectedPot =
-        60 + 
+        30 + 
         this.forceCyclist * this.cyclist.velocity.x;
       
       this.draftReduction = this.computeDraftReduction();
@@ -158,7 +158,7 @@ class Energy {
       if  (!Number.isNaN(expectedPot)) {
         this.pot = incrementalUpdate(this.pot, expectedPot);
       
-        this.points -= this.pot/8000 * delta;
+        this.points -= this.pot/9000 * delta;
       }
       
       var newPulse = this.computePulse(

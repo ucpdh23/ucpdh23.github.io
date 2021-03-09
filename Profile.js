@@ -1,12 +1,12 @@
 class Profile {
-  //etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
+  etapa = [0, 2, 4, 7, 2, -3, -5, -5, -3, 0, 0, 0, 0, 4, 5, 7, 8, 6, 7, 8, 9, 10, -3, -6,-6,-6,-7,-2, -5,-7,-9,-2,0,0,0,0,0,4,0,6,7,12,15,3];
   
   //etapa = [0,5,11,11,11,11,12,13,14,15,16,17,18,19,20]
   data = [];
   
-  segment = 200;
+  segment = 1000;
   
- etapa = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+ //etapa = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   
   portInfos = [];
   
@@ -176,10 +176,14 @@ class Profile {
       //.attr('fill', 'steelblue')
       .attr('fill', 'red')
       .attr('d', areaFn);
+      
+      let xAxisGenerator = d3.axisBottom(xScale);
+      
+      xAxisGenerator.tickFormat(d3.format(".2s"));
 
     g.append('g')
         .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(xScale))
+        .call(xAxisGenerator)
      /* .append('text')
         .attr('fill', '#333')
         .attr('y', 35)

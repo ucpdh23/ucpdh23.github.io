@@ -43,6 +43,8 @@ let profile = new Profile(clasificacion);
 
 let orientation = 'desktop'
 
+let teams = [];
+
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent('sketch-holder');
@@ -51,13 +53,25 @@ function setup() {
 frameRate(20)
   
   var number=1;
+  var team = new Team();
+  teams.push(team);
   for (i = 0; i < items; i++) {
-    cyclists.push(new Cyclist(i, number))
+    let cyclist = new Cyclist(i, number);
+    cyclists.push(cyclist);
+    team.addCyclist(cyclist);
     number++;
-    if (i!=0 && i % 6== 0) number += 3;
+    if (i!=0 && i % 6== 0) {
+      number += 3;
+      
+      var team = new Team();
+      teams.push(team);
+    }
   }
   
   profile.setCyclists(cyclists);
+  teams.forEach(item => {
+    item.build(profile);
+  })
  
   road = new Road();
   
@@ -121,6 +135,9 @@ function draw() {
   background(40);
   
   profile.update(delta);
+  teams.forEach(item => {
+    item.update();
+  })
   
   var selectedMeters = cyclists[_debug_item].position.x;
   if (selectedMeters < meters - 100) {
