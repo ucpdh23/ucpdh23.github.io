@@ -117,8 +117,11 @@ class Energy {
         }
       }
       
-      this.limitForce(this.cyclist.slope);
+      let max = this.limitForce(this.cyclist.slope);
       
+      if (this.forceCyclist > max){
+        this.forceCyclist = incrementalUpdate(this.forceCyclist, max);
+      }
 
         // F * V = pot
         var forceCyclist = this.forceCyclist;
@@ -134,10 +137,18 @@ class Energy {
     }
     
     limitForce(slope) {
+      if (this.anaerobicPoints < 5) {
+        this.maxForce = this.r_vel + 0.5 * (this.r_air + this.r_mec + this.r_vel);
+      } else if (this.anaerobicPoints < 20){
+        this.maxForce = (slope > 0)? 30 + 5 * slope : 30;
+      } else {
+        //this.maxForce = (slope > 0)? 30 + 10 * slope : 30;
+        this.maxForce = 40+ this.estadoForma*0.05;
+      }
      
-      this.maxForce = (slope > 0)? 30 + 10 * slope : 30;
+      return this.maxForce;
       
-       //this.cyclist.log='force:'+ this.maxForce;
+       //this.cyclist.log='force:'+ this .maxForce;
       
       /*
       this.maxForce = 15 + slope * 1.5
@@ -180,6 +191,17 @@ class Energy {
       this.pulse = this.pulse + accVar;
       
       this.pulse2 = this.pulse - this.draftReduction;
+      
+      this.computeAnaerobic(this.pulse2);
+    }
+    
+    computeAnaerobic(pulse) {
+      if (pulse > 200) {
+         this.anaerobicPoints -= pulse - 200;
+      } else {
+        if (this.anaerobicPoints < 100)
+          this.anaerobicPoints++;
+      }
     }
     
     computePulse(pot, force, vel, point) {

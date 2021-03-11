@@ -50,7 +50,7 @@ function setup() {
   canvas.parent('sketch-holder');
   buildList();
   
-frameRate(20)
+frameRate(40)
   
   var number=1;
   var team = new Team();
@@ -355,7 +355,8 @@ function showSelected(cyclist) {
 function drawEnergy(ctx, energy){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  let factor = 10;
+  let factor = 5;
+  let st = 20;
   
   let air = energy.r_air * factor;
   let slp = energy.r_pend * factor;
@@ -363,22 +364,26 @@ function drawEnergy(ctx, energy){
   let vel = energy.r_vel * factor;
   
   let force = energy.forceCyclist * factor;
-  
+  let maxForce = energy.maxForce * factor;
     ctx.fillStyle = "#0000FF"
-    ctx.fillRect(50, 10,
+    ctx.fillRect(st, 10,
       air, 20);
     ctx.fillStyle = "#00FF00";
-    ctx.fillRect(50+air, 10,
+    ctx.fillRect(st+air, 10,
       slp, 20);
     ctx.fillStyle = "#FF0000";
-    ctx.fillRect(50+air+slp, 10,
+    ctx.fillRect(st+air+slp, 10,
       mec, 20);
     ctx.fillStyle = "#FFFF00";
-    ctx.fillRect(50+air+slp+mec, 10,
+    ctx.fillRect(st+air+slp+mec, 10,
       vel, 20);
     ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(50+air+slp+mec+vel, 30,
+    ctx.fillRect(st+air+slp+mec+vel, 30,
       -force, 20);
+    ctx.fillStyle = '#00FFFF'
+    ctx.fillRect(st+air+slp+mec+vel, 50,
+      maxForce- force, 20);
+     
 }
 
 function buildUl(element, cyclist) {

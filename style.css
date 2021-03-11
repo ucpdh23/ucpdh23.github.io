@@ -345,6 +345,7 @@ background-image: url("Assets/311822.png");
 .box-1 {
   top: 25%;
   left: 0px;
+  width: 120px !important;
 }
 .box-2 {
   top: 0;
