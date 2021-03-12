@@ -36,6 +36,8 @@ let showSliderLastClickTime = null;
 let showSliderValue = 0;
 
 let button;
+let buttonPlus;
+let buttonLess;
 
 let clasificacion = new Clasificacion();
 
@@ -420,6 +422,10 @@ function drawProfile() {
 function _hideButton() {
   button.hide();
     button.remove();
+    buttonPlus.hide();
+    buttonPlus.remove();
+    buttonLess.hide();
+    buttonLess.remove();
 }
 
 function _hideSlider() {
@@ -445,7 +451,16 @@ function _showButton() {
   button.position(mouseX, mouseY+5);
   button.mousePressed(() => {
     cyclists[_debug_item].sendMessage('tira');
-    
+  });
+  buttonPlus = createButton('plus');
+  buttonPlus.position(mouseX+30, mouseY+5);
+  buttonPlus.mousePressed(() => {
+    cyclists[_debug_item].energy.forceCyclist+= 0.2;
+  });
+  buttonLess = createButton('less');
+  buttonLess.position(mouseX+60, mouseY+5);
+  buttonLess.mousePressed(() => {
+    cyclists[_debug_item].energy.forceCyclist-= 0.2;
   });
 }
 

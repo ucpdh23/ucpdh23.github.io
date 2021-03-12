@@ -2,6 +2,8 @@
     constructor(id, number) {
         this.id = id;
         this.number=number;
+        
+        this.enabled = true;
 
         this.maxSpeed = MAX_SPEED;
 
@@ -481,6 +483,7 @@
         
         if (diffTime > Math.PI) {
           this.selfStartedSelfAcc = false;
+          this.enabled=true;
         }
         
         return createVector(this.selfAccLevel
@@ -662,7 +665,7 @@ computeAvVel() {
             if (this !== cyclists[i]) {
                 let dist = this.position.dist(cyclists[i].position);
                 //print("dist("+this.id+"):"+dist);
-                if (dist < this.neighborDist) {
+                if (dist < this.neighborDist && cyclists[i].enabled) {
                     this.neighbour.push(cyclists[i]);
                 }
             }
@@ -675,7 +678,7 @@ computeAvVel() {
 
     sendMessage(msg, payload=null) {
         this.flashing = {
-            tics: 300,
+            tics: 150,
             color: createVector(0, 0, 255)
         };
 

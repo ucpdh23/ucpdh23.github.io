@@ -149,8 +149,9 @@ function createDefaultStateMachine() {
         },
       computeTransition(ctx){
         if (ctx.message == 'tira') {
-        ctx.cyclist.startSelfAcc = true;
+          ctx.cyclist.startSelfAcc = true;
           ctx.cyclist.selfAccLevel = -3;
+          ctx.cyclist.enabled=false;
           return {
         target: 'init',
         action(){},
