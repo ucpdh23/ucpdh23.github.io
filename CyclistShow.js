@@ -91,7 +91,7 @@ Cyclist.prototype.show = function(reference) {
         textSize(12);
         text("vel:"+((int)(this.velocity.x*3600))/1000, headX, 15);
         text("dist:" + ((int)((globalFirst.position.x - this.position.x) * 1000)) / 1000, headX, 60);
-        text("id:" + (int)(this.id), headX + 100, 15)
+        text("Nu:" + (int)(this.number), headX + 100, 15)
         text("pulse:" + (int)(this.energy.pulse2),headX+100, 30)
         text("status:" + this.peekStateMachine().value, headX + 160, 30);
         text(" red.:" + this.energy.draftReduction, headX+ 100, 45);

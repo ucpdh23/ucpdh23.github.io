@@ -36,6 +36,7 @@
 
         this._mSeparation = SEP_RANGE;
         this._stateMachine = [];
+        this._smCtx = {first: null, cyclist: this};
         this.actualBodyColor = createVector(144 - this.id, 255 - this.id, this.id);
 
         this.pushStateMachine(createDefaultStateMachine());
@@ -190,24 +191,58 @@
 
             return this.goodPositionBeforeFirst(cyclistToBet);
         } else if (this._mGoodPosition === 0) {
+          
             return this.goodPositionToFirst(first);
         } else {
             this.goodPositionInsideGroup(first);
         }
+    }
+    
+    goForwardAcc() {
+      var border = this.inBorder();
+
+            if (border == null) {
+                var steer = createVector(0.2, 1);
+                if (this.position.y < first.position.y) {
+                    steer.mult(-1);
+                } else {
+
+                }
+                steer.limit(this.maxSteeringForce);
+                return steer;
+            } else if (border.x == 0) {
+                return createVector(0, 0);
+            } else {
+                var steer = this.seek(border);
+                steer.limit(this.maxSteeringForce);
+                
+                var diffVel = first.velocity.x - this.velocity.x;
+                
+                var ref = (diffVel<-1)? 3:2;
+                
+                if (diff < ref) {
+                  diffVel = diffVel * (ref - diff) / ref;
+                  steer.x =+ diffVel;
+                }
+
+                return steer;
+            }
     }
 
     goodPositionToFirst(first) {
       var diff = first.position.x /* + first.velocity.x -
       */ - this.position.x;
 
-        var almostFirst = false;
+        /*var almostFirst = false;
         if (diff < 2) {
             var diffVel = first.velocity.x - this.velocity.x;
             if (diffVel < 0.5 && diffVel > -0.5) {
                 this._gotoFirst = true;
                 this._gotoFirstId = first.id;
             }
-        }
+        }*/
+        
+        //this.log = 'diff;'+ diff + ' num'+ first.number;
 
         if (diff > 0.5) {
             var border = this.inBorder();
@@ -671,8 +706,11 @@ computeAvVel() {
             }
         }
 
-        this.peekStateMachine().transition({ first: first, cyclist: this });
-        this.peekStateMachine().execute({ first: first, cyclist: this });
+        this._smCtx.first = this.group.getFirst();
+        this.peekStateMachine()
+            .transition(this._smCtx);
+        this.peekStateMachine()
+            .execute(this._smCtx);
     }
 
 
@@ -687,7 +725,12 @@ computeAvVel() {
         
         this.managePort();
         
-        this.peekStateMachine().transition({ first: globalFirst, cyclist: this, message: msg });
+        this._smCtx.first
+              = this.group.getFirst();
+        this._smCtx.message = msg;
+        this.peekStateMachine().transition(
+          this._smCtx);
+        this._smCtx.message=undefined;
     }
     
     ports=[];

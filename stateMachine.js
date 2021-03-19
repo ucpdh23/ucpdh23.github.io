@@ -20,7 +20,10 @@ actions.onExecute(ctx);
       const destinationState = destinationTransition.target
       const destinationStateDefinition =
         stateMachineDefinition[destinationState]
-      destinationTransition.action(ctx)
+        if (destinationTransition.hasOwnProperty('action')){
+          destinationTransition.action(ctx)
+        }
+    //  destinationTransition.action(ctx)
       currentStateDefinition.actions.onExit(ctx)
       destinationStateDefinition.actions.onEnter(ctx)
       machine.value = destinationState

@@ -24,7 +24,16 @@ function createDefaultStateMachine() {
         
         },
       };
-        }else if (ctx.message === 'adelanta') {
+        }else if (ctx.message === 'salta') {
+          //dependiendo de lo lejos puede saltar o no
+          return {
+            target: 'preparePulling',
+            action(ctx) {
+              ctx.nextState='salta'
+            }
+          };
+        
+        } else if (ctx.message === 'adelanta') {
           print("adelantando...");
         
           return {
@@ -182,15 +191,30 @@ function createDefaultStateMachine() {
     preparePulling: {
       actions: {
         onEnter(ctx){
-          print('prepare');
         //ctx.cyclist.preparePulling= null;
         ctx.cyclist._maxSteeringForce = ctx.cyclist.maxSteeringForce;
         ctx.cyclist.maxSteeringForce = ctx.cyclist.maxSteeringForce * 1.3;
+        
+        if (ctx._preparePullingMeters == null || ctx._preparePullingMeters == undefined) {
+          ctx._preparePullingMeters = 2;
+        }
+        if (ctx._preparePullingRange == null || ctx._preparePullingRange == undefined) {
+          ctx._preparePullingRange = [-0.5, 0.5];
+        }
+        if (ctx._preparePullingNext == null || ctx._preparePullingNext == undefined) {
+          ctx._preparePullingNext = 'gotoFirst';
+        }
+        
         },
         onExit(ctx){
-    print('prepared');   
          // ctx.cyclist.preparePulling = null;
           ctx.cyclist.maxSteeringForce = ctx.cyclist._maxSteeringForce;
+          ctx.nextState=null;
+          ctx._preparePullingMeters = null;
+          ctx._preparePullingRange=null;
+          ctx._preparePullingNext=null;
+          
+          
         },
         onExecute(ctx) {
           if (tirando.includes(ctx.cyclist)) return;
@@ -198,26 +222,46 @@ function createDefaultStateMachine() {
 
           
           if (ctx.first.id == ctx.cyclist.id) {
-           print('first')
             tirando.push(ctx.cyclist);
             
             } else {
           ctx.cyclist._mGoodPosition = 0;
-          ctx.cyclist.computeForces_2(ctx.first);
+          ctx.cyclist.computeForces_2(ctx.cyclist.group.getFirst());
           
           }
         }
         
         },
         computeTransition(ctx) {
-            if (ctx.cyclist._gotoFirst !== undefined && ctx.cyclist._gotoFirst === true) {
+          //======
+          let first = ctx.cyclist.group.getFirst(); 
+          let curr = ctx.cyclist;
+
+          var diff = first.position.x
+                    - curr.position.x;
+                    
+          if (diff < ctx._preparePullingMeters) {
+            
+            var diffVel = first.velocity.x - curr.velocity.x;
+            if (inRange(diffVel, ctx._preparePullingRange)) {
+                return {
+                    target: ctx._preparePullingNext,
+                    action() { }
+                };
+            }
+        }
+          //======
+          
+          
+          
+           /* if (ctx.cyclist._gotoFirst !== undefined && ctx.cyclist._gotoFirst === true) {
                 ctx.cyclist._gotoFirst = false;
 
                 return {
                     target: 'gotoFirst',
                     action() { }
                 };
-            } else if (tirando.includes(ctx.cyclist)) {
+            } else */ if (tirando.includes(ctx.cyclist)) {
                 return {
                     target: 'pulling',
                     action() { }

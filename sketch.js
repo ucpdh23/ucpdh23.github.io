@@ -54,26 +54,27 @@ function setup() {
   
 frameRate(40)
   
-  var number=1;
+  var unidades=1;
+  var decenas=0;
   var team = new Team();
   teams.push(team);
   for (i = 0; i < items; i++) {
-    let cyclist = new Cyclist(i, number);
-    cyclists.push(cyclist);
-    team.addCyclist(cyclist);
-    number++;
-    if (i!=0 && i % 6== 0) {
-      number += 3;
-      
+    if (i!=0 && i % 7== 0) {
+      decenas+=10;
+      unidades=1;
       var team = new Team();
       teams.push(team);
     }
+    let cyclist = new Cyclist(i, decenas + unidades);
+    cyclists.push(cyclist);
+    team.addCyclist(cyclist);
+    unidades++;
   }
   
   profile.setCyclists(cyclists);
   teams.forEach(item => {
     item.build(profile);
-  })
+  });
  
   road = new Road();
   
@@ -115,6 +116,26 @@ function draw() {
   }
   
   globalFirst = first;
+  
+  
+  var list = cyclists.slice(0)
+  list.sort((a,b)=>{
+    return b.position.x - a.position.x;
+  });
+  
+  
+  var currGroup=null;
+  var prev = 1000000;
+  for (i = 0; i < items; i++) {
+    if (prev - list[i].position.x > 10) {
+      currGroup = new Group();
+    }
+    prev = list[i].position.x;
+    currGroup.addCyclist(list[i]);
+  }
+  
+  
+  
 
   var hullPoints = hull(localHull, 10);
   globalHull = hullPoints;
@@ -126,8 +147,23 @@ function draw() {
           updateBox(document.getElementById('id_'+i), cyclists[i]);
         }
     }
-
+/*
+  var list = cyclists.slice(0)
+  list.sort((a,b)=>{
+    return b.position.x - a.position.x;
+  });
   
+  
+  var currGroup=null;
+  var prev = 1000000;
+  for (i = 0; i < items; i++) {
+    if (prev - list[i].position.x > 10) {
+      currGroup = new Group();
+    }
+    prev = list[i].position.x;
+    currGroup.addCyclist(list[i]);
+  }
+  */0
   for (i = 0; i < items; i++) {
     currMeters = cyclists[i].update(delta);
     if (currMeters > meters)

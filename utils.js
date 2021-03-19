@@ -67,3 +67,7 @@ function incrementalUpdate(actual, expected, step=1) {
         else
           return actual - step;
 }
+
+function inRange(value, range) {
+  return value > range[0] && value < range[1]
+}
