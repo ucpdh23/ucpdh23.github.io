@@ -15,14 +15,17 @@ class Team {
     let leader = this.cyclists[0];
     if (this.id == 0) return;
     
-    if (leader.energy.llano > 80 && leader.energy.montana > 80) {
+    if (leader.energy.llano > 80
+        && leader.energy.montana > 80) {
       this.strategy = 1;
       this.leader = leader;
       
       this.buildStrategy1();
     } else {
       this.cyclists.forEach(item => {
-        if (item.energy.llano > 75 && item.energy.montana>82) {
+        if (item.energy.llano > 75 
+          && item.energy.montana > 85
+          && item.energy.estadoForma > 95) {
           this.buildStrategy2(item);
         }
       });
@@ -30,7 +33,14 @@ class Team {
   }
   
   buildStrategy2(item) {
-    
+    console.log(''+item.number+' debe saltar')
+    item.addAction({
+      from: 1250,
+      to: 3250,
+      prob: 80,
+      action: 'salta',
+      payload:''
+    });
   }
   
   buildStrategy1() {
@@ -58,7 +68,7 @@ class Team {
       if (Math.random() < 0.001) {
         let diff = globalFirst.position.x - this.leader.position.x;
         if (diff > 15) {
-          this.leader.sendMessage('acelera#'+2);
+          this.leader.sendMessage('acelera#1');
         }
       } else {
         if (this.leader.slope > 0) {

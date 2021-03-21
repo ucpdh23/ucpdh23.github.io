@@ -29,7 +29,7 @@ function createDefaultStateMachine() {
           return {
             target: 'preparePulling',
             action(ctx) {
-              ctx.nextState='salta'
+              ctx._preparePullingNext='salta'
             }
           };
         
@@ -315,6 +315,46 @@ function createDefaultStateMachine() {
           }
       },
 
+   
+   
+   salta: {
+          actions: {
+              onEnter(ctx) {
+                  var diff = ctx.cyclist.velocity.x - ctx.first.velocity.x;
+
+                  var acceleration = 3;
+
+                  ctx.cyclist._gotoFirstDefaultTime = ctx.cyclist.selfAccTimer;
+
+                  ctx.cyclist.startSelfAcc = true;
+                  ctx.cyclist.selfAccLevel = acceleration;
+                  ctx.cyclist.selfAccTimer = 1;
+              },
+              onExit(ctx) {
+                  ctx.cyclist.selfAccTimer = ctx.cyclist._gotoFirstDefaultTime;
+              },
+              onExecute(ctx) {
+                  ctx.cyclist.computeForces_3(ctx.first);
+              }
+          },
+          computeTransition(ctx) {
+              if (ctx.cyclist.selfStartedSelfAcc === false) {
+                  if (ctx.first.id === ctx.cyclist.id) {
+                      tirando.push(ctx.cyclist);
+                      return {
+                          target: 'pulling',
+                          action() { }
+                      };
+                  } else if (ctx.first.velocity.x < ctx.cyclist.velocity.x - 0.3) {
+                      //console.log("wait a while");
+                  } else {
+                    ctx.cyclist.startSelfAcc = true;
+                  }
+              }
+          }
+      },
+   
+   
    
   
   adelanta: {

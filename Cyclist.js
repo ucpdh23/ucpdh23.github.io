@@ -26,6 +26,8 @@
         this.acceleration = createVector(0, 0)
         this.acc_physics = createVector(0, 0);
 
+        this.actions = {};
+        this.actionMeters = [];
         this.neighbour = []
         this.maxSteeringForce = MAX_STEERING_FORCE;
         this.neighborDist = NEIGHBOR_DIST;
@@ -705,12 +707,19 @@ computeAvVel() {
                 }
             }
         }
+        
+        this.checkAction(this.position.x);
 
         this._smCtx.first = this.group.getFirst();
+        this._smCtx.message = this.message;
+        this.message=undefined;
+        
         this.peekStateMachine()
             .transition(this._smCtx);
         this.peekStateMachine()
             .execute(this._smCtx);
+            
+        this._smCtx.message=undefined;
     }
 
 
@@ -724,13 +733,14 @@ computeAvVel() {
         this.msgPayload = payload;
         
         this.managePort();
-        
+        /*
         this._smCtx.first
               = this.group.getFirst();
         this._smCtx.message = msg;
         this.peekStateMachine().transition(
           this._smCtx);
         this._smCtx.message=undefined;
+        */
     }
     
     ports=[];
