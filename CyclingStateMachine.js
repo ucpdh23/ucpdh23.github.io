@@ -30,6 +30,7 @@ function createDefaultStateMachine() {
             target: 'preparePulling',
             action(ctx) {
               ctx._preparePullingNext='salta'
+              ctx._preparePullingMeters=4;
             }
           };
         
