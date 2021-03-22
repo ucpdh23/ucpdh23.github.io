@@ -307,5 +307,77 @@ Cyclist.prototype.drawMallot=function(posX, posY, heading) {
             posX + 15, posY);
             noFill()
            
+      } else if  (this.number < 70) {
+      
+        stroke(  00, 171, 132)
+        fill(  00, 171, 132);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+         /*  stroke (250)
+           fill(250)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);*/
+            noFill()
+           
+      } else if  (this.number < 80) {
+      
+        stroke(  87, 35, 100)
+        fill(  87, 35, 100);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+          /* stroke (250)
+           fill(250)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);*/
+            noFill()
+           
+      } else if  (this.number < 90) {
+      
+        stroke(  255, 255, 0)
+        fill(  255, 255, 0);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke (150)
+           fill(150)
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);
+            noFill()
+           
+      } else if  (this.number < 100) {
+      
+        stroke(  255, 255, 255)
+        fill(  255, 255, 255);
+       triangle(
+            posX + 9, posY - 3+ heading,
+            posX + 9, posY + 3+ heading,
+            posX + 15, posY);
+            noFill()
+           
+           stroke(  0, 0, 255)
+        fill(  0, 0, 255);
+           triangle(
+            posX + 11, posY - 2+ heading,
+            posX + 11, posY + 2+ heading,
+            posX + 15, posY);
+            noFill()
+           
       } 
     }

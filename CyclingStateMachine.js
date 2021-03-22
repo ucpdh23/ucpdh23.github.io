@@ -30,7 +30,7 @@ function createDefaultStateMachine() {
             target: 'preparePulling',
             action(ctx) {
               ctx._preparePullingNext='salta'
-              ctx._preparePullingMeters=4;
+              ctx._preparePullingMeters=3;
             }
           };
         
@@ -329,7 +329,7 @@ function createDefaultStateMachine() {
 
                   ctx.cyclist.startSelfAcc = true;
                   ctx.cyclist.selfAccLevel = acceleration;
-                  ctx.cyclist.selfAccTimer = 1;
+                  ctx.cyclist.selfAccTimer = 3;
               },
               onExit(ctx) {
                   ctx.cyclist.selfAccTimer = ctx.cyclist._gotoFirstDefaultTime;

@@ -52,7 +52,7 @@ function setup() {
   canvas.parent('sketch-holder');
   buildList();
   
-frameRate(40)
+frameRate(20)
   
   var unidades=1;
   var decenas=0;
