@@ -647,6 +647,8 @@ computeAvVel() {
    
     
     update(time) {
+ //     this.log='acc.x:'+ this.acceleration.x;
+      
         this.position.add(p5.Vector.mult(this.velocity, time));
         this.velocity.add(p5.Vector.mult(this.acceleration, time));
         this.velocity.add(p5.Vector.mult(this.acc_physics, time));
@@ -712,7 +714,9 @@ computeAvVel() {
 
         this._smCtx.first = this.group.getFirst();
         this._smCtx.message = this.message;
+        this._smCtx.msgPayload = this.msgPayload;
         this.message=undefined;
+        this.msgPayload = undefined;
         
         this.peekStateMachine()
             .transition(this._smCtx);
@@ -720,10 +724,11 @@ computeAvVel() {
             .execute(this._smCtx);
             
         this._smCtx.message=undefined;
+        this._smCtx.msgPayload=undefined;
     }
 
 
-    sendMessage(msg, payload=null) {
+    sendMessage(msg, payload=undefined) {
         this.flashing = {
             tics: 150,
             color: createVector(0, 0, 255)

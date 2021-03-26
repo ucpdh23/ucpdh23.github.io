@@ -51,16 +51,52 @@ class Team {
     this.llano=this.cyclists.slice(0);
     
     this.montana.sort((a,b) => {
-      return a.energy.montana - b.energy.montana
+      return - a.energy.montana + b.energy.montana
     });
     
     this.llano.sort((a,b)=> {
-      return a.energy.llano - b.energy.llano
+      return - a.energy.llano + b.energy.llano
     })
     
     var leaderMont = this.montana.indexOf(this.leader);
+    var leaderLlano = this.llano.indexOf(this.leader);
+    
+    this.montana.splice(leaderMont, 1);
+    this.llano.splice(leaderLlano, 1);
     
     console.log('im the ' + leaderMont);
+    for (var i = 0; i < 3; i++){
+      var index = this.llano.indexOf(this.montana[i]);
+      this.llano.splice(index, 1);
+    }
+    
+    this.llano[2].addAction({
+      from: 0,
+      to: 500,
+      prob: 90,
+      action: 'tira',
+      payload: 80
+    });
+    this.llano[2].addAction({
+      from: 2500,
+      prob: 100,
+      action: 'no_tira',
+      payload: 80
+    });
+    this.llano[1].addAction({
+      from: 100,
+      to: 500,
+      prob: 90,
+      action: 'avanza',
+      payload: 80
+    });
+    this.llano[1].addAction({
+      from: 2500,
+      to: 3000,
+      prob: 90,
+      action: 'tira',
+      payload: 80
+    });
   }
   
   update() {

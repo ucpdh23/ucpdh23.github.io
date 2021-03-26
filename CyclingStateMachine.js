@@ -17,6 +17,8 @@ function createDefaultStateMachine() {
         
         if (ctx.first.id == ctx.cyclist.id) targetName = 'pulling';
         
+        ctx._pullingLevel = ctx.msgPayload;
+        
         return {
       target: targetName,
         action(){
@@ -34,7 +36,17 @@ function createDefaultStateMachine() {
             }
           };
         
-        } else if (ctx.message === 'adelanta') {
+        }else if (ctx.message === 'avanza') {
+          //dependiendo de lo lejos puede saltar o no
+          return {
+            target: 'preparePulling',
+            action(ctx) {
+              ctx._preparePullingNext='init'
+              ctx._preparePullingMeters=5;
+            }
+          };
+        
+       } else if (ctx.message === 'adelanta') {
           print("adelantando...");
         
           return {
@@ -127,7 +139,9 @@ function createDefaultStateMachine() {
         } else if (ctx.message == 'tira') {
           return {
             target: 'pulling',
-            action() {},
+            action() {
+              tirando.push(ctx.cyclist);
+            },
           };
         
         }
@@ -142,23 +156,48 @@ function createDefaultStateMachine() {
   },
     pulling: {
       actions: {
-        onEnter(ctx){print('tirando');},
-        onExit(ctx){},
+        onEnter(ctx){
+          print('tirando');
+          if (ctx._pullingLevel == null) {
+            ctx._pullingLevel = 60;
+          }
+        },
+        onExit(ctx){
+          ctx._pullingLevel = undefined;
+        },
         onExecute(ctx){
           if (tirando.includes(ctx.cyclist)) {
-            if (ctx.cyclist.energy.pot < 95)
+            let level = ctx.cyclist.energy.resolvePercentage();
+            
+           // ctx.cyclist.log = ''+(ctx.cyclist.energy.force - ctx.cyclist.energy.forceCyclist);
+            
+           if (level < ctx._pullingLevel) {
+              let delta = ctx.cyclist.energy.maxForce / 1000;
+             // let diff = ctx._pullingLevel - level;
+              ctx.cyclist.energy.forceCyclist += delta;
+            } else if (level > ctx._pullingLevel) {
+              let delta = ctx.cyclist.energy.maxForce / 1000;
+              ctx.cyclist.energy.forceCyclist -= delta;
+            }
+            
+           // ctx.cyclist.computeForces_0(ctx.first);
+          }
+          
+          ctx.cyclist.computeForces_0(ctx.first);
+       /*     if (ctx.cyclist.energy.pot < 95 + ctx._pullingLevel/ 3)
           ctx.cyclist.energy.forceCyclist += 0.25;
            ctx.cyclist.computeForces_0(ctx.first);
           } else {
             console.log('outside tirando')
           }
-
+*/
         
         }
         
         },
       computeTransition(ctx){
-        if (ctx.message == 'tira') {
+        if (ctx.message == 'tira' ||
+          ctx.message == 'no_tira') {
           ctx.cyclist.startSelfAcc = true;
           ctx.cyclist.selfAccLevel = -3;
           ctx.cyclist.enabled=false;
@@ -269,6 +308,17 @@ function createDefaultStateMachine() {
                 };
             }
         }
+    },
+    
+    shouldPush: {
+      actions: {
+        onEnter(ctx){},
+        onExit(ctx){},
+        onExecute(ctx){}
+      },
+      computeTransition(ctx){
+        
+      }
     },
       gotoFirst: {
           actions: {

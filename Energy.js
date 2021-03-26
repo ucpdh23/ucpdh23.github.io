@@ -64,7 +64,16 @@ class Energy {
           //expected_r_pend);
         this.r_pend = expected_r_pend;
         
-        this.r_vel = this.cyclist.velocity.x ;
+        this.r_vel = this.cyclist.velocity.x;
+        
+        if (this.slope == 0){
+          
+        } else if (this.slope > 0) {
+          this.r_vel *= (1 + this.slope / 5);
+        } else if (this.slope < 0){
+         
+        }
+        
         // aceleracion
        // this.f_acel = (this.cyclist.acceleration.x > 10000)? this.cyclist.acceleration.x * 8 : 0;
         
@@ -132,6 +141,7 @@ class Energy {
         var accCyclist = forceCyclist / 8;
         const accRes = negAcc - accCyclist;
 
+        this.cyclist.log = 'accres:' + accRes;
 
         return createVector(-accRes, 0);
     }
@@ -157,6 +167,11 @@ class Energy {
       */
      // if (this.forceCyclist > this.maxForce)
       //  this.forceCyclist = this.maxForce;
+    }
+
+
+    resolvePercentage() {
+      return (int)(this.forceCyclist * 100 / this.maxForce);
     }
     
     update(delta) {
@@ -193,6 +208,8 @@ class Energy {
       this.pulse2 = this.pulse - this.draftReduction;
       
       this.computeAnaerobic(this.pulse2);
+      
+      //this.cyclist.log = 'pot:' + this.resolvePercentage();
     }
     
     computeAnaerobic(pulse) {
