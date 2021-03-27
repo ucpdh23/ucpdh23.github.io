@@ -176,7 +176,7 @@ function createDefaultStateMachine() {
              // let diff = ctx._pullingLevel - level;
               ctx.cyclist.energy.forceCyclist += delta;
             } else if (level > ctx._pullingLevel) {
-              let delta = ctx.cyclist.energy.maxForce / 1000;
+              let delta = ctx.cyclist.energy.maxForce / 10000;
               ctx.cyclist.energy.forceCyclist -= delta;
             }
             
@@ -323,6 +323,13 @@ function createDefaultStateMachine() {
       gotoFirst: {
           actions: {
               onEnter(ctx) {
+                ctx._gotoFirstNext=undefined;
+                if (ctx.cyclist.energy.resolvePercentage() >= ctx._pullingLevel - 15) {
+                  console.log('cannot pull');
+                  ctx._gotoFirstNext='init';
+                  return;
+                }
+                
                   var diff = ctx.cyclist.velocity.x - ctx.first.velocity.x;
 
                   var acceleration = 1;
@@ -350,6 +357,12 @@ function createDefaultStateMachine() {
               }
           },
           computeTransition(ctx) {
+            if (ctx._gotoFirstNext) {
+              return {
+                target: 'init',
+                action() {}
+              }
+            }
               if (ctx.cyclist.selfStartedSelfAcc === false) {
                   if (ctx.first.id === ctx.cyclist.id) {
                       tirando.push(ctx.cyclist);

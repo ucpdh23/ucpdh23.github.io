@@ -163,7 +163,7 @@ function draw() {
     prev = list[i].position.x;
     currGroup.addCyclist(list[i]);
   }
-  */0
+  */
   for (i = 0; i < items; i++) {
     currMeters = cyclists[i].update(delta);
     if (currMeters > meters)
