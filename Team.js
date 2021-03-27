@@ -64,6 +64,8 @@ class Team {
     this.montana.splice(leaderMont, 1);
     this.llano.splice(leaderLlano, 1);
     
+    this.escolta = this.montana[0];
+    
     console.log('im the ' + leaderMont);
     for (var i = 0; i < 3; i++){
       var index = this.llano.indexOf(this.montana[i]);
@@ -75,7 +77,7 @@ class Team {
       to: 500,
       prob: 90,
       action: 'tira',
-      payload: 80
+      payload: 70
     });
     this.llano[2].addAction({
       from: 2500,
@@ -95,7 +97,21 @@ class Team {
       to: 3000,
       prob: 90,
       action: 'tira',
+      payload: 75
+    });
+    this.leader.addAction({
+      from: 1500,
+      to: 2000,
+      prob: 75,
+      action: 'avanza',
       payload: 80
+    });
+    this.escolta.addAction({
+      from: 2000,
+      to: 2500,
+      prob: 75,
+      action: 'protege',
+      payload: this.leader.id
     });
   }
   
