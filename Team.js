@@ -35,9 +35,16 @@ class Team {
   buildStrategy2(item) {
     console.log(''+item.number+' debe saltar')
     item.addAction({
-      from: 1250,
-      to: 3250,
-      prob: 80,
+      from: 2000,
+      to: 3000,
+      prob: 90,
+      action: 'avanza',
+      payload: 90
+    })
+    item.addAction({
+      from: 18050,
+      to: 30250,
+      prob: 85,
       action: 'salta',
       payload:''
     });
@@ -77,7 +84,7 @@ class Team {
       to: 500,
       prob: 90,
       action: 'tira',
-      payload: 70
+      payload: 65
     });
     this.llano[2].addAction({
       from: 2500,
@@ -97,7 +104,7 @@ class Team {
       to: 3000,
       prob: 90,
       action: 'tira',
-      payload: 75
+      payload: 70
     });
     this.leader.addAction({
       from: 1500,
