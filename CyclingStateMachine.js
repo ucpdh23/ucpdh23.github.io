@@ -35,7 +35,20 @@ function createDefaultStateMachine() {
               ctx._preparePullingMeters=3;
             }
           };
-        
+        } else if (ctx.message=='protege') {
+          var expected = ctx.msgPayload;
+          var index = ctx.cyclist.group.indexOf(expected);
+          
+          if (index != -1) {
+            var target = ctx.cyclist.group.cyclists[index];
+            ctx._followTarget = target;
+            return {
+              target: 'follow',
+              action(ctx) {
+                
+              }
+            };
+          }
         }else if (ctx.message === 'avanza') {
           //dependiendo de lo lejos puede saltar o no
           return {
@@ -310,11 +323,17 @@ function createDefaultStateMachine() {
         }
     },
     
-    shouldPush: {
+    follow: {
       actions: {
-        onEnter(ctx){},
-        onExit(ctx){},
-        onExecute(ctx){}
+        onEnter(ctx){
+          console.log('followong:'+ ctx._followTarget.number);
+        },
+        onExit(ctx){
+          ctx._followTarget = undefined;
+        },
+        onExecute(ctx){
+          ctx.cyclist.computeForces_5(ctx._followTarget);
+        }
       },
       computeTransition(ctx){
         

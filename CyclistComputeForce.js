@@ -104,3 +104,15 @@ Cyclist.prototype.computeForces_4=function
        
        this.acceleration.limit(this.maxSteeringForce);
     }
+    
+Cyclist.prototype.computeForces_5=function
+(target) {
+        let after =this.goAfter(target);
+  
+        this.computeForces(0.5, 0.75, 0,
+          after);
+        
+       this.acceleration.add(after);
+       
+       this.acceleration.limit(this.maxSteeringForce);
+    }

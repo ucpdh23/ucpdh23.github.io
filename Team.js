@@ -114,9 +114,9 @@ class Team {
       payload: 80
     });
     this.escolta.addAction({
-      from: 2000,
-      to: 2500,
-      prob: 75,
+      from: 200,
+      to: 250,
+      prob: 85,
       action: 'protege',
       payload: this.leader.id
     });
