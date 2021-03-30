@@ -27,9 +27,22 @@ class Team {
           && item.energy.montana > 85
           && item.energy.estadoForma > 95) {
           this.buildStrategy2(item);
+        } else if (item.energy.montana > 80){
+          this.buildStrategy3(item);
         }
       });
     }
+  }
+  
+  buildStrategy3(item){
+    console.log(''+item.number+ ' esta atento');
+    item.addAction({
+      from: 2000,
+      to: 3000,
+      prob: 70,
+      action: 'avanza',
+      payload: 90
+    });
   }
   
   buildStrategy2(item) {
@@ -43,8 +56,8 @@ class Team {
     })
     item.addAction({
       from: 18050,
-      to: 30250,
-      prob: 85,
+      to: 20250,
+      prob: 55,
       action: 'salta',
       payload:''
     });

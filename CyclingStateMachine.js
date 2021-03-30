@@ -336,7 +336,14 @@ function createDefaultStateMachine() {
         }
       },
       computeTransition(ctx){
+        if (ctx.message == 'tira') {
+          return {
+            target: 'preparePulling',
+            action() {
+            },
+          };
         
+        }
       }
     },
       gotoFirst: {
