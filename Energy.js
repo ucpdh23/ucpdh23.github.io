@@ -69,7 +69,7 @@ class Energy {
         if (this.slope == 0){
           
         } else if (this.slope > 0) {
-          this.r_vel *= (1 + this.slope / 5);
+          this.r_vel *= (1 + (this.slope) / (3 + 3*this.montana/100));
         } else if (this.slope < 0){
          
         }
@@ -141,12 +141,23 @@ class Energy {
         var accCyclist = forceCyclist / 8;
         const accRes = negAcc - accCyclist;
 
-        this.cyclist.log = 'accres:' + accRes;
+       // this.cyclist.log = 'accres:' + accRes;
 
         return createVector(-accRes, 0);
     }
     
     limitForce(slope) {
+      let ref_maxForce = 40+ this.estadoForma*0.05;
+      
+      let r_mF_a = (this.anaerobicPoints < 50)? map(this.anaerobicPoints, ref_maxForce, ref_maxForce * 0.5, 50, 0) : ref_maxForce;
+      
+      let r_mF_p = (this.points < 30)? map(this.points, 30, 0, r_mF_a, r_mF_a * 0.5 ) : r_mF_a;
+      
+      this.maxForce = r_mF_p;
+      this.cyclist.log = 'maxFroce:' + dec(this.maxForce, 100) + '-' + dec(ref_maxForce, 100);
+      
+      return this.maxForce;
+      /*
       if (this.anaerobicPoints < 5) {
         this.maxForce = this.r_vel + 0.5 * (this.r_air + this.r_mec + this.r_vel);
       } else if (this.anaerobicPoints < 20){
@@ -157,7 +168,7 @@ class Energy {
       }
      
       return this.maxForce;
-      
+      */
        //this.cyclist.log='force:'+ this .maxForce;
       
       /*
