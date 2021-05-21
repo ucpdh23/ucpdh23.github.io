@@ -221,6 +221,13 @@ function draw() {
       hideOptions();
     }
 }
+
+display=''
+
+function showFeature(fet) {
+  display=fet;
+}
+
 function hideOptions() {
   _hideSlider();
     _hideButton();

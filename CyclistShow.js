@@ -54,7 +54,9 @@ Cyclist.prototype.show = function(reference) {
             posX + 15, posY);
             
         if (!isFlashing) {
+          
           this.drawMallot(posX, posY, heading);
+          
         }
 
         ellipse(posX + 14, posY - 2, this.secuence % 4, 1);
@@ -194,6 +196,11 @@ Cyclist.prototype._drawVector=function(v, posX, posY, factor) {
         line(posX, posY, posX - v.x * factor, posY + v.y * factor);
     }
     
+    var _percentColors = [
+    { pct: 0, color: { r: 0x00, g: 0xff, b: 0 } },
+    { pct: 3, color: { r: 0xff, g: 0xff, b: 0 } },
+    { pct: 5, color: { r: 0xff, g: 0x00, b: 0 } } ];
+    
 Cyclist.prototype.computeStroke=function(actual, flashing) {
   var isFlashing = false;
   var result = actual;
@@ -204,6 +211,55 @@ Cyclist.prototype.computeStroke=function(actual, flashing) {
       isFlashing = true;
     }
   }
+  
+  if (!isFlashing && display == 'air') {
+    let colorItem = getColorForPercentage(this.energy.r_air,
+    _percentColors);
+    result = {
+      x: colorItem.r,
+      y: colorItem.g,
+      z: colorItem.b
+    };
+    isFlashing=true;
+  } else if (!isFlashing && display == 'pend') {
+    
+    let colorItem = getColorForPercentage(this.energy.r_pend,
+    _percentColors);
+    result = {
+      x: colorItem.r,
+      y: colorItem.g,
+      z: colorItem.b
+    };
+    isFlashing=true;
+  } else if (!isFlashing && display == 'pulse') {
+    let colorItem = getColorForPercentage(this.energy.pulse2/ 180*5,
+    _percentColors);
+    result = {
+      x: colorItem.r,
+      y: colorItem.g,
+      z: colorItem.b
+    };
+    isFlashing=true;
+  } else if (!isFlashing && display == 'pot') {
+    let colorItem = getColorForPercentage(this.energy.pot/ 450*5,
+    _percentColors);
+    result = {
+      x: colorItem.r,
+      y: colorItem.g,
+      z: colorItem.b
+    };
+    isFlashing=true;
+  } else if (!isFlashing && display == 'vel') {
+    let colorItem = getColorForPercentage(this.energy.r_vel/5,
+    _percentColors);
+    result = {
+      x: colorItem.r,
+      y: colorItem.g,
+      z: colorItem.b
+    };
+    isFlashing=true;
+  } 
+ 
 
   stroke(result.x, result.y, result.z);
 

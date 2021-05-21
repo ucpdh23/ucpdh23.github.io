@@ -35,7 +35,7 @@ class Team {
   }
   
   buildStrategy3(item){
-    console.log(''+item.number+ ' esta atento');
+    console.log(''+item.number+ ' esta atento'); 
     item.addAction({
       from: 2000,
       to: 3000,
