@@ -37,6 +37,28 @@ function strTime(time){
   return pad(mins, 2) + ":" + pad(secs, 2);
 }
 
+function computeMedium(list) {
+  let result = {
+    llano: 0,
+    montana: 0,
+    bajada: 0,
+    sprint: 0,
+    estadoForma: 0
+  };
+  let size = list.length;
+  
+  for (item of list){
+    result.llano += item.energy.llano / size;
+    result.montana+=item.energy.montana/size;
+    result.bajada +=item.energy.bajada/ size;
+    result.sprint +=item.energy.sprint/ size;
+  }
+  
+  console.info('med.montana:'+dec(result.montana, 100));
+  
+  return result;
+}
+
 function getColorForPercentage(pct, percentColors) {
     for (var i = 1; i < percentColors.length - 1; i++) {
         if (pct < percentColors[i].pct) {

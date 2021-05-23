@@ -11,6 +11,10 @@ class Team {
     this.cyclists.push(item);
   }
   
+  setMedium(medium) {
+    this.medium=medium;
+  }
+  
   build(profile) {
     let leader = this.cyclists[0];
     if (this.id == 0) return;
@@ -24,10 +28,12 @@ class Team {
     } else {
       this.cyclists.forEach(item => {
         if (item.energy.llano > 75 
-          && item.energy.montana > 85
+          && item.energy.montana >
+                this.medium.montana * 1.2
           && item.energy.estadoForma > 95) {
           this.buildStrategy2(item);
-        } else if (item.energy.montana > 80){
+        } else if (item.energy.montana > 
+                this.medium.montana*1.1){
           this.buildStrategy3(item);
         }
       });

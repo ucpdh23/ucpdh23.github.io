@@ -71,8 +71,11 @@ frameRate(20)
     unidades++;
   }
   
+  let mediumCyclist = computeMedium(cyclists)
+  
   profile.setCyclists(cyclists);
   teams.forEach(item => {
+    item.setMedium(mediumCyclist);
     item.build(profile);
   });
  

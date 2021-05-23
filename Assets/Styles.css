@@ -59,9 +59,23 @@ p {
    align-items: center;
    justify-content: center;
    height: 400px;
+   flex-flow: column;
+ }
+ 
+ .option {
+   padding-top: 10px;
  }
  
   .box {
+  __background-color: Transparent;
+    background: rgba(0,0,0,0.2);
+    background-repeat:no-repeat;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    
+    
+    
     color: #B0FA48;
     border-radius: 5px;
     border: 1px solid #73AD21;
